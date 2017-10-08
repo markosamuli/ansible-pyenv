@@ -66,9 +66,8 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # Test command line tools have been installed are are available globally
-  - command -v pyenv
-  - command -v pyenv-virtualenv
+  # Test command line tools have been installed
+  - PATH=$HOME/.pyenv/bin:$PATH command -v pyenv
 
 notifications:
   email: false
