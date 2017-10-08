@@ -1,6 +1,8 @@
 markosamuli.pyenv
 =================
 
+[![Build Status](https://travis-ci.org/markosamli/ansible-pyenv.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-pyenv)
+
 Ansible role to install [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) on Ubuntu or macOS development machines.
 
 Role Variables

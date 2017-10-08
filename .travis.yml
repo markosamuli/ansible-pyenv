@@ -1,0 +1,73 @@
+---
+
+language: generic
+python: "2.7"
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: ANSIBLE_VERSION=2.2.3.0
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: ANSIBLE_VERSION=2.3.2.0
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: ANSIBLE_VERSION=2.4.0.0
+    - os: osx
+
+# Install Ansible and Python development packages
+addons:
+  apt:
+    packages:
+    - python-pip
+    - python-dev
+
+before_install:
+  # Install Ansible with Homebrew on OS X
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update         ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ansible; fi
+
+install:
+  # Install Ansible with pip
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible==${ANSIBLE_VERSION}; fi
+
+  # Check Ansible version
+  - ansible --version
+
+  # Create ansible.cfg with correct roles_path
+  - printf '[defaults]\nroles_path=../\n' > ansible.cfg
+
+  # Configure ansible.cfg on Linux
+  - >
+    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+      printf '\n[privilege_escalation]\nbecome=True' >> ansible.cfg
+    fi
+
+before_script:
+  # https://github.com/travis-ci/travis-ci/issues/6307
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head || true; fi
+
+script:
+  # Basic role syntax check
+  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+
+  # Test role run
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+
+  # Test idempotence
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Test command line tools have been installed
+  - PATH=$HOME/.pyenv/bin:$PATH command -v pyenv
+
+notifications:
+  email: false
