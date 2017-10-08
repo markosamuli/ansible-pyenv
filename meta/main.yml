@@ -1,0 +1,14 @@
+galaxy_info:
+  author: Marko Samuli Kirves
+  description: Installs pyenv and pyenv-virtualenv
+  license: MIT
+  min_ansible_version: 2.2
+  platforms:
+   - name: Ubuntu
+     versions:
+     - xenial
+   - name: macOS
+     versions:
+     - Sierra
+  galaxy_tags: []
+dependencies: []

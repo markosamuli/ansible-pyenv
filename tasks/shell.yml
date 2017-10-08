@@ -1,0 +1,23 @@
+---
+
+- name: Find shell profile scripts
+  stat:
+    path: "{{ pyenv_home }}/{{ item }}"
+  with_items: "{{ pyenv_shell_profile_scripts }}"
+  register: shell_st
+
+- name: Load pyenv in shell profile scripts
+  blockinfile:
+    dest: "{{ pyenv_home }}/{{ item.item }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+    block: |
+      # Add pyenv into path if installed into default location
+      if [ -d "$HOME/.pyenv" ]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+      fi
+      # Initialise pyenv and pyenv-virtualenv if installed
+      if command -v pyenv 1>/dev/null 2>&1; then eval "$(pyenv init -)"; fi
+      if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
+    insertafter: "EOF"
+  with_items: "{{ shell_st.results }}"

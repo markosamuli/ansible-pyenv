@@ -1,0 +1,8 @@
+---
+# defaults file for ansible-pyenv
+
+pyenv_home: "{{ ansible_env.HOME }}"
+pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
+pyenv_init_shell: yes
+pyenv_version: "v1.1.4"
+pyenv_virtualenv_version: "v1.1.1"

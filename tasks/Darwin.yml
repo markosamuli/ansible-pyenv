@@ -1,0 +1,9 @@
+---
+
+- name: Install pyenv with Homebrew
+  package:
+    name: pyenv
+
+- name: Install pyenv-virtualenv with Homebrew
+  package:
+    name: pyenv-virtualenv
