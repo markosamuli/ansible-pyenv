@@ -3,3 +3,7 @@
 pyenv_shell_profile_scripts:
   - .bashrc
   - .zshrc
+
+pyenv_build_requirements:
+  - readline
+  - xz

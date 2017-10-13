@@ -1,5 +1,10 @@
 ---
 
+- name: Install pyenv build requirements with Homebrew
+  package:
+    name: "{{ item }}"
+  with_items: "{{ pyenv_build_requirements }}"
+
 - name: Install pyenv with Homebrew
   package:
     name: pyenv
