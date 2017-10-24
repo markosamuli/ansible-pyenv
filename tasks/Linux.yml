@@ -1,5 +1,11 @@
 ---
 
+- name: Install pyenv build requirements
+  become: yes
+  package:
+    name: "{{ item }}"
+  with_items: "{{ pyenv_build_requirements }}"
+
 - name: Clone pyenv
   git:
     repo: https://github.com/pyenv/pyenv.git
