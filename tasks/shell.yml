@@ -1,14 +1,31 @@
 ---
 
-- name: Find shell profile scripts
-  stat:
-    path: "{{ pyenv_home }}/{{ item }}"
-  with_items: "{{ pyenv_shell_profile_scripts }}"
-  register: shell_st
+- name: Set path to .bashrc
+  set_fact:
+    pyenv_bashrc_path: "{{ pyenv_home }}/.bashrc"
+  when: pyenv_bashrc_path is undefined
 
-- name: Load pyenv in shell profile scripts
+- name: Check whether .bashrc file exists
+  stat:
+    path: "{{ pyenv_bashrc_path }}"
+  register: pyenv_bashrc_st
+
+- name: Resolve .bashrc symlink
+  set_fact:
+    pyenv_bashrc_path: "{{ pyenv_bashrc_st.stat.lnk_source }}"
+  when: pyenv_bashrc_st.stat.exists and pyenv_bashrc_st.stat.islnk
+
+- name: Check whether PYENV_ROOT is defined in .bashrc
+  command: grep -Fq "export PYENV_ROOT=" {{ pyenv_bashrc_path }}
+  register: check_bashrc
+  ignore_errors: True
+  changed_when: False
+  failed_when: False
+  when: pyenv_bashrc_st.stat.exists
+
+- name: Load pyenv in .bashrc
   blockinfile:
-    dest: "{{ pyenv_home }}/{{ item.item }}"
+    dest: "{{ pyenv_bashrc_path }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
     block: |
       # Add pyenv into path if installed into default location
@@ -19,6 +36,42 @@
       # Initialise pyenv and pyenv-virtualenv if installed
       if command -v pyenv 1>/dev/null 2>&1; then eval "$(pyenv init -)"; fi
       if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
-    insertafter: "EOF"
-  with_items: "{{ shell_st.results }}"
-  when: item.stat.exists
+  when: pyenv_bashrc_st.stat.exists and check_bashrc.rc != 0
+
+- name: Set path to .zshrc
+  set_fact:
+    pyenv_zshrc_path: "{{ pyenv_home }}/.zshrc"
+  when: pyenv_zshrc_path is undefined
+
+- name: Check whether .zshrc exists
+  stat:
+    path: "{{ pyenv_zshrc_path }}"
+  register: pyenv_zshrc_st
+
+- name: Resolve .zshrc symlink
+  set_fact:
+    pyenv_zshrc_path: "{{ pyenv_zshrc_st.stat.lnk_source }}"
+  when: pyenv_zshrc_st.stat.exists and pyenv_zshrc_st.stat.islnk
+
+- name: Check whether PYENV_ROOT is defined in .zshrc
+  command: grep -Fq "export PYENV_ROOT=" {{ pyenv_zshrc_path }}
+  register: check_zshrc
+  ignore_errors: True
+  changed_when: False
+  failed_when: False
+  when: pyenv_zshrc_st.stat.exists
+
+- name: Load pyenv in .zshrc
+  blockinfile:
+    dest: "{{ pyenv_zshrc_path }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+    block: |
+      # Add pyenv into path if installed into default location
+      if [ -d "$HOME/.pyenv" ]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        if [ -d "$PYENV_ROOT/bin" ]; then export PATH="$PYENV_ROOT/bin:$PATH"; fi
+      fi
+      # Initialise pyenv and pyenv-virtualenv if installed
+      if command -v pyenv 1>/dev/null 2>&1; then eval "$(pyenv init -)"; fi
+      if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
+  when: pyenv_zshrc_st.stat.exists and check_zshrc.rc != 0
