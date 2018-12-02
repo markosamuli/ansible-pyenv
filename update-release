@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+###
+# Print error into STDERR
+###
+error() {
+    echo "$@" 1>&2
+}
+
+###
+# Get latest release for a GitHub repository
+###
+get_latest_release() {
+    local repository=$1
+    local url="https://api.github.com/repos/${repository}/releases/latest"
+    curl --silent "${url}" | \
+        grep '"tag_name":' | \
+        sed -E 's/.*"([^"]+)".*/\1/'
+}
+
+
+###
+# Update pyenv version
+###
+update_pyenv_version() {
+    local version=$1
+    update_variable "pyenv_version" ${version}
+}
+
+###
+# Update pyenv-virtualenv version
+###
+update_pyenv_virtualenv_version() {
+    local version=$1
+    update_variable "pyenv_virtualenv_version" ${version}
+}
+
+###
+# Update Ansible variable
+###
+update_variable() {
+    local key=$1
+    local value=$2
+    local file=defaults/main.yml
+    sed -i.save -r "s/^($key):.*$/\1: \"${value}\"/" \
+        ${file}
+    rm ${file}.save
+}
+
+###
+# Get latest pyenv version
+###
+latest_pyenv_version() {
+    local latest_release=""
+    latest_release=$(get_latest_release pyenv/pyenv)
+    [ -z "${latest_release}" ] && {
+        error "Failed to get latest release from GitHub"; return 1;
+    }
+    echo "${latest_release}"
+}
+
+###
+# Get latest pyenv-virtualenv version
+###
+latest_pyenv_virtualenv_version() {
+    local latest_release=""
+    latest_release=$(get_latest_release pyenv/pyenv-virtualenv)
+    [ -z "${latest_release}" ] && {
+        error "Failed to get latest release from GitHub"; return 1;
+    }
+    echo "${latest_release}"
+}
+
+###
+# Update all versions
+###
+update_versions() {
+    PYENV_VERSION=$(latest_pyenv_version)
+    echo "Latest pyenv release is ${PYENV_VERSION}"
+    update_pyenv_version ${PYENV_VERSION}
+
+    PYENV_VIRTUALENV_VERSION=$(latest_pyenv_virtualenv_version)
+    echo "Latest pyenv-virtualenv release is ${PYENV_VIRTUALENV_VERSION}"
+    update_pyenv_virtualenv_version ${PYENV_VIRTUALENV_VERSION}
+}
+
+set -e
+
+update_versions
