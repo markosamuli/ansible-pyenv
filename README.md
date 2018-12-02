@@ -1,17 +1,15 @@
-markosamuli.pyenv
-=================
+# markosamuli.pyenv
 
 [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-pyenv)
 
 Ansible role to install [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) on Ubuntu or macOS development machines.
 
-Role Variables
---------------
+## Role Variables
 
 ```yaml
 # Versions
-pyenv_version: "v1.1.4"
-pyenv_virtualenv_version: "v1.1.1"
+pyenv_version: "v1.2.8"
+pyenv_virtualenv_version: "v1.1.3"
 
 # Initialize shell profile scripts
 pyenv_init_shell: yes
@@ -22,20 +20,28 @@ pyenv_shell_profile_scripts:
   - .zshrc
 ```
 
-Example Playbook
-----------------
+## Example Playbook
 
-    - hosts: localhost
-      connection: local
-      roles:
-         - { role: markosamuli.pyenv }
+```yaml
+- hosts: localhost
+  connection: local
+  roles:
+      - { role: markosamuli.pyenv }
+```
 
-License
--------
+## Updating versions
+
+Run the following script to get latest releases from GitHub and update them in
+role defaults.
+
+```bash
+./update-release
+```
+
+## License
 
 MIT
 
-Author Information
-------------------
+## Author Information
 
 - [@markosamuli](https://github.com/markosamuli)

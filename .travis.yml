@@ -5,20 +5,39 @@ python: "2.7"
 
 matrix:
   include:
+    # Ubuntu 14.04 LTS
     - os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.2.3.0 PYTHON_VERSION=3.5.2
+      env: ANSIBLE_VERSION=2.2.3.0 PYTHON_VERSION=2.7.15
     - os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.3.2.0 PYTHON_VERSION=3.5.2
+      env: ANSIBLE_VERSION=2.3.3.0 PYTHON_VERSION=2.7.15
     - os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.4.0.0 PYTHON_VERSION=3.5.2
+      env: ANSIBLE_VERSION=2.4.6.0 PYTHON_VERSION=2.7.15
+    # Ubuntu 16.04 LTS
+    - os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION=2.5.13.0 PYTHON_VERSION=3.7.1
+    - os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION=2.6.10.0 PYTHON_VERSION=3.7.1
+    - os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION=2.7.4.0 PYTHON_VERSION=3.7.1
+    # OS X 10.13 (High Sierra) with Xcode 9.4
     - os: osx
-      env: PYTHON_VERSION=3.5.2
+      env: PYTHON_VERSION=2.7.15
+    # OS X 10.13 (High Sierra) with Xcode 10.1
+    - os: osx
+      osx_image: xcode10.1
+      env: PYTHON_VERSION=3.7.1
 
 # Install Ansible and Python development packages
 addons:
@@ -27,14 +46,28 @@ addons:
     - python-pip
     - python-dev
 
+cache:
+  directories:
+  - $HOME/.cache/pre-commit/
+
+before_cache:
+- rm -f $HOME/.cache/pre-commit/pre-commit.log
+
 before_install:
   # Install Ansible with Homebrew on OS X
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update         ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ansible; fi
+  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update         ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then command -v ansible >/dev/null || brew install ansible; fi
+  # Install pre-commit with Homebrew
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pre-commit; fi
+  # existing pyenv installation on Linux conflicts with ours
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then rm -rf /opt/pyenv; fi
 
 install:
   # Install Ansible with pip
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible==${ANSIBLE_VERSION}; fi
+
+  # Install pre-commit with pip
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install pre-commit; fi
 
   # Check Ansible version
   - ansible --version
@@ -42,17 +75,14 @@ install:
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../\n' > ansible.cfg
 
-  # Configure ansible.cfg on Linux
-  - >
-    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      printf '\n[privilege_escalation]\nbecome=True' >> ansible.cfg
-    fi
-
 before_script:
   # https://github.com/travis-ci/travis-ci/issues/6307
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head || true; fi
 
 script:
+  # Run pre-commit hooks
+  - pre-commit run -a
+
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
@@ -67,19 +97,6 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # Test command line tools have been installed
+  # Run tests in a separate script
   - >
-    PYENV_ROOT=$HOME/.pyenv
-    PATH=$PYENV_ROOT/bin:$PATH
-    command -v pyenv
-
-  # Test command line tools have been installed
-  - >
-    PYENV_ROOT=$HOME/.pyenv
-    PATH=$PYENV_ROOT/bin:$PATH
-    eval "$(pyenv init -)"
-    && echo "Install Python $PYTHON_VERSION"
-    && pyenv install $PYTHON_VERSION
-
-notifications:
-  email: false
+    ./tests/pyenv-test

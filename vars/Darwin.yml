@@ -1,5 +1,6 @@
 ---
 
 pyenv_build_requirements:
+  - openssl
   - readline
   - xz
