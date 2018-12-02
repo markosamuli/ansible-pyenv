@@ -5,7 +5,7 @@ python: "2.7"
 
 matrix:
   include:
-    # Ubuntu 14.04 LTS with Python 2.7.15
+    # Ubuntu 14.04 LTS
     - os: linux
       dist: trusty
       sudo: required
@@ -31,11 +31,12 @@ matrix:
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION=2.7.4.0 PYTHON_VERSION=3.7.1
-    # OS X with Python 2.7.15
+    # OS X 10.13 (High Sierra) with Xcode 9.4
     - os: osx
       env: PYTHON_VERSION=2.7.15
-    # OS X with Python 3.7.1
+    # OS X 10.13 (High Sierra) with Xcode 10.1
     - os: osx
+      osx_image: xcode10.1
       env: PYTHON_VERSION=3.7.1
 
 # Install Ansible and Python development packages
