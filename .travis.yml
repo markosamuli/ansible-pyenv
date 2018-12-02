@@ -110,6 +110,3 @@ script:
     eval "$(pyenv init -)"
     && echo "Install Python $PYTHON_VERSION"
     && pyenv install $PYTHON_VERSION
-
-notifications:
-  email: false
