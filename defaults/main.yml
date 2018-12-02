@@ -7,4 +7,4 @@ pyenv_init_shell: yes
 
 # https://github.com/pyenv/pyenv/blob/master/CHANGELOG.md
 pyenv_version: "v1.2.8"
-pyenv_virtualenv_version: "v1.1.1"
+pyenv_virtualenv_version: "v1.1.3"
