@@ -56,6 +56,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then command -v ansible >/dev/null || brew install ansible; fi
   # Install pre-commit with Homebrew
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pre-commit; fi
+  # existing pyenv installation on Linux conflicts with ours
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then rm -rf /opt/pyenv; fi
 
 install:
   # Install Ansible with pip
@@ -69,12 +71,6 @@ install:
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../\n' > ansible.cfg
-
-  # Configure ansible.cfg on Linux
-  - >
-    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      printf '\n[privilege_escalation]\nbecome=True' >> ansible.cfg
-    fi
 
 before_script:
   # https://github.com/travis-ci/travis-ci/issues/6307
@@ -98,16 +94,6 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # Test command line tools have been installed
+  # Run tests in a separate script
   - >
-    PYENV_ROOT=$HOME/.pyenv
-    PATH=$PYENV_ROOT/bin:$PATH
-    command -v pyenv
-
-  # Test command line tools have been installed
-  - >
-    PYENV_ROOT=$HOME/.pyenv
-    PATH=$PYENV_ROOT/bin:$PATH
-    eval "$(pyenv init -)"
-    && echo "Install Python $PYTHON_VERSION"
-    && pyenv install $PYTHON_VERSION
+    ./tests/pyenv-test
