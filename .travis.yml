@@ -48,7 +48,10 @@ addons:
 
 cache:
   directories:
-  - /home/travis/.cache/pre-commit/
+  - $HOME/.cache/pre-commit/
+
+before_cache:
+- rm -f $HOME/.cache/pre-commit/pre-commit.log
 
 before_install:
   # Install Ansible with Homebrew on OS X
