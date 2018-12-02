@@ -5,20 +5,38 @@ python: "2.7"
 
 matrix:
   include:
+    # Ubuntu 14.04 LTS with Python 2.7.15
     - os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.2.3.0 PYTHON_VERSION=3.5.2
+      env: ANSIBLE_VERSION=2.2.3.0 PYTHON_VERSION=2.7.15
     - os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.3.2.0 PYTHON_VERSION=3.5.2
+      env: ANSIBLE_VERSION=2.3.3.0 PYTHON_VERSION=2.7.15
     - os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.4.0.0 PYTHON_VERSION=3.5.2
+      env: ANSIBLE_VERSION=2.4.6.0 PYTHON_VERSION=2.7.15
+    # Ubuntu 16.04 LTS
+    - os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION=2.5.13.0 PYTHON_VERSION=3.7.1
+    - os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION=2.6.10.0 PYTHON_VERSION=3.7.1
+    - os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION=2.7.4.0 PYTHON_VERSION=3.7.1
+    # OS X with Python 2.7.15
     - os: osx
-      env: PYTHON_VERSION=3.5.2
+      env: PYTHON_VERSION=2.7.15
+    # OS X with Python 3.7.1
+    - os: osx
+      env: PYTHON_VERSION=3.7.1
 
 # Install Ansible and Python development packages
 addons:
