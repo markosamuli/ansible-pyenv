@@ -52,7 +52,7 @@ cache:
 
 before_install:
   # Install Ansible with Homebrew on OS X
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update         ; fi
+  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update         ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then command -v ansible >/dev/null || brew install ansible; fi
   # Install pre-commit with Homebrew
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pre-commit; fi
