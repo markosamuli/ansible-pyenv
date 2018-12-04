@@ -89,14 +89,16 @@ script:
   # Test role run
   - >
     ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    -e "{'pyenv_python_versions':['${PYTHON_VERSION}'],'pyenv_global':'${PYTHON_VERSION}'}"
 
   # Test idempotence
   - >
     ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    -e "{'pyenv_python_versions':['${PYTHON_VERSION}'],'pyenv_global':'${PYTHON_VERSION}'}"
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # Run tests in a separate script
-  - >
-    ./tests/pyenv-test
+  # Test python version matches
+  - . $HOME/.pyenv/.pyenvrc && pyenv version
+  - . $HOME/.pyenv/.pyenvrc && pyenv version | grep -q ${PYTHON_VERSION}
