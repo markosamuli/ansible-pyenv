@@ -6,9 +6,11 @@ galaxy_info:
   platforms:
    - name: Ubuntu
      versions:
+     - trusty
      - xenial
    - name: macOS
      versions:
      - Sierra
+     - High Sierra
   galaxy_tags: []
 dependencies: []
