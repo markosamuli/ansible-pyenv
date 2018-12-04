@@ -14,5 +14,8 @@
 - include: Darwin.yml
   when: "ansible_os_family == 'Darwin'"
 
+- include: install.yml
+
 - include: shell.yml
   when: pyenv_init_shell
+
