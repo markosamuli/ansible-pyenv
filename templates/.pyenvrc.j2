@@ -1,7 +1,31 @@
 # Add pyenv into path if installed into default location
 export PYENV_ROOT="{{ pyenv_root }}"
-export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="${PYENV_ROOT}/bin:${PATH}"
 
 # Initialise pyenv and pyenv-virtualenv if installed
 if command -v pyenv 1>/dev/null 2>&1; then eval "$(pyenv init -)"; fi
-if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
+if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then
+    eval "$(pyenv virtualenv-init -)"
+elif [ -d "${PYENV_ROOT}/plugins/pyenv-virtualenv" ]; then
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+# Disable prompt changing
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+{% if pyenv_virtualenvwrapper %}
+# Setup virtualenv home for virtualenvwrapper
+export WORKON_HOME="{{ pyenv_virtualenvwrapper_home }}"
+
+# Tell pyenv-virtualenvwrapper to use pyenv when creating new Python environments
+export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+
+# Load virtualenvwrapper in supported shells
+if [ "${PYENV_SHELL}" = "bash" ] || [ "${PYENV_SHELL}" = "zsh" ]; then
+    if command -v pyenv-virtualenvwrapper 1>/dev/null 2>&1; then
+        pyenv virtualenvwrapper
+    elif [ -d "${PYENV_ROOT}/plugins/pyenv-virtualenvwrapper" ]; then
+        pyenv virtualenvwrapper
+    fi
+fi
+{% endif %}

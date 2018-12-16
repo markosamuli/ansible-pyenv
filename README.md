@@ -4,6 +4,8 @@
 
 Ansible role to install [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) on Ubuntu or macOS development machines.
 
+Optionally, [pyenv-virtualenvwrapper](https://github.com/pyenv/pyenv-virtualenvwrapper) can be installed and used for managing environments.
+
 Don't use this role on production servers as it supports installing pyenv only under
 user home directory.
 
@@ -39,6 +41,9 @@ pyenv_global: "3.7.1"
 pyenv_shell_profile_scripts:
   - .bashrc
   - .zshrc
+
+# Optionally, install virtualenvwrapper plugin for pyenv
+pyenv_virtualenvwrapper: no
 ```
 
 ## Example Playbook

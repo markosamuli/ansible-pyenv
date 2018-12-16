@@ -11,3 +11,8 @@
 - name: Install pyenv-virtualenv with Homebrew
   package:
     name: pyenv-virtualenv
+
+- name: Install pyenv-virtualenvwrapper with Homebrew
+  package:
+    name: pyenv-virtualenvwrapper
+  when: pyenv_virtualenvwrapper
