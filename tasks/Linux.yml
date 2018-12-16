@@ -17,3 +17,9 @@
     dest: "{{ pyenv_root }}/plugins/pyenv-virtualenv"
     version: "{{ pyenv_virtualenv_version }}"
 
+- name: Clone pyenv-virtualenvwrapper
+  git:
+    repo: https://github.com/pyenv/pyenv-virtualenvwrapper.git
+    dest: "{{ pyenv_root }}/plugins/pyenv-virtualenvwrapper"
+    version: "{{ pyenv_virtualenvwrapper_version }}"
+  when: pyenv_virtualenvwrapper

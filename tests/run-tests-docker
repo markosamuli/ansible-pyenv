@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT=$(dirname $DIR)
+
+export PYTHON_VERSION=2.7.15
+
+set -e
+
+cd $PROJECT_ROOT
+
+echo "*** Check syntax"
+
+ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+
+
+echo "*** Run Ansible playbook"
+
+ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+    -e "{'pyenv_python_versions':['${PYTHON_VERSION}'],'pyenv_global':'${PYTHON_VERSION}','pyenv_virtualenvwrapper':'True'}"
+
+
+echo "*** Idempotence test"
+
+ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+    -e "{'pyenv_python_versions':['${PYTHON_VERSION}'],'pyenv_global':'${PYTHON_VERSION}','pyenv_virtualenvwrapper':'True'}" \
+    | grep -q 'changed=0.*failed=0' \
+    && (echo 'Idempotence test: pass' && exit 0) \
+    || (echo 'Idempotence test: fail' && exit 1)

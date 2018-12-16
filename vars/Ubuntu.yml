@@ -1,6 +1,7 @@
 ---
 
 pyenv_build_requirements:
+  - git
   - make
   - build-essential
   - libssl-dev

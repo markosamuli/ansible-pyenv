@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT=$(dirname $DIR)
+
+CONTAINER_NAME=ansible-pyenv-ubuntu-tests
+IMAGE_NAME=ansible-pyenv-ubuntu
+
+###
+# Stop containers
+###
+function finish {
+    echo "*** Stop containers"
+    docker stop $CONTAINER_NAME
+}
+
+###
+# Build image
+###
+function build {
+    echo "*** Build image"
+    docker build -t $IMAGE_NAME ./tests/ubuntu
+}
+
+###
+# Start container in the background
+###
+function start {
+    echo "*** Start container"
+    docker run --rm -it -d \
+        -v $(pwd):/src/ansible-pyenv \
+        --name $CONTAINER_NAME \
+        $IMAGE_NAME
+}
+
+###
+# Run tests in the container
+###
+function run_tests {
+    echo "*** Run tests"
+    docker exec -it \
+        $CONTAINER_NAME \
+        /src/ansible-pyenv/tests/run-tests-docker
+}
+
+trap finish EXIT
+
+cd $PROJECT_ROOT
+
+set -e
+
+build
+start
+run_tests

@@ -5,6 +5,12 @@
     path: "{{ pyenv_root }}"
     state: directory
 
+- name: Make sure WORKON_HOME directory exists
+  file:
+    path: "{{ pyenv_virtualenvwrapper_home }}"
+    state: directory
+  when: pyenv_virtualenvwrapper
+
 - name: Create .pyenvrc
   template:
     src: ".pyenvrc.j2"

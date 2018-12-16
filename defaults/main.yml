@@ -11,8 +11,13 @@ pyenv_init_shell: yes
 # Versions to install
 pyenv_version: "v1.2.8"
 pyenv_virtualenv_version: "v1.1.3"
+pyenv_virtualenvwrapper_version: "v20140609"
 
 # Python versions to install
 pyenv_python_versions:
 - "2.7.15"
 - "3.7.1"
+
+# Optionally, install virtualenvwrapper plugin for pyenv
+pyenv_virtualenvwrapper: no
+pyenv_virtualenvwrapper_home: "{{ ansible_env.HOME }}/.virtualenvs"
