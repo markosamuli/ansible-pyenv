@@ -13,6 +13,9 @@ error() {
 get_latest_release() {
     local repository=$1
     local url="https://api.github.com/repos/${repository}/releases/latest"
+    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
+        url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
+    fi
     curl --silent "${url}" | \
         grep '"tag_name":' | \
         sed -E 's/.*"([^"]+)".*/\1/'
@@ -54,7 +57,7 @@ latest_pyenv_version() {
     local latest_release=""
     latest_release=$(get_latest_release pyenv/pyenv)
     [ -z "${latest_release}" ] && {
-        error "Failed to get latest release from GitHub"; return 1;
+        error "Failed to get latest pyenv/pyenv release from GitHub"; return 1;
     }
     echo "${latest_release}"
 }
@@ -66,7 +69,7 @@ latest_pyenv_virtualenv_version() {
     local latest_release=""
     latest_release=$(get_latest_release pyenv/pyenv-virtualenv)
     [ -z "${latest_release}" ] && {
-        error "Failed to get latest release from GitHub"; return 1;
+        error "Failed to get latest pyenv/pyenv-virtualenv release from GitHub"; return 1;
     }
     echo "${latest_release}"
 }
@@ -84,6 +87,11 @@ update_versions() {
     update_pyenv_virtualenv_version ${PYENV_VIRTUALENV_VERSION}
 }
 
+check_requirements() {
+    command -v curl > /dev/null || { error "curl is not installed"; exit 1; }
+}
+
 set -e
 
+check_requirements
 update_versions
