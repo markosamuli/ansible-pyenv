@@ -9,7 +9,7 @@ pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 pyenv_init_shell: yes
 
 # Versions to install
-pyenv_version: "v1.2.8"
+pyenv_version: "v1.2.9"
 pyenv_virtualenv_version: "v1.1.3"
 pyenv_virtualenvwrapper_version: "v20140609"
 

@@ -54,8 +54,9 @@ before_cache:
 - rm -f $HOME/.cache/pre-commit/pre-commit.log
 
 before_install:
+  # Update Homebrew to fix HOMEBREW_LOGS error
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
   # Install Ansible with Homebrew on OS X
-  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update         ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then command -v ansible >/dev/null || brew install ansible; fi
   # Install pre-commit with Homebrew
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pre-commit; fi
