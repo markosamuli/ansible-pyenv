@@ -22,22 +22,22 @@ matrix:
     - os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION=2.5.13.0 PYTHON_VERSION=3.7.1
+      env: ANSIBLE_VERSION=2.5.13.0 PYTHON_VERSION=3.7.2
     - os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION=2.6.10.0 PYTHON_VERSION=3.7.1
+      env: ANSIBLE_VERSION=2.6.10.0 PYTHON_VERSION=3.7.2
     - os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION=2.7.4.0 PYTHON_VERSION=3.7.1
+      env: ANSIBLE_VERSION=2.7.4.0 PYTHON_VERSION=3.7.2
     # OS X 10.13 (High Sierra) with Xcode 9.4
     - os: osx
       env: PYTHON_VERSION=2.7.15
     # OS X 10.13 (High Sierra) with Xcode 10.1
     - os: osx
       osx_image: xcode10.1
-      env: PYTHON_VERSION=3.7.1
+      env: PYTHON_VERSION=3.7.2
 
 # Install Ansible and Python development packages
 addons:
