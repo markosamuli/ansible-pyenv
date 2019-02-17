@@ -25,8 +25,8 @@ Autocomplete is loaded by default.
 
 ```yaml
 # Versions to install
-pyenv_version: "v1.2.8"
-pyenv_virtualenv_version: "v1.1.3"
+pyenv_version: "v1.2.9"
+pyenv_virtualenv_version: "v1.1.5"
 
 # Initialize shell profile scripts
 pyenv_init_shell: yes
@@ -71,9 +71,13 @@ role defaults.
 Use of `.pyenvrc` file and parts used for installing python version taken from
 [avanov.pyenv](https://github.com/avanov/ansible-galaxy-pyenv) role.
 
+## Changes
+
+* [CHANGELOG.md](CHANGELOG.md)
+
 ## License
 
-MIT
+* [MIT](LICENSE)
 
 ## Author Information
 
