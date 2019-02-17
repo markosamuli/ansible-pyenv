@@ -5,39 +5,41 @@ python: "2.7"
 
 matrix:
   include:
-    # Ubuntu 14.04 LTS
-    - os: linux
+    - name: "Ubuntu 14.04 LTS with Ansible 2.4"
+      os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION=2.2.3.0 PYTHON_VERSION=2.7.15
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: ANSIBLE_VERSION=2.3.3.0 PYTHON_VERSION=2.7.15
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: ANSIBLE_VERSION=2.4.6.0 PYTHON_VERSION=2.7.15
-    # Ubuntu 16.04 LTS
-    - os: linux
+      env: ANSIBLE_VERSION='<2.5.0' PYTHON_VERSION=2.7.15
+    - name: "Ubuntu 16.04 LTS with Ansible 2.5"
+      os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION=2.5.13.0 PYTHON_VERSION=3.7.2
-    - os: linux
+      env: ANSIBLE_VERSION='<2.6.0' PYTHON_VERSION=3.7.2
+    - name: "Ubuntu 16.04 LTS with Ansible 2.6"
+      os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION=2.6.10.0 PYTHON_VERSION=3.7.2
-    - os: linux
+      env: ANSIBLE_VERSION='<2.7.0' PYTHON_VERSION=3.7.2
+    - name: "Ubuntu 16.04 LTS with Ansible 2.7"
+      os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION=2.7.4.0 PYTHON_VERSION=3.7.2
-    # OS X 10.13 (High Sierra) with Xcode 9.4
-    - os: osx
+      env: ANSIBLE_VERSION='<2.8.0' PYTHON_VERSION=3.7.2
+    - name: "macOS 10.12 (Sierra) with Xcode 9.2"
+      os: osx
+      osx_image: xcode9.2
+      env: PYTHON_VERSION=2.7.15 BREW_UPGRADE=yes
+    - name: "macOS 10.13 (High Sierra) with Xcode 9.4"
+      os: osx
       osx_image: xcode9.4
       env: PYTHON_VERSION=2.7.15
-    # OS X 10.13 (High Sierra) with Xcode 10.1
-    - os: osx
+    - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
+      os: osx
       osx_image: xcode10.1
+      env: PYTHON_VERSION=3.7.2
+    - name: "macOS 10.14 (Mojave) with Xcode 10.2 beta"
+      os: osx
+      osx_image: xcode10.2
       env: PYTHON_VERSION=3.7.2
 
 # Install Ansible and Python development packages
@@ -46,29 +48,40 @@ addons:
     packages:
     - python-pip
     - python-dev
+  homebrew:
+    packages:
+    - ansible
+    - pre-commit
 
 cache:
   directories:
   - $HOME/.cache/pre-commit/
+
+branches:
+  only:
+  - master
+  - /^feature\/.*$/
+  - /^bugfix\/.*$/
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 before_cache:
 - rm -f $HOME/.cache/pre-commit/pre-commit.log
 
 before_install:
   # Update Homebrew to fix HOMEBREW_LOGS error
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
-  # Install Ansible with Homebrew on OS X
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then command -v ansible >/dev/null || brew install ansible; fi
+  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew update; fi
+  # # Install Ansible with Homebrew on OS X
+  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade ansible; fi
   # Install pre-commit with Homebrew
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pre-commit; fi
+  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade pre-commit; fi
   # existing pyenv installation on Linux conflicts with ours
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then rm -rf /opt/pyenv; fi
 
 install:
-  # Install Ansible with pip
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible==${ANSIBLE_VERSION}; fi
+  # Install Ansible with pip on Ubuntu
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible${ANSIBLE_VERSION}; fi
 
-  # Install pre-commit with pip
+  # Install pre-commit with pip on Ubuntu
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install pre-commit; fi
 
   # Check Ansible version
