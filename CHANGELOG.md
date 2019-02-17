@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.2] - 2019-02-17
 
 * install Python 3.7.2
 
