@@ -10,7 +10,7 @@ pyenv_init_shell: yes
 
 # Versions to install
 pyenv_version: "v1.2.9"
-pyenv_virtualenv_version: "v1.1.3"
+pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 
 # Python versions to install
