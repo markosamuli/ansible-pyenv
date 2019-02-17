@@ -14,9 +14,7 @@ pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 
 # Python versions to install
-pyenv_python_versions:
-- "2.7.15"
-- "3.7.2"
+pyenv_python_versions: ["2.7.15", "3.7.2"]
 
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: no
