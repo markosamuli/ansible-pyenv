@@ -66,6 +66,12 @@ role defaults.
 ./update-release
 ```
 
+Update default Python versions:
+
+```bash
+./update-python
+```
+
 ## Acknowledgments
 
 Use of `.pyenvrc` file and parts used for installing python version taken from
