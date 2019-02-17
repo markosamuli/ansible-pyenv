@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+###
+# Print error into STDERR
+###
+error() {
+    echo "$@" 1>&2
+}
+
+###
+# Get latest stable tag for a GitHub repository
+###
+get_latest_python27_version() {
+    local repository=python/cpython
+    local url="https://api.github.com/repos/${repository}/git/refs/tags"
+    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
+        url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
+    fi
+    curl --silent "${url}" | \
+        jq -r 'map(select(.object.type == "tag")) | map(select(.ref | test("refs/tags/v2.7"))) | map(select(.ref | test("rc") | not)) | map(.ref) | map(capture("refs/tags/v(?<version>.*)")) | sort_by(.version) | last | .version'
+}
+
+###
+# Get latest stable tag for a GitHub repository
+###
+get_latest_python37_version() {
+    local repository=python/cpython
+    local url="https://api.github.com/repos/${repository}/git/refs/tags"
+    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
+        url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
+    fi
+    curl --silent "${url}" | \
+        jq -r 'map(select(.object.type == "tag")) | map(select(.ref | test("refs/tags/v3.7"))) | map(select(.ref | test("rc") | not)) | map(.ref) | map(capture("refs/tags/v(?<version>.*)")) | sort_by(.version) | last | .version'
+}
+
+###
+# Update Ansible variable
+###
+update_python_versions() {
+    local key=pyenv_python_versions
+    local python27=$1
+    local python37=$2
+    local file=defaults/main.yml
+    sed -i.save -r "s/^($key):.*$/\1: [\"${python27}\", \"${python37}\"]/" \
+        ${file}
+    rm ${file}.save
+}
+
+###
+# Update all versions
+###
+update_versions() {
+    PYTHON27_VERSION=$(get_latest_python27_version)
+    PYTHON37_VERSION=$(get_latest_python37_version)
+    echo "Latest Python 2.7 release is ${PYTHON27_VERSION}"
+    echo "Latest Python 3.7 release is ${PYTHON37_VERSION}"
+    update_python_versions "${PYTHON27_VERSION}" "${PYTHON37_VERSION}"
+}
+
+check_requirements() {
+    command -v curl > /dev/null || { error "curl is not installed"; exit 1; }
+    command -v jq > /dev/null || { error "jq not installed"; exit 1; }
+}
+
+set -e
+
+check_requirements
+update_versions

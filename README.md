@@ -34,10 +34,10 @@ pyenv_init_shell: yes
 # Python versions to install
 pyenv_python_versions:
   - "2.7.15"
-  - "3.7.1"
+  - "3.7.2"
 
 # Set global pyenv version
-pyenv_global: "3.7.1"
+pyenv_global: "3.7.2"
 
 # Define the shell profile scripts to initialiaze
 pyenv_shell_profile_scripts:
@@ -64,6 +64,12 @@ role defaults.
 
 ```bash
 ./update-release
+```
+
+Update default Python versions:
+
+```bash
+./update-python
 ```
 
 ## Acknowledgments

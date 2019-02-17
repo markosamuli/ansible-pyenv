@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+* install Python 3.7.2
+
 ## [1.1.1] - 2019-02-17
 
 * updated [pyenv-virtualenv] from v1.1.3 to v1.1.5
