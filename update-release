@@ -55,10 +55,9 @@ update_variable() {
 ###
 latest_pyenv_version() {
     local latest_release=""
+    local errmsg="Failed to get latest pyenv/pyenv release"
     latest_release=$(get_latest_release pyenv/pyenv)
-    [ -z "${latest_release}" ] && {
-        error "Failed to get latest pyenv/pyenv release from GitHub"; return 1;
-    }
+    [ -z "${latest_release}" ] && { error "${errmsg}"; return 1; }
     echo "${latest_release}"
 }
 
@@ -67,10 +66,9 @@ latest_pyenv_version() {
 ###
 latest_pyenv_virtualenv_version() {
     local latest_release=""
+    local errmsg="Failed to get latest pyenv/pyenv-virtualenv release"
     latest_release=$(get_latest_release pyenv/pyenv-virtualenv)
-    [ -z "${latest_release}" ] && {
-        error "Failed to get latest pyenv/pyenv-virtualenv release from GitHub"; return 1;
-    }
+    [ -z "${latest_release}" ] && { error "${errmsg}"; return 1; }
     echo "${latest_release}"
 }
 
