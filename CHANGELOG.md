@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] - 2019-02-26
+## [1.2.0] - 2019-02-27
 
 * add support for macOS 10.14
 * drop Ansible < 2.4 support
@@ -29,6 +29,8 @@
 [pyenv]: https://github.com/pyenv/pyenv
 [pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
 [pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
+[1.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.0
+[1.1.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.2
 [1.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.1
 [1.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.0
 [1.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.0.0

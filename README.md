@@ -11,10 +11,20 @@ Optionally, [pyenv-virtualenvwrapper](https://github.com/pyenv/pyenv-virtualenvw
 Don't use this role on production servers as it supports installing pyenv only under
 user home directory.
 
+## macOS Mojave
+
+This role installs macOS SDK headers from
+`/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg`
+if they're not found in `/usr/include`.
+
+## Installed Python versions
+
 This role installs Python versions defined in `pyenv_python_versions` variable.
 
 To set global version, set `pyenv_global` variable to the desired version. By default
 this is not configured.
+
+## Changes to shell config files
 
 This role creates config file in `~/.pyenv/.pyenvrc` that is loaded in `.bashrc`
 and `.zshrc` files.
