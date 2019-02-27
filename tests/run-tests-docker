@@ -7,23 +7,31 @@ export PYTHON_VERSION=2.7.15
 
 set -e
 
+# Variables to pass to ansible-playbook
+ansible_vars=(
+    "'pyenv_python_versions':['${PYTHON_VERSION}']"
+    "'pyenv_global':'${PYTHON_VERSION}'"
+    "'pyenv_virtualenvwrapper':'True'"
+)
+extra_vars=$(printf ",%s" "${ansible_vars[@]}")
+extra_vars="{${extra_vars:1}}"
+
 cd $PROJECT_ROOT
 
 echo "*** Check syntax"
 
 ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
-
 echo "*** Run Ansible playbook"
 
 ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-    -e "{'pyenv_python_versions':['${PYTHON_VERSION}'],'pyenv_global':'${PYTHON_VERSION}','pyenv_virtualenvwrapper':'True'}"
+    -e "${extra_vars}"
 
 
 echo "*** Idempotence test"
 
 ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-    -e "{'pyenv_python_versions':['${PYTHON_VERSION}'],'pyenv_global':'${PYTHON_VERSION}','pyenv_virtualenvwrapper':'True'}" \
+    -e "${extra_vars}" \
     | grep -q 'changed=0.*failed=0' \
     && (echo 'Idempotence test: pass' && exit 0) \
     || (echo 'Idempotence test: fail' && exit 1)

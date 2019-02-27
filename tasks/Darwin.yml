@@ -1,5 +1,16 @@
 ---
 
+- name: Get macOS version
+  set_fact:
+    macos_version: "{{ ansible_distribution_version | regex_search('^([0-9]+\\.[0-9]+)') }}"
+
+- name: Install macOS SDK headers for macOS 10.14
+  become: yes
+  command: installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+  when: macos_version == "10.14"
+  args:
+    creates: /usr/include
+
 - name: Install pyenv build requirements with Homebrew
   package:
     name: "{{ pyenv_build_requirements }}"
