@@ -28,7 +28,7 @@ matrix:
     - name: "macOS 10.12 (Sierra) with Xcode 9.2"
       os: osx
       osx_image: xcode9.2
-      env: PYTHON_VERSION=2.7.15 BREW_UPGRADE=yes
+      env: PYTHON_VERSION=2.7.15 BREW_UPGRADE=yes RVM_GPG_IMPORT=yes
     - name: "macOS 10.13 (High Sierra) with Xcode 9.4"
       os: osx
       osx_image: xcode9.4
@@ -68,13 +68,15 @@ before_cache:
 - rm -f $HOME/.cache/pre-commit/pre-commit.log
 
 before_install:
+  # Import new GPG key for RVM when necessary
+  - if [[ "$RVM_GPG_IMPORT" == "yes" ]]; then command curl -sSL https://rvm.io/mpapis.asc | gpg --import -; fi
   # Update Homebrew to fix HOMEBREW_LOGS error
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew update; fi
   # # Install Ansible with Homebrew on OS X
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade ansible; fi
   # Install pre-commit with Homebrew
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade pre-commit; fi
-  # existing pyenv installation on Linux conflicts with ours
+  # Existing pyenv installation on Linux conflicts with ours
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then rm -rf /opt/pyenv; fi
 
 install:
