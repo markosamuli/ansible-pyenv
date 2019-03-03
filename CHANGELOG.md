@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] - 2019-03-03
+## [1.2.1] - 2019-03-03
 
 * improved update-python script
 * coding style changes
@@ -35,6 +35,7 @@
 [pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
 [pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/master
+[1.2.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.1
 [1.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.0
 [1.1.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.2
 [1.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.1
