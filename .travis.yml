@@ -90,13 +90,13 @@ install:
   # Install Ansible with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      sudo pip install ansible${ANSIBLE_VERSION}
+      pip install --user ansible${ANSIBLE_VERSION}
     fi
 
   # Install pre-commit with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      sudo pip install pre-commit
+      pip install --user pre-commit
     fi
 
   # Check Ansible version
