@@ -10,27 +10,37 @@ error() {
 ###
 # Get latest stable tag for a GitHub repository
 ###
-get_latest_python27_version() {
+get_latest_cpython_version() {
+    local target_version=$1
     local repository=python/cpython
     local url="https://api.github.com/repos/${repository}/git/refs/tags"
     if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
         url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
     fi
+    # @formatter:off
     curl --silent "${url}" | \
-        jq -r 'map(select(.object.type == "tag")) | map(select(.ref | test("refs/tags/v2.7"))) | map(select(.ref | test("rc") | not)) | map(.ref) | map(capture("refs/tags/v(?<version>.*)")) | sort_by(.version) | last | .version'
+        jq --arg version_tag "${target_version}" \
+        -r 'map(select(.object.type == "tag"))
+            | map(select(.ref | test("refs/tags/" + $version_tag)))
+            | map(select(.ref | test("rc") | not))
+            | map(.ref)
+            | map(capture("refs/tags/v(?<version>.*)"))
+            | sort_by(.version) | last | .version'
+    # @formatter:on
+}
+
+###
+# Get latest stable tag for a GitHub repository
+###
+get_latest_python27_version() {
+    get_latest_cpython_version "v2.7"
 }
 
 ###
 # Get latest stable tag for a GitHub repository
 ###
 get_latest_python37_version() {
-    local repository=python/cpython
-    local url="https://api.github.com/repos/${repository}/git/refs/tags"
-    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
-        url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
-    fi
-    curl --silent "${url}" | \
-        jq -r 'map(select(.object.type == "tag")) | map(select(.ref | test("refs/tags/v3.7"))) | map(select(.ref | test("rc") | not)) | map(.ref) | map(capture("refs/tags/v(?<version>.*)")) | sort_by(.version) | last | .version'
+    get_latest_cpython_version "v3.7"
 }
 
 ###
