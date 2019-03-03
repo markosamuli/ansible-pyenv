@@ -21,4 +21,5 @@ galaxy_info:
     - macos
     - pyenv
     - python
+    - development
 dependencies: []
