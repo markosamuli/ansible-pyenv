@@ -3,9 +3,13 @@
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
   rev: v2.0.0
   hooks:
-    - id: check-executables-have-shebangs
     - id: trailing-whitespace
     - id: check-yaml
+
+- repo: https://github.com/adrienverge/yamllint.git
+  sha: v1.15.0
+  hooks:
+    - id: yamllint
 
 - repo: https://github.com/ansible/ansible-lint.git
   rev: v3.5.1

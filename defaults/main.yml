@@ -1,5 +1,5 @@
 ---
-# defaults file for ansible-pyenv
+# defaults file for markosamuli.pyenv
 
 # Installation paths
 pyenv_home: "{{ ansible_env.HOME }}"

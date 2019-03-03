@@ -1,5 +1,5 @@
 ---
-# tasks file for ansible-pyenv
+# tasks file for markosamuli.pyenv
 
 - name: Load variables for the target system
   include_vars: "{{ item }}"
@@ -21,4 +21,3 @@
 - name: Initialise shell
   include_tasks: shell.yml
   when: pyenv_init_shell
-

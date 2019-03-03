@@ -46,45 +46,58 @@ matrix:
 addons:
   apt:
     packages:
-    - python-pip
-    - python-dev
+      - python-pip
+      - python-dev
   homebrew:
     packages:
-    - ansible
-    - pre-commit
-
-cache:
-  directories:
-  - $HOME/.cache/pre-commit/
+      - ansible
+      - pre-commit
 
 branches:
   only:
-  - master
-  - /^feature\/.*$/
-  - /^bugfix\/.*$/
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+    - master
+    - /^feature\/.*$/
+    - /^bugfix\/.*$/
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
+cache:
+  directories:
+    - $HOME/.cache/pre-commit/
 
 before_cache:
-- rm -f $HOME/.cache/pre-commit/pre-commit.log
+  - rm -f $HOME/.cache/pre-commit/pre-commit.log
 
 before_install:
   # Import new GPG key for RVM when necessary
-  - if [[ "$RVM_GPG_IMPORT" == "yes" ]]; then command curl -sSL https://rvm.io/mpapis.asc | gpg --import -; fi
+  - >
+    if [[ "$RVM_GPG_IMPORT" == "yes" ]]; then
+      command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+    fi
+
   # Update Homebrew to fix HOMEBREW_LOGS error
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew update; fi
-  # # Install Ansible with Homebrew on OS X
+
+  # Upgrade Ansible with installed Homebrew
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade ansible; fi
-  # Install pre-commit with Homebrew
+
+  # Upgrade pre-commit installed with Homebrew
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade pre-commit; fi
+
   # Existing pyenv installation on Linux conflicts with ours
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then rm -rf /opt/pyenv; fi
 
 install:
   # Install Ansible with pip on Ubuntu
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible${ANSIBLE_VERSION}; fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+      pip install --user ansible${ANSIBLE_VERSION}
+    fi
 
   # Install pre-commit with pip on Ubuntu
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install pre-commit; fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+      pip install --user pre-commit
+    fi
 
   # Check Ansible version
   - ansible --version
