@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: pyenv
   author: Marko Samuli Kirves
   description: Installs pyenv and pyenv-virtualenv
   license: MIT
