@@ -3,6 +3,7 @@ galaxy_info:
   description: Installs pyenv and pyenv-virtualenv
   license: MIT
   min_ansible_version: 2.4
+  github_branch: master
   platforms:
    - name: Ubuntu
      versions:
