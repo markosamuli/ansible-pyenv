@@ -1,0 +1,34 @@
+# -*- mode: yaml -*-
+# vim:ts=2:sw=2:ai:si:syntax=yaml
+#
+# yamllint configuration directives
+# Project Homepage: https://github.com/adrienverge/yamllint
+#
+# Overriding rules in files:
+# http://yamllint.readthedocs.io/en/latest/disable_with_comments.html
+---
+extends: relaxed
+
+# Rules documentation: http://yamllint.readthedocs.io/en/latest/rules.html
+rules:
+
+  document-start:
+    present: true
+
+  braces:
+    # Allowing one space inside braces to improve code readability
+    max-spaces-inside: 1
+
+  brackets:
+    # Allowing one space inside braces to improve code readability
+    max-spaces-inside: 1
+
+  indentation:
+    # Requiring 2 space indentation
+    spaces: 2
+    # Requiring consistent indentation within a file, either indented or not
+    indent-sequences: consistent
+
+  line-length:
+    max: 80
+    level: warning
