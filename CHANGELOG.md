@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased] - 2019-03-03
+
+* improved update-python script
+* coding style changes
+
 ## [1.2.0] - 2019-02-27
 
 * add support for macOS 10.14
@@ -29,6 +34,7 @@
 [pyenv]: https://github.com/pyenv/pyenv
 [pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
 [pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
+[Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/master
 [1.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.0
 [1.1.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.2
 [1.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.1
