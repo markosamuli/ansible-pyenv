@@ -30,6 +30,8 @@
     block: |
       if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
         source $HOME/.pyenv/.pyenvrc
+      fi
+      if [ -e "$HOME/.pyenv/completions/pyenv.bash" ]; then
         source $HOME/.pyenv/completions/pyenv.bash
       fi
   when: pyenv_bashrc_st.stat.exists and check_bashrc.rc != 0
@@ -64,6 +66,9 @@
     block: |
       if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
         source $HOME/.pyenv/.pyenvrc
+        source $HOME/.pyenv/completions/pyenv.zsh
+      fi
+      if [ -e "$HOME/.pyenv/completions/pyenv.zsh" ]; then
         source $HOME/.pyenv/completions/pyenv.zsh
       fi
   when: pyenv_zshrc_st.stat.exists and check_zshrc.rc != 0
