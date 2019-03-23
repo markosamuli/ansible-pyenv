@@ -5,22 +5,22 @@ python: "2.7"
 
 matrix:
   include:
-    - name: "Ubuntu 14.04 LTS with Ansible 2.4"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.4"
       os: linux
-      dist: trusty
+      dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.5.0' PYTHON_VERSION=2.7.15
-    - name: "Ubuntu 16.04 LTS with Ansible 2.5"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.5"
       os: linux
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.6.0' PYTHON_VERSION=3.7.2
-    - name: "Ubuntu 16.04 LTS with Ansible 2.6"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
       os: linux
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.7.0' PYTHON_VERSION=3.7.2
-    - name: "Ubuntu 16.04 LTS with Ansible 2.7"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
       os: linux
       dist: xenial
       sudo: required
