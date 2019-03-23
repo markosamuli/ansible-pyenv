@@ -99,4 +99,4 @@ Use of `.pyenvrc` file and parts used for installing python version taken from
 
 ## Author Information
 
-- [@markosamuli](https://github.com/markosamuli)
+* [@markosamuli](https://github.com/markosamuli)
