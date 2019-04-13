@@ -10,12 +10,16 @@
 | master  | [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-pyenv)
 | develop | [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=develop)](https://travis-ci.org/markosamuli/ansible-pyenv)
 
-Ansible role to install [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) on Ubuntu or macOS development machines.
+Ansible role to install [pyenv] and [pyenv-virtualenv] on Ubuntu or macOS development machines.
 
-Optionally, [pyenv-virtualenvwrapper](https://github.com/pyenv/pyenv-virtualenvwrapper) can be installed and used for managing environments.
+Optionally, [pyenv-virtualenvwrapper] can be installed and used for managing environments.
 
 Don't use this role on production servers as it supports installing pyenv only under
 user home directory.
+
+[pyenv]: https://github.com/pyenv/pyenv
+[pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
+[pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
 
 ## macOS Mojave
 
@@ -25,10 +29,12 @@ if they're not found in `/usr/include`.
 
 ## Installed Python versions
 
-This role installs Python versions defined in `pyenv_python_versions` variable.
+This role installs [Python] versions defined in `pyenv_python_versions` variable.
 
 To set global version, set `pyenv_global` variable to the desired version. By default
 this is not configured.
+
+[Python]: https://www.python.org
 
 ## Changes to shell config files
 
@@ -75,14 +81,22 @@ pyenv_virtualenvwrapper: no
 
 ## Updating versions
 
-Run the following script to get latest releases from GitHub and update them in
+Run the following scripts to get latest releases from GitHub and update them in
 role defaults.
 
+Update [pyenv] release:
+
 ```bash
-./update-release
+./update-release pyenv
 ```
 
-Update default Python versions:
+Update [pyenv-virtualenv] release:
+
+```bash
+./update-release pyenv-virtualenv
+```
+
+Update default [Python] versions:
 
 ```bash
 ./update-python

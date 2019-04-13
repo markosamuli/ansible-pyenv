@@ -76,13 +76,23 @@ latest_pyenv_virtualenv_version() {
 # Update all versions
 ###
 update_versions() {
-    PYENV_VERSION=$(latest_pyenv_version)
-    echo "Latest pyenv release is ${PYENV_VERSION}"
-    update_pyenv_version ${PYENV_VERSION}
-
-    PYENV_VIRTUALENV_VERSION=$(latest_pyenv_virtualenv_version)
-    echo "Latest pyenv-virtualenv release is ${PYENV_VIRTUALENV_VERSION}"
-    update_pyenv_virtualenv_version ${PYENV_VIRTUALENV_VERSION}
+    local repository=$1
+    if [ -z "${repository}" ]; then
+        error "Repository not defined"
+        exit 1
+    fi
+    if [ "${repository}" == "pyenv" ]; then
+        PYENV_VERSION=$(latest_pyenv_version)
+        echo "Latest pyenv release is ${PYENV_VERSION}"
+        update_pyenv_version ${PYENV_VERSION}
+    elif [ "${repository}" == "pyenv-virtualenv" ]; then
+        PYENV_VIRTUALENV_VERSION=$(latest_pyenv_virtualenv_version)
+        echo "Latest pyenv-virtualenv release is ${PYENV_VIRTUALENV_VERSION}"
+        update_pyenv_virtualenv_version ${PYENV_VIRTUALENV_VERSION}
+    else
+        error "Unknown repository: ${repository}"
+        exit 1
+    fi
 }
 
 check_requirements() {
@@ -92,4 +102,4 @@ check_requirements() {
 set -e
 
 check_requirements
-update_versions
+update_versions $1
