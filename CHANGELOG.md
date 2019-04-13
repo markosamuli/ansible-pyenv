@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+## Fixed
+
+* `update-release` script needs repository to update
+
 ## [1.2.1] - 2019-03-03
 
 * improved update-python script
@@ -19,11 +25,16 @@
 
 * updated [pyenv-virtualenv] from v1.1.3 to v1.1.5
 
+[pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
+
 ## [1.1.0] - 2019-01-13
 
 * optionally install [pyenv-virtualenvwrapper]
 * updated [pyenv] from v1.2.8 to v1.2.9
 * add GitHub access token to `update-release` script
+
+[pyenv]: https://github.com/pyenv/pyenv
+[pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
 
 ## [1.0.0] - 2018-12-04
 
@@ -31,10 +42,7 @@
 * install Python versions
 * set pyenv global version
 
-[pyenv]: https://github.com/pyenv/pyenv
-[pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
-[pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
-[Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/master
+[Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
 [1.2.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.1
 [1.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.0
 [1.1.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.2
