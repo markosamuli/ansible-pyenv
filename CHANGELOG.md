@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.3.0] - 2019-04-20
 
 ## Fixed
 
@@ -48,6 +48,7 @@
 * set pyenv global version
 
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[1.3.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.3.0
 [1.2.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.1
 [1.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.0
 [1.1.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.2
