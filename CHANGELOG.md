@@ -6,6 +6,11 @@
 
 * `update-release` script needs repository to update
 
+## Changed
+
+* updated [pyenv] from v1.2.9 to v1.2.11
+* drop Trusty support and builds
+
 ## [1.2.1] - 2019-03-03
 
 * improved update-python script
