@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT=$(dirname $DIR)
+
+ROLE_NAME=ansible-pyenv
+TEST_HOME=/home/test
+
+###
+# Detect Windows Subsystem for Linux
+###
+function detect_wsl {
+    if grep -q Microsoft /proc/version; then
+        echo "*** Windows Subsystem for Linux detected"
+        is_wsl=1
+    else
+        is_wsl=0
+    fi
+}
+
+###
+# Stop all containers
+###
+function finish {
+    local containers=""
+    containers=$(docker ps -q --filter=name=${ROLE_NAME})
+    if [ ! -z "${containers}" ]; then
+        echo "*** Stop all test containers"
+        docker stop ${containers}
+    fi
+}
+
+###
+# Stop container
+###
+function stop {
+    local image=$1
+    local container_name=${ROLE_NAME}-${image}-tests
+    echo "*** Stop containers"
+    docker stop ${container_name}
+}
+
+###
+# Build image
+###
+function build {
+    local image=$1
+    local image_name=${ROLE_NAME}-${image}
+    echo "*** Build image"
+    docker build -t ${image_name} ./tests/${image}
+}
+
+###
+# Start container in the background
+###
+function start {
+    local image=$1
+    local image_name=${ROLE_NAME}-${image}
+    local container_name=${ROLE_NAME}-${image}-tests
+    echo "*** Start container"
+    docker run --rm -it -d \
+        -v ${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME} \
+        --name ${container_name} \
+        $image_name
+}
+
+###
+# Run tests in the container
+###
+function run_tests {
+    local image=$1
+    local container_name=${ROLE_NAME}-${image}-tests
+    echo "*** Run tests"
+    docker exec -it \
+        --user test \
+        ${container_name} \
+        ${TEST_HOME}/${ROLE_NAME}/tests/run-tests-docker
+}
+
+trap finish EXIT
+
+detect_wsl
+
+cd $PROJECT_ROOT
+
+if [ "${is_wsl}" == "1" ]; then
+    MOUNT_ROOT="$(pwd -P | sed 's~/mnt/c/~c:/~')"
+else
+    MOUNT_ROOT="$(pwd -P)"
+fi
+
+set -e
+
+images=( bionic xenial stretch buster )
+for i in "${images[@]}"; do
+    build $i
+    start $i
+    run_tests $i
+    stop $i
+done

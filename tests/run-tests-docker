@@ -3,18 +3,17 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT=$(dirname $DIR)
 
-export PYTHON_VERSION=2.7.15
-
 set -e
 
 # Variables to pass to ansible-playbook
 ansible_vars=(
-    "'pyenv_python_versions':['${PYTHON_VERSION}']"
-    "'pyenv_global':'${PYTHON_VERSION}'"
     "'pyenv_virtualenvwrapper':'True'"
 )
 extra_vars=$(printf ",%s" "${ansible_vars[@]}")
 extra_vars="{${extra_vars:1}}"
+
+# Paths in which Ansible will search for Roles
+export ANSIBLE_ROLES_PATH=$(dirname $PROJECT_ROOT)
 
 cd $PROJECT_ROOT
 
