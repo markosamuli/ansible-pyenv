@@ -47,7 +47,7 @@ get_latest_python37_version() {
 # Update Ansible variable
 ###
 update_python2_version() {
-    local key=pyenv_python2
+    local key=pyenv_python2_version
     local version=$1
     local file=defaults/main.yml
     sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
@@ -59,7 +59,7 @@ update_python2_version() {
 # Update Ansible variable
 ###
 update_python3_version() {
-    local key=pyenv_python3
+    local key=pyenv_python3_version
     local version=$1
     local file=defaults/main.yml
     sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
