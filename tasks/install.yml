@@ -20,14 +20,19 @@
 - name: Install Python interpreters
   shell: . {{ pyenv_root }}/.pyenvrc && pyenv install {{ item }}
   args:
+    executable: /bin/bash
     creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
   with_items: "{{ pyenv_python_versions }}"
 
 - name: Get current global version
   shell: . {{ pyenv_root }}/.pyenvrc && pyenv global
+  args:
+    executable: /bin/bash
   register: pyenv_global_version
   changed_when: False
 
 - name: Set pyenv global version
   shell: . {{ pyenv_root }}/.pyenvrc && pyenv global {{ pyenv_global }} && pyenv rehash
+  args:
+    executable: /bin/bash
   when: pyenv_global is defined and pyenv_global_version.stdout != pyenv_global
