@@ -10,12 +10,14 @@
 | master  | [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-pyenv)
 | develop | [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=develop)](https://travis-ci.org/markosamuli/ansible-pyenv)
 
-Ansible role to install [pyenv] and [pyenv-virtualenv] on Ubuntu or macOS development machines.
+Ansible role to install [pyenv] and [pyenv-virtualenv] on Ubuntu or macOS
+development machines.
 
-Optionally, [pyenv-virtualenvwrapper] can be installed and used for managing environments.
+Optionally, [pyenv-virtualenvwrapper] can be installed and used for managing
+environments.
 
-Don't use this role on production servers as it supports installing pyenv only under
-user home directory.
+Don't use this role on production servers as it supports installing pyenv only
+under user home directory.
 
 [pyenv]: https://github.com/pyenv/pyenv
 [pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
@@ -31,15 +33,15 @@ if they're not found in `/usr/include`.
 
 This role installs [Python] versions defined in `pyenv_python_versions` variable.
 
-To set global version, set `pyenv_global` variable to the desired version. By default
-this is not configured.
+To set global version, set `pyenv_global` variable to the desired version. By
+default this is not configured.
 
 [Python]: https://www.python.org
 
 ## Changes to shell config files
 
-This role creates config file in `~/.pyenv/.pyenvrc` that is loaded in `.bashrc`
-and `.zshrc` files.
+This role creates config file in `~/.pyenv/.pyenvrc` that is loaded in
+`.bashrc` and `.zshrc` files.
 
 Autocomplete is loaded by default.
 
@@ -60,11 +62,6 @@ pyenv_python_versions:
 
 # Set global pyenv version
 pyenv_global: "3.7.2"
-
-# Define the shell profile scripts to initialiaze
-pyenv_shell_profile_scripts:
-  - .bashrc
-  - .zshrc
 
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: no

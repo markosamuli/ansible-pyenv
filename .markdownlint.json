@@ -1,0 +1,9 @@
+{
+    "default": true,
+    "MD003": {
+        "style": "atx"
+    },
+    "MD024": {
+        "siblings_only": true
+    }
+}
