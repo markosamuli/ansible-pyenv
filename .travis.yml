@@ -9,38 +9,38 @@ matrix:
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.5.0' PYTHON_VERSION=2.7.15
+      env: ANSIBLE_VERSION='<2.5.0' PYTHON_VERSION=2.7.16
     - name: "Ubuntu 16.04 (Xenial) with Ansible 2.5"
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.6.0' PYTHON_VERSION=3.7.2
+      env: ANSIBLE_VERSION='<2.6.0' PYTHON_VERSION=3.7.3
     - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.7.0' PYTHON_VERSION=3.7.2
+      env: ANSIBLE_VERSION='<2.7.0' PYTHON_VERSION=3.7.3
     - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.8.0' PYTHON_VERSION=3.7.2
+      env: ANSIBLE_VERSION='<2.8.0' PYTHON_VERSION=3.7.3
     - name: "macOS 10.12 (Sierra) with Xcode 9.2"
       os: osx
       osx_image: xcode9.2
-      env: PYTHON_VERSION=2.7.15 BREW_UPGRADE=yes RVM_GPG_IMPORT=yes
+      env: PYTHON_VERSION=2.7.16 BREW_UPGRADE=yes RVM_GPG_IMPORT=yes
     - name: "macOS 10.13 (High Sierra) with Xcode 9.4"
       os: osx
       osx_image: xcode9.4
-      env: PYTHON_VERSION=2.7.15
+      env: PYTHON_VERSION=2.7.16
     - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
       os: osx
       osx_image: xcode10.1
-      env: PYTHON_VERSION=3.7.2
+      env: PYTHON_VERSION=3.7.3
     - name: "macOS 10.14 (Mojave) with Xcode 10.2 beta"
       os: osx
       osx_image: xcode10.2
-      env: PYTHON_VERSION=3.7.2
+      env: PYTHON_VERSION=3.7.3
 
 # Install Ansible and Python development packages
 addons:
