@@ -7,6 +7,14 @@
 * install on Pengwin Linux
 * added Debian build requirements
 * removed unused default variables
+* tests inside Docker containers on WSL
+
+### Changed
+
+* changed Python version variables structure so that they're easier to update
+* update Python 2.7.16 -> 2.7.16
+* update Python 3.7.2 -> 3.7.3
+* install latest Python 3.7 as the default global version
 
 ## [1.3.0] - 2019-04-20
 
