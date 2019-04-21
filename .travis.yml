@@ -135,4 +135,5 @@ script:
   - . $HOME/.pyenv/.pyenvrc && pyenv version | grep -q ${PYTHON_VERSION}
 
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  webhooks:
+    - https://galaxy.ansible.com/api/v1/notifications/
