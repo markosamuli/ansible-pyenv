@@ -7,9 +7,14 @@ galaxy_info:
   min_ansible_version: 2.4
   github_branch: master
   platforms:
+   - name: Debian
+     versions:
+     - buster
+     - stretch
    - name: Ubuntu
      versions:
      - xenial
+     - bionic
    - name: MacOSX
      versions:
      - '10.12'
