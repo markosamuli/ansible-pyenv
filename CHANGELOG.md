@@ -5,6 +5,8 @@
 ### Fixed
 
 * install on Pengwin Linux
+* added Debian build requirements
+* removed unused default variables
 
 ## [1.3.0] - 2019-04-20
 
