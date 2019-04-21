@@ -1,12 +1,18 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+* install on Pengwin Linux
+
 ## [1.3.0] - 2019-04-20
 
-## Fixed
+### Fixed
 
 * `update-release` script needs repository to update
 
-## Changed
+### Changed
 
 * updated [pyenv] from v1.2.9 to v1.2.11
 * drop Trusty support and builds
