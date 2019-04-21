@@ -61,11 +61,6 @@ pyenv_python_versions:
 # Set global pyenv version
 pyenv_global: "3.7.2"
 
-# Define the shell profile scripts to initialiaze
-pyenv_shell_profile_scripts:
-  - .bashrc
-  - .zshrc
-
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: no
 ```

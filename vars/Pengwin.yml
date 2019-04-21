@@ -2,7 +2,6 @@
 
 # https://github.com/pyenv/pyenv/wiki/common-build-problems
 pyenv_build_requirements:
-  - git
   - make
   - build-essential
   - libssl-dev
@@ -17,3 +16,7 @@ pyenv_build_requirements:
   - libncursesw5-dev
   - xz-utils
   - tk-dev
+  - libffi-dev
+  - liblzma-dev
+  - python-openssl
+  - git

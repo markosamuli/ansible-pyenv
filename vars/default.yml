@@ -1,5 +1,3 @@
 ---
 
-pyenv_shell_profile_scripts:
-  - .bash_profile
-  - .zshrc
+pyenv_build_requirements: []
