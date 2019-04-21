@@ -57,11 +57,11 @@ pyenv_init_shell: yes
 
 # Python versions to install
 pyenv_python_versions:
-  - "2.7.15"
-  - "3.7.2"
+  - "2.7.16"
+  - "3.7.3"
 
 # Set global pyenv version
-pyenv_global: "3.7.2"
+pyenv_global: "3.7.3"
 
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: no
@@ -93,10 +93,16 @@ Update [pyenv-virtualenv] release:
 ./update-release pyenv-virtualenv
 ```
 
-Update default [Python] versions:
+Update default [Python] 2.7 version:
 
 ```bash
-./update-python
+./update-python python2
+```
+
+Update default [Python] 3.7 version:
+
+```bash
+./update-python python3
 ```
 
 ## Acknowledgments

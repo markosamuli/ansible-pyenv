@@ -46,12 +46,23 @@ get_latest_python37_version() {
 ###
 # Update Ansible variable
 ###
-update_python_versions() {
-    local key=pyenv_python_versions
-    local python27=$1
-    local python37=$2
+update_python2_version() {
+    local key=pyenv_python2
+    local version=$1
     local file=defaults/main.yml
-    sed -i.save -r "s/^($key):.*$/\1: [\"${python27}\", \"${python37}\"]/" \
+    sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
+        ${file}
+    rm ${file}.save
+}
+
+###
+# Update Ansible variable
+###
+update_python3_version() {
+    local key=pyenv_python3
+    local version=$1
+    local file=defaults/main.yml
+    sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
         ${file}
     rm ${file}.save
 }
@@ -60,11 +71,37 @@ update_python_versions() {
 # Update all versions
 ###
 update_versions() {
+    local target=$1
+    if [ -z "${target}" ]; then
+        error "Target version not defined"
+        exit 1
+    fi
+    if [ "${target}" == "python2" ]; then
+        update_python2
+    elif [ "${target}" == "python3" ]; then
+        update_python3
+    else
+        error "Unknown target version: ${target}"
+        exit 1
+    fi
+}
+
+###
+# Update Python 2 version
+###
+update_python2() {
     PYTHON27_VERSION=$(get_latest_python27_version)
-    PYTHON37_VERSION=$(get_latest_python37_version)
     echo "Latest Python 2.7 release is ${PYTHON27_VERSION}"
+    update_python2_version "${PYTHON27_VERSION}"
+}
+
+###
+# Update Python 3 version
+###
+update_python3() {
+    PYTHON37_VERSION=$(get_latest_python37_version)
     echo "Latest Python 3.7 release is ${PYTHON37_VERSION}"
-    update_python_versions "${PYTHON27_VERSION}" "${PYTHON37_VERSION}"
+    update_python3_version "${PYTHON37_VERSION}"
 }
 
 check_requirements() {
@@ -75,4 +112,4 @@ check_requirements() {
 set -e
 
 check_requirements
-update_versions
+update_versions $1
