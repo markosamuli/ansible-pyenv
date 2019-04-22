@@ -1,13 +1,6 @@
 # Changelog
 
-## [Unreleased]
-
-### Fixed
-
-* install on Pengwin Linux
-* added Debian build requirements
-* removed unused default variables
-* tests inside Docker containers on WSL
+## [1.4.0] - 2019-04-22
 
 ### Changed
 
@@ -15,6 +8,13 @@
 * update Python 2.7.16 -> 2.7.16
 * update Python 3.7.2 -> 3.7.3
 * install latest Python 3.7 as the default global version
+
+### Fixed
+
+* install on Pengwin Linux
+* added Debian build requirements
+* removed unused default variables
+* tests inside Docker containers on WSL
 
 ## [1.3.0] - 2019-04-20
 
@@ -64,6 +64,7 @@
 * set pyenv global version
 
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[1.4.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.4.0
 [1.3.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.3.0
 [1.2.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.1
 [1.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.0
