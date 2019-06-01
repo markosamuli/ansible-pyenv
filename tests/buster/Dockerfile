@@ -5,7 +5,9 @@ RUN apt-get update && apt-get install -y \
     python-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install ansible
+ARG ansible_version="<2.8.0"
+ENV ANSIBLE_VERSION="${ansible_version}"
+RUN pip install ansible${ANSIBLE_VERSION}
 
 RUN apt-get update && apt-get install -y \
     zsh \
