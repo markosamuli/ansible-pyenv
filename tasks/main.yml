@@ -4,9 +4,9 @@
 - name: Load variables for the target system
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "default.yml"
+    - "os/{{ ansible_distribution }}.yml"
+    - "os/{{ ansible_os_family }}.yml"
+    - "os/default.yml"
 
 - name: Setup on Linux
   include_tasks: Linux.yml
