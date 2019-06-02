@@ -35,4 +35,4 @@
   shell: . {{ pyenv_root }}/.pyenvrc && pyenv global {{ pyenv_global }} && pyenv rehash
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
-  when: pyenv_global is defined and pyenv_global_version.stdout != pyenv_global
+  when: pyenv_global is defined and (pyenv_global_version.stdout_lines | join (" ")) != pyenv_global

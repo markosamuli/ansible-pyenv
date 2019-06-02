@@ -23,7 +23,7 @@ pyenv_python_versions:
   - "{{ pyenv_python3_version }}"
 
 # Set global pyenv version
-pyenv_global: "{{ pyenv_python3_version }}"
+pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
 
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: no

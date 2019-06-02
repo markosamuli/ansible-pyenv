@@ -33,8 +33,14 @@ if they're not found in `/usr/include`.
 
 This role installs [Python] versions defined in `pyenv_python_versions` variable.
 
-To set global version, set `pyenv_global` variable to the desired version. By
-default this is not configured.
+To set global version, set `pyenv_global` variable to the desired version(s).
+
+```yaml
+pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+```
+
+This is configured to use latest python2 and python3 versions and the
+system version as default.
 
 [Python]: https://www.python.org
 
