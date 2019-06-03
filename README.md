@@ -111,7 +111,7 @@ Update default [Python] 3.7 version:
 ./update-python python3
 ```
 
-## Acknowledgments
+## Acknowledgements
 
 Use of `.pyenvrc` file and parts used for installing python version taken from
 [avanov.pyenv](https://github.com/avanov/ansible-galaxy-pyenv) role.

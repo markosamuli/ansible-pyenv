@@ -1,3 +1,7 @@
+# -*- mode: yaml -*-
+# vim:ts=2:sw=2:ai:si:syntax=yaml
+#
+# Travis CI configuration
 ---
 
 language: generic
@@ -5,16 +9,6 @@ python: "2.7"
 
 matrix:
   include:
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.4"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.5.0'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.5"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.6.0'
     - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
       os: linux
       dist: xenial
@@ -30,21 +24,13 @@ matrix:
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.9.0'
-    - name: "macOS 10.12 (Sierra) with Xcode 9.2"
-      os: osx
-      osx_image: xcode9.2
-      env: BREW_UPGRADE=yes RVM_GPG_IMPORT=yes
-    - name: "macOS 10.13 (High Sierra) with Xcode 9.4"
-      os: osx
-      osx_image: xcode9.4
     - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
       os: osx
       osx_image: xcode10.1
-    - name: "macOS 10.14 (Mojave) with Xcode 10.2 beta"
+    - name: "macOS 10.14 (Mojave) with Xcode 10.2.1"
       os: osx
       osx_image: xcode10.2
 
-# Install Ansible and Python development packages
 addons:
   apt:
     packages:

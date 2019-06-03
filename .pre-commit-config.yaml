@@ -1,3 +1,7 @@
+# -*- mode: yaml -*-
+# vim:ts=2:sw=2:ai:si:syntax=yaml
+#
+# pre-commit hooks configuration
 ---
 
 repos:
