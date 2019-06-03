@@ -116,6 +116,17 @@ Update default [Python] 3.7 version:
 Use of `.pyenvrc` file and parts used for installing python version taken from
 [avanov.pyenv](https://github.com/avanov/ansible-galaxy-pyenv) role.
 
+## Development
+
+Install [pre-commit] hooks:
+
+```bash
+pre-commit install
+pre-commit install --hook-type pre-push
+```
+
+[pre-commit]: https://pre-commit.com/
+
 ## Changes
 
 * [CHANGELOG.md](CHANGELOG.md)
