@@ -9,16 +9,6 @@ python: "2.7"
 
 matrix:
   include:
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.4"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.5.0'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.5"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.6.0'
     - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
       os: linux
       dist: xenial
