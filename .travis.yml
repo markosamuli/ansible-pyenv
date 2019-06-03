@@ -37,7 +37,7 @@ matrix:
     - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
       os: osx
       osx_image: xcode10.1
-    - name: "macOS 10.14 (Mojave) with Xcode 10.2 beta"
+    - name: "macOS 10.14 (Mojave) with Xcode 10.2.1"
       os: osx
       osx_image: xcode10.2
 
