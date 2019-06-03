@@ -17,7 +17,6 @@ galaxy_info:
      - bionic
    - name: MacOSX
      versions:
-     - '10.12'
      - '10.13'
      - '10.14'
   galaxy_tags:
