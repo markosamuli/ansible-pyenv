@@ -1,2 +1,6 @@
 *.retry
 ansible.cfg
+
+# IDEs
+.vscode/*
+!.vscode/cSpell.json
