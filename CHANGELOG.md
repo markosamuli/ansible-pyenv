@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0] - 2019-06-03
+
+### Changed
+
+* Set global python version to `2.7.16 3.7.3 system`
+* Run Debian and Ubuntu tests in Docker containers with Ansible v2.7
+* Drop support for unsupported Ansible v2.4 and v2.5 versions
+* Drop support for macOS 10.12 and Xcode 9.4
+
+### Fixed
+
+* Load zsh and bash completions only if installed
+* OS variable loading breaking with conflicting playbooks
+
 ## [1.4.0] - 2019-04-22
 
 ### Changed
