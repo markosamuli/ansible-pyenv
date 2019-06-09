@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1] - 2019-06-09
+
+### Fixed
+
+* Do not set 'system' in global version if it's not available
+
 ## [1.5.0] - 2019-06-03
 
 ### Changed
