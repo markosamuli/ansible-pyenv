@@ -30,11 +30,11 @@
     block: |
       if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
         source $HOME/.pyenv/.pyenvrc
-      fi
-      if [ -e "$HOME/.pyenv/completions/pyenv.bash" ]; then
-        source $HOME/.pyenv/completions/pyenv.bash
-      elif [ -e "/usr/local/opt/pyenv/completions/pyenv.bash" ]; then
-        source /usr/local/opt/pyenv/completions/pyenv.bash
+        if [ -e "$HOME/.pyenv/completions/pyenv.bash" ]; then
+          source $HOME/.pyenv/completions/pyenv.bash
+        elif [ -e "/usr/local/opt/pyenv/completions/pyenv.bash" ]; then
+          source /usr/local/opt/pyenv/completions/pyenv.bash
+        fi
       fi
   when: pyenv_bashrc_st.stat.exists and check_bashrc.rc != 0
 
@@ -68,10 +68,10 @@
     block: |
       if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
         source $HOME/.pyenv/.pyenvrc
-      fi
-      if [ -e "$HOME/.pyenv/completions/pyenv.zsh" ]; then
-        source $HOME/.pyenv/completions/pyenv.zsh
-      elif [ -e "/usr/local/opt/pyenv/completions/pyenv.zsh" ]; then
-        source /usr/local/opt/pyenv/completions/pyenv.zsh
+        if [ -e "$HOME/.pyenv/completions/pyenv.zsh" ]; then
+          source $HOME/.pyenv/completions/pyenv.zsh
+        elif [ -e "/usr/local/opt/pyenv/completions/pyenv.zsh" ]; then
+          source /usr/local/opt/pyenv/completions/pyenv.zsh
+        fi
       fi
   when: pyenv_zshrc_st.stat.exists and check_zshrc.rc != 0
