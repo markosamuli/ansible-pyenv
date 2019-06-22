@@ -1,11 +1,11 @@
-FROM ubuntu:xenial
+FROM %%FROM%%
 
 RUN apt-get update && apt-get install -y \
     python-minimal \
     python-pip \
  && rm -rf /var/lib/apt/lists/*
 
-ARG ansible_version="<2.9.0"
+ARG ansible_version="%%ANSIBLE_VERSION%%"
 ENV ANSIBLE_VERSION="${ansible_version}"
 RUN pip install ansible${ANSIBLE_VERSION}
 
@@ -18,8 +18,8 @@ RUN apt-get update && apt-get install -y \
     aptitude \
  && rm -rf /var/lib/apt/lists/*
 
-ARG user=test
-ARG repository=ansible-pyenv
+ARG user=%%USER%%
+ARG repository=%%REPOSITORY%%
 
 # Create test user
 RUN useradd -m ${user} -s /bin/bash \

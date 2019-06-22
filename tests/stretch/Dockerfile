@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     python-pip \
  && rm -rf /var/lib/apt/lists/*
 
-ARG ansible_version="<2.8.0"
+ARG ansible_version="<2.9.0"
 ENV ANSIBLE_VERSION="${ansible_version}"
 RUN pip install ansible${ANSIBLE_VERSION}
 
@@ -14,15 +14,24 @@ RUN apt-get update && apt-get install -y \
     sudo \
  && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+    aptitude \
+ && rm -rf /var/lib/apt/lists/*
+
+ARG user=test
+ARG repository=ansible-pyenv
+
 # Create test user
-RUN useradd -m test -s /bin/bash \
- && echo "test:test" | chpasswd \
- && adduser test sudo \
+RUN useradd -m ${user} -s /bin/bash \
+ && echo "${user}:${user}" | chpasswd \
+ && adduser ${user} sudo \
  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN touch /home/test/.zshrc && chown -R test:test /home/test
+RUN touch /home/${user}/.zshrc \
+ && chown -R ${user}:${user} /home/${user}
 
 # Create directory for code
-RUN mkdir -p /home/test/ansible-pyenv ; chown -R test:test /home/test/ansible-pyenv
-VOLUME ["/home/test/ansible-pyenv"]
+RUN mkdir -p /home/${user}/${repository} ; \
+    chown -R ${user}:${user} /home/${user}/${repository}
+VOLUME ["/home/${user}/${repository}"]
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
