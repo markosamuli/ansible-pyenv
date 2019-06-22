@@ -22,4 +22,4 @@
     repo: https://github.com/pyenv/pyenv-virtualenvwrapper.git
     dest: "{{ pyenv_root }}/plugins/pyenv-virtualenvwrapper"
     version: "{{ pyenv_virtualenvwrapper_version }}"
-  when: pyenv_virtualenvwrapper
+  when: pyenv_virtualenvwrapper|bool

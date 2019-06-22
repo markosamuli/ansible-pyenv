@@ -26,4 +26,4 @@
 - name: Install pyenv-virtualenvwrapper with Homebrew
   package:
     name: pyenv-virtualenvwrapper
-  when: pyenv_virtualenvwrapper
+  when: pyenv_virtualenvwrapper|bool
