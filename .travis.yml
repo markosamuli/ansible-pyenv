@@ -73,14 +73,31 @@ script:
 
   # Test role run
   - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+        -e "{'pyenv_install_from_package_manager':'True'}" \
+        || travis_terminate 1
+    else
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+        -e "{'pyenv_install_from_package_manager':'False'}" \
+        || travis_terminate 1
+    fi
 
   # Test idempotence
   - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+      -e "{'pyenv_install_from_package_manager':'True'}" \
+        | grep -q 'changed=0.*failed=0' \
+        && (echo 'Idempotence test: pass' && exit 0) \
+        || (echo 'Idempotence test: fail' && exit 1)
+    else
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+      -e "{'pyenv_install_from_package_manager':'False'}" \
+        | grep -q 'changed=0.*failed=0' \
+        && (echo 'Idempotence test: pass' && exit 0) \
+        || (echo 'Idempotence test: fail' && exit 1)
+    fi
 
   # Test global python version is defined
   - . $HOME/.pyenv/.pyenvrc && pyenv version
@@ -93,6 +110,10 @@ stages:
   - test
 
 jobs:
+  allow_failures:
+    - osx_image: xcode10.2
+      env: FROM_PACKAGE_MANAGER='yes'
+
   include:
 
     # Run validation stage in Linux with latest Ansible only
@@ -123,14 +144,26 @@ jobs:
       env: ANSIBLE_VERSION='<2.9.0'
 
     - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1"
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
       osx_image: xcode10.1
+      env: FROM_PACKAGE_MANAGER='yes'
+    - stage: test
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 from Git"
+      os: osx
+      osx_image: xcode10.1
+      env: FROM_PACKAGE_MANAGER='no'
 
     - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 10.2.1"
+      name: "macOS 10.14 (Mojave) with Xcode 10.2.1 with Homebrew"
       os: osx
       osx_image: xcode10.2
+      env: FROM_PACKAGE_MANAGER='yes'
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 10.2.1 from Git"
+      os: osx
+      osx_image: xcode10.2
+      env: FROM_PACKAGE_MANAGER='no'
 
 notifications:
   webhooks:

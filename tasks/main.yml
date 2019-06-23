@@ -16,7 +16,11 @@
   include_tasks: Darwin.yml
   when: "ansible_os_family == 'Darwin'"
 
-- import_tasks: install.yml
+# Setup directories and configuration
+- import_tasks: setup.yml
+
+# Install Python versions
+- import_tasks: python_versions.yml
 
 - name: Initialise shell
   include_tasks: shell.yml

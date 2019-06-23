@@ -28,3 +28,6 @@ pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: false
 pyenv_virtualenvwrapper_home: "{{ ansible_env.HOME }}/.virtualenvs"
+
+# Install using package manager where available
+pyenv_install_from_package_manager: false

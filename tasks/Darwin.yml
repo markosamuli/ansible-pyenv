@@ -13,18 +13,13 @@
     creates: /usr/include
 
 - name: Install pyenv build requirements with Homebrew
-  package:
+  homebrew:
     name: "{{ pyenv_build_requirements }}"
 
-- name: Install pyenv with Homebrew
-  package:
-    name: pyenv
+- name: Install with Homebrew
+  include_tasks: install_with_homebrew.yml
+  when: pyenv_install_from_package_manager|bool
 
-- name: Install pyenv-virtualenv with Homebrew
-  package:
-    name: pyenv-virtualenv
-
-- name: Install pyenv-virtualenvwrapper with Homebrew
-  package:
-    name: pyenv-virtualenvwrapper
-  when: pyenv_virtualenvwrapper|bool
+- name: Install with Git
+  include_tasks: install_with_git.yml
+  when: not pyenv_install_from_package_manager|bool
