@@ -1,7 +1,8 @@
 # -*- mode: yaml -*-
 # vim:ts=2:sw=2:ai:si:syntax=yaml
-#
-# Travis CI configuration
+#########################
+# Travis CI configuration
+#########################
 ---
 
 language: generic

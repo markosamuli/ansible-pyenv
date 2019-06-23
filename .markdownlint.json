@@ -1,9 +1,16 @@
 {
     "default": true,
-    "MD003": {
+    "heading-style": {
         "style": "atx"
     },
-    "MD024": {
+    "line-length": {
+        "code_blocks": false,
+        "tables": false
+    },
+    "no-duplicate-heading": {
         "siblings_only": true
+    },
+    "code-block-style": {
+        "style": "fenced"
     }
 }

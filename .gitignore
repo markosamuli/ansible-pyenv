@@ -1,3 +1,4 @@
+# Ignore Ansible files generated during development and testing
 *.retry
 ansible.cfg
 
