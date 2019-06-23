@@ -1,19 +1,49 @@
+# EditorConfig: https://editorconfig.org
 root = true
 
+# Unix-style newlines with a newline ending every file
 [*]
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
-[{update-*,tests/run-tests-*}]
+# Shell scripts without extension
+[{update-*,tests/run-*,tests/update}]
 indent_style = space
 indent_size = 4
 
+# Shell scripts
+[{*.sh}]
+indent_style = space
+indent_size = 4
+
+# Markdown files
 [*.md]
 indent_style = space
 indent_size = 2
 
+# YAML files
 [{*.yml,*.yaml}]
 indent_style = space
+indent_size = 2
+
+# YAML files without extension
+[{.ansible-lint,.yamllint}]
+indent_style = space
+indent_size = 2
+
+# JSON files
+[{*.json}]
+indent_style = space
+indent_size = 2
+
+# Dockerfile
+[{Dockerfile,Dockerfile.template}]
+indent_style = space
+indent_size = 2
+
+# Makefile
+[Makefile]
+indent_style = tab
 indent_size = 2

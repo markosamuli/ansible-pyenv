@@ -18,9 +18,9 @@
 - name: Check whether .pyenvrc is loaded in .bashrc
   command: grep -EFq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_bashrc_path }}
   register: check_bashrc
-  ignore_errors: True
-  changed_when: False
-  failed_when: False
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
   when: pyenv_bashrc_st.stat.exists
 
 - name: Load pyenv in .bashrc
@@ -56,9 +56,9 @@
 - name: Check whether .pyenvrc is loaded in .zshrc
   command: grep -Fq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_zshrc_path }}
   register: check_zshrc
-  ignore_errors: True
-  changed_when: False
-  failed_when: False
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
   when: pyenv_zshrc_st.stat.exists
 
 - name: Load pyenv in .zshrc

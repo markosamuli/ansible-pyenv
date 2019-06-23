@@ -1,0 +1,14 @@
+---
+
+- name: Install pyenv with Homebrew
+  homebrew:
+    name: pyenv
+
+- name: Install pyenv-virtualenv with Homebrew
+  homebrew:
+    name: pyenv-virtualenv
+
+- name: Install pyenv-virtualenvwrapper with Homebrew
+  homebrew:
+    name: pyenv-virtualenvwrapper
+  when: pyenv_virtualenvwrapper|bool

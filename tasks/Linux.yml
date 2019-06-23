@@ -5,21 +5,5 @@
   package:
     name: "{{ pyenv_build_requirements }}"
 
-- name: Clone pyenv
-  git:
-    repo: https://github.com/pyenv/pyenv.git
-    dest: "{{ pyenv_root }}"
-    version: "{{ pyenv_version }}"
-
-- name: Clone pyenv-virtualenv
-  git:
-    repo: https://github.com/pyenv/pyenv-virtualenv.git
-    dest: "{{ pyenv_root }}/plugins/pyenv-virtualenv"
-    version: "{{ pyenv_virtualenv_version }}"
-
-- name: Clone pyenv-virtualenvwrapper
-  git:
-    repo: https://github.com/pyenv/pyenv-virtualenvwrapper.git
-    dest: "{{ pyenv_root }}/plugins/pyenv-virtualenvwrapper"
-    version: "{{ pyenv_virtualenvwrapper_version }}"
-  when: pyenv_virtualenvwrapper
+- name: Install with Git
+  include_tasks: install_with_git.yml

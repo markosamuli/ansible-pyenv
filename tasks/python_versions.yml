@@ -1,22 +1,5 @@
 ---
 
-- name: Make sure .pyenv directory exists
-  file:
-    path: "{{ pyenv_root }}"
-    state: directory
-
-- name: Make sure WORKON_HOME directory exists
-  file:
-    path: "{{ pyenv_virtualenvwrapper_home }}"
-    state: directory
-  when: pyenv_virtualenvwrapper
-
-- name: Create .pyenvrc
-  template:
-    src: ".pyenvrc.j2"
-    dest: "{{ pyenv_root }}/.pyenvrc"
-    mode: "0644"
-
 - name: Install Python interpreters
   shell: >-
     . {{ pyenv_root }}/.pyenvrc &&
@@ -33,11 +16,12 @@
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   register: pyenv_global_version
-  changed_when: False
+  changed_when: false
 
 - name: Set pyenv_global_active fact
   set_fact:
-    pyenv_global_active: "{{ pyenv_global_version.stdout_lines | join(' ') | trim() }}"
+    pyenv_global_active: "{{ pyenv_global_version.stdout_lines |
+                          join(' ') | trim() }}"
 
 - name: Check if 'system' version is available
   shell: >-
@@ -47,8 +31,8 @@
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   register: pyenv_versions_grep_system
-  changed_when: False
-  failed_when: False
+  changed_when: false
+  failed_when: false
   when: "'system' in pyenv_global"
 
 - name: Remove 'system' from pyenv_global

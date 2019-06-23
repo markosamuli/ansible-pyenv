@@ -1,38 +1,40 @@
 # -*- mode: yaml -*-
 # vim:ts=2:sw=2:ai:si:syntax=yaml
-#
+################################
 # pre-commit hooks configuration
+################################
 ---
 
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v2.1.0
-  hooks:
-    - id: trailing-whitespace
-    - id: check-yaml
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v2.1.0
+    hooks:
+      - id: check-executables-have-shebangs
+      - id: trailing-whitespace
+      - id: check-yaml
 
-- repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.15.0
-  hooks:
-    - id: yamllint
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.15.0
+    hooks:
+      - id: yamllint
 
-- repo: https://github.com/ansible/ansible-lint.git
-  rev: v4.1.0
-  hooks:
-    - id: ansible-lint
-      files: \.(yaml|yml)$
+  - repo: https://github.com/ansible/ansible-lint.git
+    rev: v4.1.0
+    hooks:
+      - id: ansible-lint
+        files: \.(yaml|yml)$
 
-- repo: https://github.com/bemeurer/beautysh.git
-  rev: '4.1'
-  hooks:
-    - id: beautysh
+  - repo: https://github.com/bemeurer/beautysh.git
+    rev: '4.1'
+    hooks:
+      - id: beautysh
 
-- repo: https://github.com/openstack-dev/bashate.git
-  rev: '0.6.0'
-  hooks:
-    - id: bashate
+  - repo: https://github.com/openstack-dev/bashate.git
+    rev: '0.6.0'
+    hooks:
+      - id: bashate
 
-- repo: https://github.com/igorshubovych/markdownlint-cli.git
-  rev: 'v0.15.0'
-  hooks:
-    - id: markdownlint
+  - repo: https://github.com/igorshubovych/markdownlint-cli.git
+    rev: 'v0.15.0'
+    hooks:
+      - id: markdownlint

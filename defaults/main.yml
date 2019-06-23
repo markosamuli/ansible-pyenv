@@ -6,7 +6,7 @@ pyenv_home: "{{ ansible_env.HOME }}"
 pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 
 # Configure shell
-pyenv_init_shell: yes
+pyenv_init_shell: true
 
 # Versions to install
 pyenv_version: "v1.2.11"
@@ -26,5 +26,8 @@ pyenv_python_versions:
 pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
 
 # Optionally, install virtualenvwrapper plugin for pyenv
-pyenv_virtualenvwrapper: no
+pyenv_virtualenvwrapper: false
 pyenv_virtualenvwrapper_home: "{{ ansible_env.HOME }}/.virtualenvs"
+
+# Install using package manager where available
+pyenv_install_from_package_manager: false

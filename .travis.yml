@@ -1,85 +1,51 @@
 # -*- mode: yaml -*-
 # vim:ts=2:sw=2:ai:si:syntax=yaml
-#
-# Travis CI configuration
+#########################
+# Travis CI configuration
+#########################
 ---
 
+# Run tests against pull requests and main branches only
+if: |
+  type = pull_request OR \
+  branch IN (master, develop)
+
 language: generic
-python: "2.7"
+sudo: required
 
-matrix:
-  include:
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.7.0'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.8.0'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.9.0'
-    - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
-      os: osx
-      osx_image: xcode10.1
-    - name: "macOS 10.14 (Mojave) with Xcode 10.2.1"
-      os: osx
-      osx_image: xcode10.2
-
+# Install Ansible and Python development packages
 addons:
   apt:
     packages:
       - python-pip
       - python-dev
+    update: true
   homebrew:
     packages:
       - ansible
       - pre-commit
-
-branches:
-  only:
-    - master
-    - develop
-    - /^feature\/.*$/
-    - /^bugfix\/.*$/
-    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+    update: true
 
 cache:
   directories:
     - $HOME/.cache/pre-commit/
 
-before_cache:
-  - rm -f $HOME/.cache/pre-commit/pre-commit.log
-
 before_install:
-  # Import new GPG key for RVM when necessary
-  - >
-    if [[ "$RVM_GPG_IMPORT" == "yes" ]]; then
-      command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
-    fi
-
-  # Update Homebrew to fix HOMEBREW_LOGS error
-  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew update; fi
-
-  # Upgrade Ansible with installed Homebrew
-  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade ansible; fi
-
-  # Upgrade pre-commit installed with Homebrew
-  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade pre-commit; fi
-
   # Existing pyenv installation on Linux conflicts with ours
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then rm -rf /opt/pyenv; fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+      rm -rf /opt/pyenv
+    fi
 
 install:
   # Install Ansible with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      pip install --user ansible${ANSIBLE_VERSION}
+      if [[ -z "$ANSIBLE_VERSION" ]]; then
+        pip install --user ansible
+      else
+        pip install --user ansible${ANSIBLE_VERSION}
+      fi
     fi
 
   # Install pre-commit with pip on Ubuntu
@@ -96,28 +62,108 @@ install:
 
 before_script:
   # https://github.com/travis-ci/travis-ci/issues/6307
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head || true; fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      rvm get head || true
+    fi
 
 script:
-  # Run pre-commit hooks
-  - pre-commit run -a
-
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # Test role run
   - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+        -e "{'pyenv_install_from_package_manager':'True'}" \
+        || travis_terminate 1
+    else
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+        -e "{'pyenv_install_from_package_manager':'False'}" \
+        || travis_terminate 1
+    fi
 
   # Test idempotence
   - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+      -e "{'pyenv_install_from_package_manager':'True'}" \
+        | grep -q 'changed=0.*failed=0' \
+        && (echo 'Idempotence test: pass' && exit 0) \
+        || (echo 'Idempotence test: fail' && exit 1)
+    else
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+      -e "{'pyenv_install_from_package_manager':'False'}" \
+        | grep -q 'changed=0.*failed=0' \
+        && (echo 'Idempotence test: pass' && exit 0) \
+        || (echo 'Idempotence test: fail' && exit 1)
+    fi
 
   # Test global python version is defined
   - . $HOME/.pyenv/.pyenvrc && pyenv version
+
+before_cache:
+  - rm -f $HOME/.cache/pre-commit/pre-commit.log
+
+stages:
+  - validate
+  - test
+
+jobs:
+  allow_failures:
+    - osx_image: xcode10.2
+      env: FROM_PACKAGE_MANAGER='yes'
+
+  include:
+
+    # Run validation stage in Linux with latest Ansible only
+    - stage: validate
+      name: Validate with pre-commit
+      os: linux
+      dist: xenial
+      language: minimal
+      script:
+        - pre-commit run -a
+
+    # Run tests
+    - stage: test
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
+      os: linux
+      dist: xenial
+      env: ANSIBLE_VERSION='<2.7.0'
+    - stage: test
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
+      os: linux
+      dist: xenial
+      env: ANSIBLE_VERSION='<2.8.0'
+
+    - stage: test
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8"
+      os: linux
+      dist: bionic
+      env: ANSIBLE_VERSION='<2.9.0'
+
+    - stage: test
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
+      os: osx
+      osx_image: xcode10.1
+      env: FROM_PACKAGE_MANAGER='yes'
+    - stage: test
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 from Git"
+      os: osx
+      osx_image: xcode10.1
+      env: FROM_PACKAGE_MANAGER='no'
+
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 10.2.1 with Homebrew"
+      os: osx
+      osx_image: xcode10.2
+      env: FROM_PACKAGE_MANAGER='yes'
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 10.2.1 from Git"
+      os: osx
+      osx_image: xcode10.2
+      env: FROM_PACKAGE_MANAGER='no'
 
 notifications:
   webhooks:

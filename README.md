@@ -29,6 +29,17 @@ This role installs macOS SDK headers from
 `/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg`
 if they're not found in `/usr/include`.
 
+## Configuration
+
+To install pyenv and plugins from the package manager where available, enable
+this in Ansible configuration:
+
+```yaml
+pyenv_install_from_package_manager: true
+```
+
+This is supported on macOS with Homebrew only.
+
 ## Installed Python versions
 
 This role installs [Python] versions defined in `pyenv_python_versions` variable.
