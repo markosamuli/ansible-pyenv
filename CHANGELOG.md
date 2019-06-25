@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.0.0] - 2019-06-25
+
+### Changed
+
+* Use the Git repository installation method instead of Homebrew packages
+  on macOS.
+
+### Fixed
+
+* Fix deprecation warnings when running role with Ansible 2.8.
+* Load shell completions only if `.pyenvrc` is found.
+* Load shell completions from Homebrew directory on macOS.
+
+### CI/CD
+
+* Define build matrix in job definitions as build stages do not support
+  matrix.include configuration.
+* Add Bionic to Ubuntu build images.
+* Update apt cache on Ubuntu jobs.
+* Use minimal image for pre-commit stage jobs.
+* Remove python version variable when using generic images as it doesn't
+  have any effect.
+* Remove duplicate Ansible versions.
+
 ## [1.5.1] - 2019-06-09
 
 ### Fixed
@@ -84,6 +108,9 @@
 * set pyenv global version
 
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[2.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.0.0
+[1.5.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.5.1
+[1.5.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.5.0
 [1.4.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.4.0
 [1.3.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.3.0
 [1.2.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.2.1
