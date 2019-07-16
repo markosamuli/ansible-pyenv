@@ -1,14 +1,14 @@
 {
-    "version": "0.1",
-    "words": [
-        "avanov",
-        "debian",
-        "markosamuli",
-        "pengwin",
-        "playbook",
-        "playbooks",
-        "pyenvrc",
-        "virtualenvwrapper",
-        "xcode"
-    ]
+  "version": "0.1",
+  "words": [
+    "avanov",
+    "debian",
+    "markosamuli",
+    "pengwin",
+    "playbook",
+    "playbooks",
+    "pyenvrc",
+    "virtualenvwrapper",
+    "xcode"
+  ]
 }

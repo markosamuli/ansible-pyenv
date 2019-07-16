@@ -1,16 +1,16 @@
 {
-    "default": true,
-    "heading-style": {
-        "style": "atx"
-    },
-    "line-length": {
-        "code_blocks": false,
-        "tables": false
-    },
-    "no-duplicate-heading": {
-        "siblings_only": true
-    },
-    "code-block-style": {
-        "style": "fenced"
-    }
+  "default": true,
+  "heading-style": {
+    "style": "atx"
+  },
+  "line-length": {
+    "code_blocks": false,
+    "tables": false
+  },
+  "no-duplicate-heading": {
+    "siblings_only": true
+  },
+  "code-block-style": {
+    "style": "fenced"
+  }
 }
