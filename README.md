@@ -122,6 +122,28 @@ Update default [Python] 3.7 version:
 ./update-python python3
 ```
 
+Update all versions:
+
+```bash
+make update
+```
+
+## Coding style
+
+Install pre-commit hooks and validate coding style:
+
+```bash
+make lint
+```
+
+## Run tests
+
+Run tests in Ubuntu and Debian using Docker:
+
+```bash
+make test
+```
+
 ## Acknowledgements
 
 Use of `.pyenvrc` file and parts used for installing python version taken from
@@ -132,8 +154,7 @@ Use of `.pyenvrc` file and parts used for installing python version taken from
 Install [pre-commit] hooks:
 
 ```bash
-pre-commit install
-pre-commit install --hook-type pre-push
+make install-git-hooks
 ```
 
 [pre-commit]: https://pre-commit.com/
