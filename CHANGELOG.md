@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.1.0-rc.1] - 2019-07-19
+
+### Changes
+
+* Update pyenv 1.2.11 -> 1.2.13
+* Update Python 3.7.3 -> 3.7.4
+* Added Xcode 11.0 test image on Travis
+* Remove Homebrew packages if using Git installation method
+
+### Fix Python installation on macOS Mojave
+
+The role sets `MACOSX_DEPLOYMENT_TARGET` and `SDKROOT` environment variables
+when installing new Python versions on macOS Mojave.
+
+This fixes [issue #16] when installing Python versions within the Ansible role.
+
+### Use Homebrew as the default installation method on macOS
+
+The Git-based install was enabled to address [issue #16] on macOS Mojave with
+the pyenv version pinned down to version 1.2.11. Using an old pyenv version
+prevents user from installing the latest Python.
+
+The installation issues with macOS Mojave been been fixed, so I've changed the
+default installation method back to using Homebrew packages.
+
+The role doesn't know how to migrate from existing Homebrew installs to
+Git-based installations, so it will try to detect any existing installation
+and keep using the previous method.
+
 ## [2.0.0] - 2019-06-25
 
 ### Changed
@@ -108,6 +137,7 @@
 * set pyenv global version
 
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[2.1.0-rc.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.1
 [2.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.0.0
 [1.5.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.5.1
 [1.5.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.5.0
@@ -119,3 +149,4 @@
 [1.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.1
 [1.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.1.0
 [1.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.0.0
+[issue #16]: https://github.com/markosamuli/ansible-pyenv/issues/16
