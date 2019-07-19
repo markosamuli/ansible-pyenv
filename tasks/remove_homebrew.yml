@@ -1,0 +1,16 @@
+---
+
+- name: Remove pyenv installed with Homebrew
+  homebrew:
+    name: pyenv
+    state: absent
+
+- name: Remove pyenv-virtualenv installed with Homebrew
+  homebrew:
+    name: pyenv-virtualenv
+    state: absent
+
+- name: Remove pyenv-virtualenvwrapper installed with Homebrew
+  homebrew:
+    name: pyenv-virtualenvwrapper
+    state: absent

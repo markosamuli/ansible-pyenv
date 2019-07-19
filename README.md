@@ -29,16 +29,16 @@ This role installs macOS SDK headers from
 `/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg`
 if they're not found in `/usr/include`.
 
-## Configuration
+## Install from Homebrew on macOS
 
-To install pyenv and plugins from the package manager where available, enable
-this in Ansible configuration:
+The default method to install pyenv and plugins on macOS is to use Homebrew.
 
-```yaml
-pyenv_install_from_package_manager: true
-```
+The role doesn't know how to migrate from existing Homebrew installs to
+Git-based installations, so it will try to detect any existing installation
+and keep using the previous method.
 
-This is supported on macOS with Homebrew only.
+If you want to migrate, backup and delete your existing `~/.pyenv` directory
+before running this role.
 
 ## Installed Python versions
 
@@ -50,7 +50,7 @@ To set global version, set `pyenv_global` variable to the desired version(s).
 pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
 ```
 
-This is configured to use latest python2 and python3 versions and the
+This is configured to use latest Python 2 and Python 3 versions and the
 system version as default.
 
 [Python]: https://www.python.org
@@ -60,28 +60,104 @@ system version as default.
 This role creates config file in `~/.pyenv/.pyenvrc` that is loaded in
 `.bashrc` and `.zshrc` files.
 
-Autocomplete is loaded by default.
+Code completion is loaded by default.
+
+If you're managing your shell scripts `.dotfiles` or are using a framework, you
+should set `pyenv_init_shell` to `false` and update these files yourself to keep
+them clean.
+
+Reference `.bashrc` configuration:
+
+```bash
+if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
+  source $HOME/.pyenv/.pyenvrc
+  if [ -e "$HOME/.pyenv/completions/pyenv.bash" ]; then
+    source $HOME/.pyenv/completions/pyenv.bash
+  elif [ -e "/usr/local/opt/pyenv/completions/pyenv.bash" ]; then
+    source /usr/local/opt/pyenv/completions/pyenv.bash
+  fi
+fi
+```
+
+Reference `.zshrc` configuration:
+
+```zsh
+if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
+  source $HOME/.pyenv/.pyenvrc
+  if [ -e "$HOME/.pyenv/completions/pyenv.zsh" ]; then
+    source $HOME/.pyenv/completions/pyenv.zsh
+  elif [ -e "/usr/local/opt/pyenv/completions/pyenv.zsh" ]; then
+    source /usr/local/opt/pyenv/completions/pyenv.zsh
+  fi
+fi
+```
 
 ## Role Variables
 
+Path to `~/.pyenv` is based on environment variables:
+
+```yaml
+# Installation paths
+pyenv_home: "{{ ansible_env.HOME }}"
+pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
+```
+
+Update `.bashrc` and `.zshrc` files in user home directory:
+
+```yaml
+# Update .bashrc and .zshrc shell scripts
+pyenv_init_shell: true
+```
+
+Versions to install.
+
 ```yaml
 # Versions to install
-pyenv_version: "v1.2.9"
+pyenv_version: "v1.2.13"
 pyenv_virtualenv_version: "v1.1.5"
+pyenv_virtualenvwrapper_version: "v20140609"
+```
 
-# Initialize shell profile scripts
-pyenv_init_shell: yes
+Latest Python 2 and Python 3 versions are installed:
+
+```yaml
+# Latest Python versions
+pyenv_python2_version: "2.7.16"
+pyenv_python3_version: "3.7.4"
 
 # Python versions to install
 pyenv_python_versions:
-  - "2.7.16"
-  - "3.7.3"
+  - "{{ pyenv_python2_version }}"
+  - "{{ pyenv_python3_version }}"
+```
 
+Set global version:
+
+```yaml
 # Set global pyenv version
-pyenv_global: "3.7.3"
+pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+```
 
+Install virtualenvwrapper plugin:
+
+```yaml
 # Optionally, install virtualenvwrapper plugin for pyenv
-pyenv_virtualenvwrapper: no
+pyenv_virtualenvwrapper: false
+pyenv_virtualenvwrapper_home: "{{ ansible_env.HOME }}/.virtualenvs"
+```
+
+Install using Homebrew on macOS:
+
+```yaml
+# Install using package manager where available
+pyenv_install_from_package_manager: false
+```
+
+Detect existing installation method and use that:
+
+```yaml
+# Detect existing install
+pyenv_detect_existing_install: true
 ```
 
 ## Example Playbook
@@ -89,8 +165,9 @@ pyenv_virtualenvwrapper: no
 ```yaml
 - hosts: localhost
   connection: local
+  become: false
   roles:
-      - { role: markosamuli.pyenv }
+    - role: markosamuli.pyenv
 ```
 
 ## Updating versions
