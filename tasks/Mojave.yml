@@ -30,6 +30,21 @@
     sdkroot: "{{ lookup('env', 'SDKROOT' )
                | ternary (lookup('env', 'SDKROOT' ), omit) }}"
 
+- name: Use xcrun to show the SDK path
+  command: xcrun --sdk macosx --show-sdk-path
+  register: xcrun_sdk_path
+  ignore_errors: true
+  changed_when: false
+
+- name: Debug
+  debug:
+    var: xcrun_sdk_path
+
+- name: Set SDKROOT to the SDK path returned by xcrun
+  set_fact:
+    sdkroot: "{{ xcrun_sdk_path.stdout | trim }}"
+  when: xcrun_sdk_path.rc == 0 and xcrun_sdk_path.stdout
+
 - name: Find macOS SDK headers and set SDKROOT
   when: sdkroot is undefined
   block:
