@@ -5,7 +5,7 @@
 pyenv_home: "{{ ansible_env.HOME }}"
 pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 
-# Configure shell
+# Initialize .bashrc and .zshrc shell scripts
 pyenv_init_shell: true
 
 # Versions to install
@@ -30,4 +30,7 @@ pyenv_virtualenvwrapper: false
 pyenv_virtualenvwrapper_home: "{{ ansible_env.HOME }}/.virtualenvs"
 
 # Install using package manager where available
-pyenv_install_from_package_manager: false
+pyenv_install_from_package_manager: true
+
+# Detect existing install
+pyenv_detect_existing_install: true
