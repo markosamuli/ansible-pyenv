@@ -1,0 +1,13 @@
+---
+
+xcode_sdk_path: Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs
+xcode_sdk_lookup:
+  - app: "Xcode.app"
+    sdk: "MacOSX10.14.sdk"
+  - app: "Xcode-10.2.1.app"
+    sdk: "MacOSX10.14.sdk"
+  - app: "Xcode.app"
+    sdk: "MacOSX10.15.sdk"
+  - app: "Xcode-11.app"
+    sdk: "MacOSX10.15.sdk"
+mojave_sdk_headers: /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg

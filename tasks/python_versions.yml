@@ -8,6 +8,7 @@
     executable: "{{ pyenv_install_shell | default(omit) }}"
     creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
   with_items: "{{ pyenv_python_versions }}"
+  environment: "{{ pyenv_install_environment }}"
 
 - name: Get current global version
   shell: >-

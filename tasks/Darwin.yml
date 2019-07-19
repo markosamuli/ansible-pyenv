@@ -5,12 +5,9 @@
     macos_version: "{{ ansible_distribution_version |
                     regex_search('^([0-9]+\\.[0-9]+)') }}"
 
-- name: Install macOS SDK headers for macOS 10.14 (Mojave)
-  become: true
-  command: "installer -pkg {{ mojave_sdk_headers }} -target /"
+- name: macOS Mojave setup
+  include_tasks: "Mojave.yml"
   when: macos_version == "10.14"
-  args:
-    creates: /usr/include
 
 - name: Install pyenv build requirements with Homebrew
   homebrew:
