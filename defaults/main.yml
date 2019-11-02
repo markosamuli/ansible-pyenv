@@ -34,3 +34,7 @@ pyenv_install_from_package_manager: true
 
 # Detect existing install
 pyenv_detect_existing_install: true
+
+# Allow expired Apple security certificates
+# https://eclecticlight.co/2019/10/18/beware-apple-security-certificates-after-24-october-they-may-have-expired/
+pyenv_macos_untrusted_packages: false
