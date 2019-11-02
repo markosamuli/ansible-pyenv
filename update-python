@@ -50,8 +50,13 @@ update_python2_version() {
     local key=pyenv_python2_version
     local version=$1
     local file=defaults/main.yml
-    sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
-        ${file}
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^($key):.*$/\1: \"${version}\"/" \
+            ${file}
+    else
+        sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
+            ${file}
+    fi
     rm ${file}.save
 }
 
@@ -62,8 +67,13 @@ update_python3_version() {
     local key=pyenv_python3_version
     local version=$1
     local file=defaults/main.yml
-    sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
-        ${file}
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^($key):.*$/\1: \"${version}\"/" \
+            ${file}
+    else
+        sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
+            ${file}
+    fi
     rm ${file}.save
 }
 
