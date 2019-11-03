@@ -11,7 +11,6 @@ if: |
   branch IN (master, develop)
 
 language: generic
-sudo: required
 
 # Install Ansible and Python development packages
 addons:
@@ -19,7 +18,10 @@ addons:
     packages:
       - python-pip
       - python-dev
+      - shellcheck
     update: true
+  snaps:
+    - shfmt
   homebrew:
     packages:
       - ansible
