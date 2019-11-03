@@ -14,13 +14,13 @@ get_latest_cpython_version() {
     local target_version=$1
     local repository=python/cpython
     local url="https://api.github.com/repos/${repository}/git/refs/tags"
-    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
+    if [ -n "$GITHUB_OAUTH_TOKEN" ]; then
         url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
     fi
     # @formatter:off
-    curl --silent "${url}" | \
+    curl --silent "${url}" |
         jq --arg version_tag "${target_version}" \
-        -r 'map(select(.object.type == "tag"))
+            -r 'map(select(.object.type == "tag"))
             | map(select(.ref | test("refs/tags/" + $version_tag)))
             | map(select(.ref | test("rc") | not))
             | map(.ref)
@@ -115,11 +115,17 @@ update_python3() {
 }
 
 check_requirements() {
-    command -v curl > /dev/null || { error "curl is not installed"; exit 1; }
-    command -v jq > /dev/null || { error "jq not installed"; exit 1; }
+    command -v curl >/dev/null || {
+        error "curl is not installed"
+        exit 1
+    }
+    command -v jq >/dev/null || {
+        error "jq not installed"
+        exit 1
+    }
 }
 
 set -e
 
 check_requirements
-update_versions $1
+update_versions "$1"
