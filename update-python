@@ -1,26 +1,22 @@
 #!/usr/bin/env bash
 
-###
 # Print error into STDERR
-###
 error() {
     echo "$@" 1>&2
 }
 
-###
 # Get latest stable tag for a GitHub repository
-###
 get_latest_cpython_version() {
     local target_version=$1
     local repository=python/cpython
     local url="https://api.github.com/repos/${repository}/git/refs/tags"
-    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
+    if [ -n "$GITHUB_OAUTH_TOKEN" ]; then
         url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
     fi
     # @formatter:off
-    curl --silent "${url}" | \
+    curl --silent "${url}" |
         jq --arg version_tag "${target_version}" \
-        -r 'map(select(.object.type == "tag"))
+            -r 'map(select(.object.type == "tag"))
             | map(select(.ref | test("refs/tags/" + $version_tag)))
             | map(select(.ref | test("rc") | not))
             | map(.ref)
@@ -29,23 +25,17 @@ get_latest_cpython_version() {
     # @formatter:on
 }
 
-###
 # Get latest stable tag for a GitHub repository
-###
 get_latest_python27_version() {
     get_latest_cpython_version "v2.7"
 }
 
-###
 # Get latest stable tag for a GitHub repository
-###
 get_latest_python37_version() {
     get_latest_cpython_version "v3.7"
 }
 
-###
 # Update Ansible variable
-###
 update_python2_version() {
     local key=pyenv_python2_version
     local version=$1
@@ -60,9 +50,7 @@ update_python2_version() {
     rm ${file}.save
 }
 
-###
 # Update Ansible variable
-###
 update_python3_version() {
     local key=pyenv_python3_version
     local version=$1
@@ -77,9 +65,7 @@ update_python3_version() {
     rm ${file}.save
 }
 
-###
 # Update all versions
-###
 update_versions() {
     local target=$1
     if [ -z "${target}" ]; then
@@ -96,18 +82,14 @@ update_versions() {
     fi
 }
 
-###
 # Update Python 2 version
-###
 update_python2() {
     PYTHON27_VERSION=$(get_latest_python27_version)
     echo "Latest Python 2.7 release is ${PYTHON27_VERSION}"
     update_python2_version "${PYTHON27_VERSION}"
 }
 
-###
 # Update Python 3 version
-###
 update_python3() {
     PYTHON37_VERSION=$(get_latest_python37_version)
     echo "Latest Python 3.7 release is ${PYTHON37_VERSION}"
@@ -115,11 +97,17 @@ update_python3() {
 }
 
 check_requirements() {
-    command -v curl > /dev/null || { error "curl is not installed"; exit 1; }
-    command -v jq > /dev/null || { error "jq not installed"; exit 1; }
+    command -v curl >/dev/null || {
+        error "curl is not installed"
+        exit 1
+    }
+    command -v jq >/dev/null || {
+        error "jq not installed"
+        exit 1
+    }
 }
 
 set -e
 
 check_requirements
-update_versions $1
+update_versions "$1"

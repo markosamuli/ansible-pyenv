@@ -11,7 +11,6 @@ if: |
   branch IN (master, develop)
 
 language: generic
-sudo: required
 
 # Install Ansible and Python development packages
 addons:
@@ -19,7 +18,10 @@ addons:
     packages:
       - python-pip
       - python-dev
+      - shellcheck
     update: true
+  snaps:
+    - shfmt
   homebrew:
     packages:
       - ansible
@@ -64,6 +66,8 @@ script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
+  # yamllint disable rule:line-length
+
   # Test role run
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
@@ -104,6 +108,8 @@ script:
         || (echo 'Idempotence test: fail' && exit 1)
     fi
 
+  # yamllint enable rule:line-length
+
   # Test global python version is defined
   - . $HOME/.pyenv/.pyenvrc && pyenv version
 
@@ -129,7 +135,7 @@ jobs:
         - pip install --user virtualenv==16.3.0
 
         # Install pre-commit with pip
-        - pip install --user pre-commit
+        - SKIP=dockerfile_lint pip install --user pre-commit
       script:
         - pre-commit run -a
 
@@ -144,73 +150,36 @@ jobs:
       os: linux
       dist: xenial
       env: ANSIBLE_VERSION='<2.8.0'
-
     - stage: test
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8"
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.9.0'
-
-    # https://docs.travis-ci.com/user/reference/osx/#xcode-101
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
       osx_image: xcode10.1
       env: FROM_PACKAGE_MANAGER='yes'
-    # - stage: test
-    #   name: "macOS 10.13 (High Sierra) with Xcode 10.1 from Git"
-    #   os: osx
-    #   osx_image: xcode10.1
-    #   env: FROM_PACKAGE_MANAGER='no'
-
-    # https://docs.travis-ci.com/user/reference/osx/#xcode-102
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 10.2.1 with Homebrew"
       os: osx
       osx_image: xcode10.2
       env: FROM_PACKAGE_MANAGER='yes'
-    # - stage: test
-    #   name: "macOS 10.14 (Mojave) with Xcode 10.2.1 from Git"
-    #   os: osx
-    #   osx_image: xcode10.2
-    #   env: FROM_PACKAGE_MANAGER='no'
-
-
-    # https://docs.travis-ci.com/user/reference/osx/#xcode-102
     - stage: test
       name: "macOS 10.14.4 (Mojave) with Xcode 10.3 with Homebrew"
       os: osx
       osx_image: xcode10.3
       env: FROM_PACKAGE_MANAGER='yes'
-    # - stage: test
-    #   name: "macOS 10.14.4 (Mojave) with Xcode 10.3 from Git"
-    #   os: osx
-    #   osx_image: xcode10.3
-    #   env: FROM_PACKAGE_MANAGER='no'
-
-    # https://docs.travis-ci.com/user/reference/osx/#xcode-110
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.0 with Homebrew"
       os: osx
       osx_image: xcode11
       env: FROM_PACKAGE_MANAGER='yes'
-    # - stage: test
-    #   name: "macOS 10.14 (Mojave) with Xcode 11.0 from Git"
-    #   os: osx
-    #   osx_image: xcode11
-    #   env: FROM_PACKAGE_MANAGER='no'
-
-    # https://docs.travis-ci.com/user/reference/osx/#xcode-112
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 with Homebrew"
       os: osx
       osx_image: xcode11.2
       env: FROM_PACKAGE_MANAGER='yes'
-    # - stage: test
-    #   name: "macOS 10.14 (Mojave) with Xcode 11.2 from Git"
-    #   os: osx
-    #   osx_image: xcode11.2
-    #   env: FROM_PACKAGE_MANAGER='no'
 
 notifications:
   webhooks:

@@ -22,7 +22,7 @@ update:
 
 .PHONY: lint
 lint: install-git-hooks
-	@pre-commit run -a
+	@pre-commit run -a -v
 
 .PHONY: install-git-hooks
 install-git-hooks: $(PRE_COMMIT_HOOKS) $(PRE_PUSH_HOOKS) $(COMMIT_MSG_HOOKS)

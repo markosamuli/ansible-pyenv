@@ -1,0 +1,36 @@
+---
+
+name: Test
+
+# This workflow is triggered on pushes to the repository.
+on: [push]  # yamllint disable-line rule:truthy
+
+jobs:
+  build:
+    name: Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+      - name: Install dependencies
+        run: |
+          pip install virtualenv==16.3.0
+          pip install pre-commit
+          sudo snap install shfmt
+          sudo apt-get install -y shellcheck
+      - name: Cache pre-commit dependencies
+        uses: actions/cache@preview
+        with:
+          path: ~/.cache/pre-commit/
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pre-commit-
+      - name: Run pre-commit
+        run: pre-commit run -a

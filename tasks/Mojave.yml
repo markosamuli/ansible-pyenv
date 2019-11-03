@@ -8,6 +8,8 @@
     path: "{{ mojave_sdk_headers }}"
   register: mojave_sdk_headers_st
 
+# yamllint disable rule:line-length
+
 - name: Install package with expired Apple security certificates
   set_fact:
     mojave_sdk_headers_opts: "{% if pyenv_macos_untrusted_packages %}-allowUntrusted{% endif %}"
@@ -28,6 +30,8 @@
   set_fact:
     pyenv_install_environment: "{{ pyenv_install_environment
                                  | combine({ 'MACOSX_DEPLOYMENT_TARGET': macos_target }) }}"
+
+# yamllint enable rule:line-length
 
 - name: Use existing SDKROOT environment variable
   set_fact:

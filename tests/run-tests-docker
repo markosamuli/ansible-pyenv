@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT=$(dirname $DIR)
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$DIR")
 
 set -e
 
@@ -13,9 +13,11 @@ extra_vars=$(printf ",%s" "${ansible_vars[@]}")
 extra_vars="{${extra_vars:1}}"
 
 # Paths in which Ansible will search for Roles
-export ANSIBLE_ROLES_PATH=$(dirname $PROJECT_ROOT)
+ANSIBLE_ROLES_PATH=
+ANSIBLE_ROLES_PATH=$(dirname "$PROJECT_ROOT")
+export ANSIBLE_ROLES_PATH
 
-cd $PROJECT_ROOT
+cd "$PROJECT_ROOT"
 
 echo "*** Check syntax"
 
@@ -26,11 +28,11 @@ echo "*** Run Ansible playbook"
 ansible-playbook tests/test.yml -i tests/inventory --connection=local \
     -e "${extra_vars}"
 
-
 echo "*** Idempotence test"
 
+# shellcheck disable=SC2015
 ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-    -e "${extra_vars}" \
-    | grep -q 'changed=0.*failed=0' \
-    && (echo 'Idempotence test: pass' && exit 0) \
-    || (echo 'Idempotence test: fail' && exit 1)
+    -e "${extra_vars}" |
+    grep -q 'changed=0.*failed=0' &&
+    (echo 'Idempotence test: pass' && exit 0) ||
+    (echo 'Idempotence test: fail' && exit 1)

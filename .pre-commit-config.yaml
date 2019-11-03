@@ -1,8 +1,5 @@
 # -*- mode: yaml -*-
 # vim:ts=2:sw=2:ai:si:syntax=yaml
-################################
-# pre-commit hooks configuration
-################################
 ---
 
 minimum_pre_commit_version: 1.16.1
@@ -35,17 +32,17 @@ repos:
       - id: ansible-lint
         files: \.(yaml|yml)$
 
-  - repo: https://github.com/bemeurer/beautysh.git
-    rev: '4.1'
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: v0.0.16
     hooks:
-      - id: beautysh
-        files: (update-.*|tests/run-.*|tests/update)$
+      - id: shellcheck
+      - id: shfmt
+        args: ['-l', '-i', '4', '-ci', '-w']
 
   - repo: https://github.com/openstack-dev/bashate.git
     rev: '0.6.0'
     hooks:
       - id: bashate
-        files: (update-.*|tests/run-.*|tests/update)$
 
   - repo: https://github.com/igorshubovych/markdownlint-cli.git
     rev: v0.17.0

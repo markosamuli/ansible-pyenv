@@ -1,35 +1,48 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$DIR")
+
+ROLE_NAME="$(basename "$PROJECT_ROOT")"
 
 set -euo pipefail
 
-cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
+cd "$DIR"
 
 user="test"
-repository="$(basename $(dirname $(pwd)))"
+repository="${ROLE_NAME}"
 ansible_version="<2.9.0"
 
-image="ubuntu"
+# Generate Dockerfile from Dockerfile.template
+update_docker_image() {
+    local docker_image=$1
+    local docker_tag=$2
+    dir="${docker_tag}"
+    echo "*** Updating $dir/Dockerfile"
+    mkdir -p "$dir"
+    if test "$(uname)" = "Darwin"; then
+        sed -E \
+            -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
+            -e 's!%%USER%%!'"$user"'!g' \
+            -e 's!%%REPOSITORY%%!'"$repository"'!g' \
+            -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
+            "Dockerfile.template" >"$dir/Dockerfile"
+    else
+        sed -r \
+            -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
+            -e 's!%%USER%%!'"$user"'!g' \
+            -e 's!%%REPOSITORY%%!'"$repository"'!g' \
+            -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
+            "Dockerfile.template" >"$dir/Dockerfile"
+    fi
+}
+
 ubuntu_releases=(xenial bionic)
 for tag in "${ubuntu_releases[@]}"; do
-    dir="${tag}"
-    echo "*** Updating $dir/Dockerfile"
-    sed -r \
-        -e 's!%%FROM%%!'"$image:$tag"'!g' \
-        -e 's!%%USER%%!'"$user"'!g' \
-        -e 's!%%REPOSITORY%%!'"$repository"'!g' \
-        -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-        "Dockerfile.template" > "$dir/Dockerfile"
+    update_docker_image "ubuntu" "${tag}"
 done
 
-image="debian"
 debian_releases=(stretch buster)
 for tag in "${debian_releases[@]}"; do
-    dir="${tag}"
-    echo "*** Updating $dir/Dockerfile"
-    sed -r \
-        -e 's!%%FROM%%!'"$image:$tag"'!g' \
-        -e 's!%%USER%%!'"$user"'!g' \
-        -e 's!%%REPOSITORY%%!'"$repository"'!g' \
-        -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-        "Dockerfile.template" > "$dir/Dockerfile"
+    update_docker_image "debian" "${tag}"
 done
