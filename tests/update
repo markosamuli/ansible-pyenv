@@ -21,6 +21,7 @@ update_docker_image() {
     dir="${docker_tag}"
     label_name="${repository}-${docker_tag}"
     echo "*** Updating $dir/Dockerfile"
+    mkdir -p "$dir"
     if test "$(uname)" = "Darwin"; then
         sed -E \
             -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
