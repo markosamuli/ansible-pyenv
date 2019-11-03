@@ -1,7 +1,9 @@
+---
+
 name: Test
 
 # This workflow is triggered on pushes to the repository.
-on: [push]
+on: [push]  # yamllint disable-line rule:truthy
 
 jobs:
   build:
@@ -26,6 +28,7 @@ jobs:
         uses: actions/cache@preview
         with:
           path: ~/.cache/pre-commit/
+          # yamllint disable-line rule:line-length
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pre-commit-
