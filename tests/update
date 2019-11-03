@@ -1,11 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$DIR")
+
+ROLE_NAME="$(basename "$PROJECT_ROOT")"
 
 set -euo pipefail
 
-cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
+cd "$DIR"
 
 user="test"
-repository="$(basename $(dirname $(pwd)))"
+repository="${ROLE_NAME}"
 ansible_version="<2.9.0"
 
 image="ubuntu"
@@ -18,7 +23,7 @@ for tag in "${ubuntu_releases[@]}"; do
         -e 's!%%USER%%!'"$user"'!g' \
         -e 's!%%REPOSITORY%%!'"$repository"'!g' \
         -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-        "Dockerfile.template" > "$dir/Dockerfile"
+        "Dockerfile.template" >"$dir/Dockerfile"
 done
 
 image="debian"
@@ -31,5 +36,5 @@ for tag in "${debian_releases[@]}"; do
         -e 's!%%USER%%!'"$user"'!g' \
         -e 's!%%REPOSITORY%%!'"$repository"'!g' \
         -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-        "Dockerfile.template" > "$dir/Dockerfile"
+        "Dockerfile.template" >"$dir/Dockerfile"
 done
