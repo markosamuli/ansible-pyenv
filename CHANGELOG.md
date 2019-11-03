@@ -1,10 +1,21 @@
 # Changelog
 
+## [2.1.0] - 2019-11-03
+
+### macOS Mojave support
+
+This released has a patch for older Mojave releases, but as the defaults seem
+to be working again (at least with the Command LIne Tools), I've disabled this
+in the default configuration.
+
+Apple security certificates on Travis have expired so installing the macOS SDK
+headers on the CI pipelines doesn't currently work.
+
 ## [2.1.0-rc.2] - 2019-11-03
 
 ### Changed
 
-* Update pyenv 1.2.13 -> v1.2.14
+* Update pyenv 1.2.13 -> 1.2.14
 * Added Xcode 10.3 and Xcode 11.2 test images on Travis
 * Removed macOS Git install test jobs on Travis
 
@@ -150,6 +161,8 @@ and keep using the previous method.
 * set pyenv global version
 
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[2.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0
+[2.1.0-rc.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.2
 [2.1.0-rc.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.1
 [2.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.0.0
 [1.5.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v1.5.1
