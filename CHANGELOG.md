@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0-rc.2] - 2019-11-03
+
+### Changed
+
+* Update pyenv 1.2.13 -> v1.2.14
+* Added Xcode 10.3 and Xcode 11.2 test images on Travis
+* Removed macOS Git install test jobs on Travis
+
+### Fixed
+
+* Do no install macOS SDK headers on Mojave
+* Support for BSD sed in `update-python` and `update-release` scripts
+
 ## [2.1.0-rc.1] - 2019-07-19
 
 ### Changes
