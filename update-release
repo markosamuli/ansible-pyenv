@@ -13,27 +13,26 @@ error() {
 get_latest_release() {
     local repository=$1
     local url="https://api.github.com/repos/${repository}/releases/latest"
-    if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
+    if [ -n "$GITHUB_OAUTH_TOKEN" ]; then
         url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
     fi
     if test "$(uname)" = "Darwin"; then
-        curl --silent "${url}" | \
-            grep '"tag_name":' | \
+        curl --silent "${url}" |
+            grep '"tag_name":' |
             sed -E 's/.*"([^"]+)".*/\1/'
     else
-        curl --silent "${url}" | \
-            grep '"tag_name":' | \
+        curl --silent "${url}" |
+            grep '"tag_name":' |
             sed -r 's/.*"([^"]+)".*/\1/'
     fi
 }
-
 
 ###
 # Update pyenv version
 ###
 update_pyenv_version() {
     local version=$1
-    update_variable "pyenv_version" ${version}
+    update_variable "pyenv_version" "${version}"
 }
 
 ###
@@ -41,7 +40,7 @@ update_pyenv_version() {
 ###
 update_pyenv_virtualenv_version() {
     local version=$1
-    update_variable "pyenv_virtualenv_version" ${version}
+    update_variable "pyenv_virtualenv_version" "${version}"
 }
 
 ###
@@ -68,7 +67,10 @@ latest_pyenv_version() {
     local latest_release=""
     local errmsg="Failed to get latest pyenv/pyenv release"
     latest_release=$(get_latest_release pyenv/pyenv)
-    [ -z "${latest_release}" ] && { error "${errmsg}"; return 1; }
+    [ -z "${latest_release}" ] && {
+        error "${errmsg}"
+        return 1
+    }
     echo "${latest_release}"
 }
 
@@ -79,7 +81,10 @@ latest_pyenv_virtualenv_version() {
     local latest_release=""
     local errmsg="Failed to get latest pyenv/pyenv-virtualenv release"
     latest_release=$(get_latest_release pyenv/pyenv-virtualenv)
-    [ -z "${latest_release}" ] && { error "${errmsg}"; return 1; }
+    [ -z "${latest_release}" ] && {
+        error "${errmsg}"
+        return 1
+    }
     echo "${latest_release}"
 }
 
@@ -93,13 +98,15 @@ update_versions() {
         exit 1
     fi
     if [ "${repository}" == "pyenv" ]; then
-        PYENV_VERSION=$(latest_pyenv_version)
-        echo "Latest pyenv release is ${PYENV_VERSION}"
-        update_pyenv_version ${PYENV_VERSION}
+        local pyenv_version
+        pyenv_version=$(latest_pyenv_version)
+        echo "Latest pyenv release is ${pyenv_version}"
+        update_pyenv_version "${pyenv_version}"
     elif [ "${repository}" == "pyenv-virtualenv" ]; then
-        PYENV_VIRTUALENV_VERSION=$(latest_pyenv_virtualenv_version)
-        echo "Latest pyenv-virtualenv release is ${PYENV_VIRTUALENV_VERSION}"
-        update_pyenv_virtualenv_version ${PYENV_VIRTUALENV_VERSION}
+        local pyenv_virtualenv_version
+        pyenv_virtualenv_version=$(latest_pyenv_virtualenv_version)
+        echo "Latest pyenv-virtualenv release is ${pyenv_virtualenv_version}"
+        update_pyenv_virtualenv_version "${pyenv_virtualenv_version}"
     else
         error "Unknown repository: ${repository}"
         exit 1
@@ -107,10 +114,13 @@ update_versions() {
 }
 
 check_requirements() {
-    command -v curl > /dev/null || { error "curl is not installed"; exit 1; }
+    command -v curl >/dev/null || {
+        error "curl is not installed"
+        exit 1
+    }
 }
 
 set -e
 
 check_requirements
-update_versions $1
+update_versions "$1"
