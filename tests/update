@@ -12,7 +12,7 @@ cd "$DIR"
 user="test"
 repository="${ROLE_NAME}"
 ansible_version="<2.9.0"
-label_version=$(date +"%Y-%m-%dT%H:%M:%S%z")
+label_version=$(date +"%Y-%m-%d")
 
 # Generate Dockerfile from Dockerfile.template
 update_docker_image() {

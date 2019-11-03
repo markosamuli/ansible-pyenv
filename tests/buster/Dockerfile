@@ -1,7 +1,7 @@
 FROM debian:buster
 
 LABEL name="ansible-pyenv-buster"
-LABEL version="2019-11-03T16:37:07+0000"
+LABEL version="2019-11-03"
 
 RUN apt-get update && apt-get install -y \
     python-minimal \
