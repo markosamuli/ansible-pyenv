@@ -49,11 +49,6 @@ repos:
     hooks:
       - id: markdownlint
 
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: v1.1.0
-    hooks:
-      - id: dockerfile_lint
-
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook.git
     rev: '2.0.0'
     hooks:
