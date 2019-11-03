@@ -1,8 +1,5 @@
 FROM debian:stretch
 
-LABEL name="ansible-pyenv-stretch"
-LABEL version="2019-11-03"
-
 RUN apt-get update && apt-get install -y \
     python-minimal \
     python-pip \

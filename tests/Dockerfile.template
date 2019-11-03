@@ -1,8 +1,5 @@
 FROM %%FROM%%
 
-LABEL name="%%LABEL_NAME%%"
-LABEL version="%%LABEL_VERSION%%"
-
 RUN apt-get update && apt-get install -y \
     python-minimal \
     python-pip \

@@ -12,22 +12,18 @@ cd "$DIR"
 user="test"
 repository="${ROLE_NAME}"
 ansible_version="<2.9.0"
-label_version=$(date +"%Y-%m-%d")
 
 # Generate Dockerfile from Dockerfile.template
 update_docker_image() {
     local docker_image=$1
     local docker_tag=$2
     dir="${docker_tag}"
-    label_name="${repository}-${docker_tag}"
     echo "*** Updating $dir/Dockerfile"
     mkdir -p "$dir"
     if test "$(uname)" = "Darwin"; then
         sed -E \
             -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
             -e 's!%%USER%%!'"$user"'!g' \
-            -e 's!%%LABEL_NAME%%!'"$label_name"'!g' \
-            -e 's!%%LABEL_VERSION%%!'"$label_version"'!g' \
             -e 's!%%REPOSITORY%%!'"$repository"'!g' \
             -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
             "Dockerfile.template" >"$dir/Dockerfile"
@@ -35,8 +31,6 @@ update_docker_image() {
         sed -r \
             -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
             -e 's!%%USER%%!'"$user"'!g' \
-            -e 's!%%LABEL_NAME%%!'"$label_name"'!g' \
-            -e 's!%%LABEL_VERSION%%!'"$label_version"'!g' \
             -e 's!%%REPOSITORY%%!'"$repository"'!g' \
             -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
             "Dockerfile.template" >"$dir/Dockerfile"
