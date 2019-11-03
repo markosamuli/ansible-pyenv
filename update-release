@@ -16,9 +16,15 @@ get_latest_release() {
     if [ ! -z "$GITHUB_OAUTH_TOKEN" ]; then
         url="${url}?access_token=${GITHUB_OAUTH_TOKEN}"
     fi
-    curl --silent "${url}" | \
-        grep '"tag_name":' | \
-        sed -E 's/.*"([^"]+)".*/\1/'
+    if test "$(uname)" = "Darwin"; then
+        curl --silent "${url}" | \
+            grep '"tag_name":' | \
+            sed -E 's/.*"([^"]+)".*/\1/'
+    else
+        curl --silent "${url}" | \
+            grep '"tag_name":' | \
+            sed -r 's/.*"([^"]+)".*/\1/'
+    fi
 }
 
 
@@ -45,8 +51,13 @@ update_variable() {
     local key=$1
     local value=$2
     local file=defaults/main.yml
-    sed -i.save -r "s/^($key):.*$/\1: \"${value}\"/" \
-        ${file}
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^($key):.*$/\1: \"${value}\"/" \
+            ${file}
+    else
+        sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
+            ${file}
+    fi
     rm ${file}.save
 }
 

@@ -1,13 +1,22 @@
 ---
 
-- name: Get macOS version
-  set_fact:
-    macos_version: "{{ ansible_distribution_version |
-                    regex_search('^([0-9]+\\.[0-9]+)') }}"
+# - name: Get active developer directory
+#   command: xcode-select -p
+#   register: xcode_select_path
+#   changed_when: false
 
-- name: macOS Mojave setup
-  include_tasks: "Mojave.yml"
-  when: macos_version == "10.14"
+# - name: Check if we're using Command Line Tools
+#   set_fact:
+#     macos_clt: "{{ xcode_select_path.stdout == '/Library/Developer/CommandLineTools' }}"
+
+# - name: Get macOS version
+#   set_fact:
+#     macos_version: "{{ ansible_distribution_version |
+#                     regex_search('^([0-9]+\\.[0-9]+)') }}"
+
+# - name: macOS Mojave setup
+#   include_tasks: "Mojave.yml"
+#   when: macos_version == "10.14" and not macos_clt
 
 - name: Install pyenv build requirements with Homebrew
   homebrew:

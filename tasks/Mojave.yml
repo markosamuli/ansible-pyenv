@@ -8,9 +8,13 @@
     path: "{{ mojave_sdk_headers }}"
   register: mojave_sdk_headers_st
 
+- name: Install package with expired Apple security certificates
+  set_fact:
+    mojave_sdk_headers_opts: "{% if pyenv_macos_untrusted_packages %}-allowUntrusted{% endif %}"
+
 - name: Install macOS SDK headers for macOS 10.14
   become: true
-  command: "installer -pkg {{ mojave_sdk_headers }} -target /"
+  command: "installer -pkg {{ mojave_sdk_headers }} -target / {{ mojave_sdk_headers_opts }}"
   args:
     creates: /usr/include
   when: mojave_sdk_headers_st.stat.exists
