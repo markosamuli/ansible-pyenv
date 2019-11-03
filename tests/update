@@ -12,29 +12,42 @@ cd "$DIR"
 user="test"
 repository="${ROLE_NAME}"
 ansible_version="<2.9.0"
+label_version=$(date +"%Y-%m-%dT%H:%M:%S%z")
 
-image="ubuntu"
+# Generate Dockerfile from Dockerfile.template
+update_docker_image() {
+    local docker_image=$1
+    local docker_tag=$2
+    dir="${docker_tag}"
+    label_name="${repository}-${docker_tag}"
+    echo "*** Updating $dir/Dockerfile"
+    if test "$(uname)" = "Darwin"; then
+        sed -E \
+            -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
+            -e 's!%%USER%%!'"$user"'!g' \
+            -e 's!%%LABEL_NAME%%!'"$label_name"'!g' \
+            -e 's!%%LABEL_VERSION%%!'"$label_version"'!g' \
+            -e 's!%%REPOSITORY%%!'"$repository"'!g' \
+            -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
+            "Dockerfile.template" >"$dir/Dockerfile"
+    else
+        sed -r \
+            -e 's!%%FROM%%!'"$docker_image:$docker_tag"'!g' \
+            -e 's!%%USER%%!'"$user"'!g' \
+            -e 's!%%LABEL_NAME%%!'"$label_name"'!g' \
+            -e 's!%%LABEL_VERSION%%!'"$label_version"'!g' \
+            -e 's!%%REPOSITORY%%!'"$repository"'!g' \
+            -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
+            "Dockerfile.template" >"$dir/Dockerfile"
+    fi
+}
+
 ubuntu_releases=(xenial bionic)
 for tag in "${ubuntu_releases[@]}"; do
-    dir="${tag}"
-    echo "*** Updating $dir/Dockerfile"
-    sed -r \
-        -e 's!%%FROM%%!'"$image:$tag"'!g' \
-        -e 's!%%USER%%!'"$user"'!g' \
-        -e 's!%%REPOSITORY%%!'"$repository"'!g' \
-        -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-        "Dockerfile.template" >"$dir/Dockerfile"
+    update_docker_image "ubuntu" "${tag}"
 done
 
-image="debian"
 debian_releases=(stretch buster)
 for tag in "${debian_releases[@]}"; do
-    dir="${tag}"
-    echo "*** Updating $dir/Dockerfile"
-    sed -r \
-        -e 's!%%FROM%%!'"$image:$tag"'!g' \
-        -e 's!%%USER%%!'"$user"'!g' \
-        -e 's!%%REPOSITORY%%!'"$repository"'!g' \
-        -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-        "Dockerfile.template" >"$dir/Dockerfile"
+    update_docker_image "debian" "${tag}"
 done

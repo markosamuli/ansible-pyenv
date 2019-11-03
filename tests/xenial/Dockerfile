@@ -1,21 +1,15 @@
 FROM ubuntu:xenial
 
+LABEL name="ansible-pyenv-xenial"
+LABEL version="2019-11-03T16:37:07+0000"
+
 RUN apt-get update && apt-get install -y \
     python-minimal \
     python-pip \
- && rm -rf /var/lib/apt/lists/*
-
-ARG ansible_version="<2.9.0"
-ENV ANSIBLE_VERSION="${ansible_version}"
-RUN pip install ansible${ANSIBLE_VERSION}
-
-RUN apt-get update && apt-get install -y \
     zsh \
     sudo \
- && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y \
     aptitude \
+ && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 ARG user=test
@@ -30,8 +24,12 @@ RUN touch /home/${user}/.zshrc \
  && chown -R ${user}:${user} /home/${user}
 
 # Create directory for code
-RUN mkdir -p /home/${user}/${repository} ; \
-    chown -R ${user}:${user} /home/${user}/${repository}
+RUN mkdir -p /home/${user}/${repository} \
+ && chown -R ${user}:${user} /home/${user}/${repository}
 VOLUME ["/home/${user}/${repository}"]
+
+ARG ansible_version="<2.9.0"
+ENV ANSIBLE_VERSION="${ansible_version}"
+RUN pip install ansible${ANSIBLE_VERSION}
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
