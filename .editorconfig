@@ -8,11 +8,6 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
-# Shell scripts without extension
-[{tests/run-*,tests/update}]
-indent_style = space
-indent_size = 4
-
 # Markdown
 # https://github.com/google/styleguide/blob/gh-pages/docguide/style.md
 [*.md]
