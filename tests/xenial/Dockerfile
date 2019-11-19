@@ -25,7 +25,7 @@ RUN mkdir -p /home/${user}/${repository} \
  && chown -R ${user}:${user} /home/${user}/${repository}
 VOLUME ["/home/${user}/${repository}"]
 
-ARG ansible_version="<2.9.0"
+ARG ansible_version="<2.9.0,!=2.8.6"
 ENV ANSIBLE_VERSION="${ansible_version}"
 RUN pip install ansible${ANSIBLE_VERSION}
 
