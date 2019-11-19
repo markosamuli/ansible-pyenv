@@ -9,7 +9,7 @@ trim_trailing_whitespace = true
 charset = utf-8
 
 # Shell scripts without extension
-[{update-*,tests/run-*,tests/update}]
+[{tests/run-*,tests/update}]
 indent_style = space
 indent_size = 4
 

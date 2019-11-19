@@ -15,10 +15,10 @@ test-update:
 
 .PHONY: update
 update:
-	@./update-release pyenv
-	@./update-release pyenv-virtualenv
-	@./update-python python2
-	@./update-python python3
+	@./scripts/update-release.sh pyenv
+	@./scripts/update-release.sh pyenv-virtualenv
+	@./scripts/update-python.sh python2
+	@./scripts/update-python.sh python3
 
 .PHONY: lint
 lint: install-git-hooks
