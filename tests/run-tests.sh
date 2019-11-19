@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT=$(dirname "$DIR")
+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$TESTS_DIR")
 
 ROLE_NAME="$(basename "$PROJECT_ROOT")"
 TEST_HOME=/home/test
@@ -88,7 +88,7 @@ trap finish EXIT
 
 detect_wsl
 
-cd "$DIR"
+cd "${TESTS_DIR}"
 
 images=("$@")
 if [ ${#images[@]} -eq 0 ]; then
