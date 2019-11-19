@@ -8,8 +8,12 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 4
+
 # Markdown
-# https://github.com/google/styleguide/blob/gh-pages/docguide/style.md
 [*.md]
 trim_trailing_whitespace = false
 indent_style = space
