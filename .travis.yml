@@ -1,8 +1,8 @@
 # -*- mode: yaml -*-
 # vim:ts=2:sw=2:ai:si:syntax=yaml
-#########################
+#
 # Travis CI configuration
-#########################
+# https://docs.travis-ci.com/
 ---
 
 # Run tests against pull requests and main branches only
@@ -26,10 +26,6 @@ addons:
     packages:
       - ansible
     update: true
-
-cache:
-  directories:
-    - $HOME/.cache/pre-commit/
 
 before_install:
   # Existing pyenv installation on Linux conflicts with ours
@@ -113,9 +109,6 @@ script:
   # Test global python version is defined
   - . $HOME/.pyenv/.pyenvrc && pyenv version
 
-before_cache:
-  - rm -f $HOME/.cache/pre-commit/pre-commit.log
-
 stages:
   - validate
   - test
@@ -129,11 +122,15 @@ jobs:
       os: linux
       dist: xenial
       language: minimal
+      cache:
+        directories:
+          - $HOME/.cache/pre-commit/
+      before_cache:
+        - rm -f $HOME/.cache/pre-commit/pre-commit.log
       install:
         # Fix ansible-lint installation issues
         # https://github.com/ansible/ansible-lint/issues/590
         - pip install --user virtualenv==16.3.0
-
         # Install pre-commit with pip
         - SKIP=dockerfile_lint pip install --user pre-commit
       script:
