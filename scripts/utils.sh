@@ -42,10 +42,56 @@ get_latest_tag() {
 }
 
 # Update Ansible variable in defaults/main.yml
-update_variable() {
+update_default_variable() {
     local key=$1
     local value=$2
     local file=defaults/main.yml
+    update_variable_file "${file}" "${key}" "${value}"
+}
+
+# Update Ansible variable in vars/os/ansible_os.yml
+update_os_variable() {
+    local os=$1
+    local key=$2
+    local value=$3
+
+    if [ -z "${os}" ]; then
+        error "OS name missing"
+        exit 1
+    fi
+    if [ -z "${key}" ]; then
+        error "Variable name missing"
+        exit 1
+    fi
+    if [ -z "${value}" ]; then
+        error "Variable value missing"
+        exit 1
+    fi
+
+    local ansible_os
+    if [ "${os}" == "darwin" ] || [ "${os}" == "Darwin" ]; then
+        ansible_os="Darwin"
+    elif [ "${os}" == "debian" ] || [ "${os}" == "Debian" ]; then
+        ansible_os="Debian"
+    fi
+    if [ -z "${ansible_os}" ]; then
+        error "Unsupported OS: ${os}"
+        exit 1
+    fi
+
+    local file="vars/os/${ansible_os}.yml"
+    update_variable_file "${file}" "${key}" "${value}"
+}
+
+# Update variable in Ansible file
+update_variable_file() {
+    local file=$1
+    local key=$2
+    local value=$3
+    if [ ! -e "${file}" ]; then
+        error "${file} not found"
+        exit 1
+    fi
     if test "$(uname)" = "Darwin"; then
         sed -i.save -E "s/^($key):.*$/\1: \"${value}\"/" \
             "${file}"

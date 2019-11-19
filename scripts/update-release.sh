@@ -9,13 +9,13 @@ source "${SCRIPTS_DIR}/utils.sh"
 # Update pyenv version
 update_pyenv_version() {
     local version=$1
-    update_variable "pyenv_version" "${version}"
+    update_default_variable "pyenv_version" "${version}"
 }
 
 # Update pyenv-virtualenv version
 update_pyenv_virtualenv_version() {
     local version=$1
-    update_variable "pyenv_virtualenv_version" "${version}"
+    update_default_variable "pyenv_virtualenv_version" "${version}"
 }
 
 # Get latest pyenv version

@@ -39,13 +39,13 @@ get_latest_python37_version() {
 # Update Ansible variable
 update_python2_version() {
     local version=$1
-    update_variable "pyenv_python2_version" "$version"
+    update_default_variable "pyenv_python2_version" "$version"
 }
 
 # Update Ansible variable
 update_python3_version() {
     local version=$1
-    update_variable "pyenv_python3_version" "$version"
+    update_default_variable "pyenv_python3_version" "$version"
 }
 
 # Update all versions
