@@ -1,7 +1,3 @@
-PRE_COMMIT_HOOKS = .git/hooks/pre-commit
-PRE_PUSH_HOOKS = .git/hooks/pre-push
-COMMIT_MSG_HOOKS = .git/hooks/commit-msg
-
 .PHONY: all
 all: install-git-hooks test-update lint test
 
@@ -19,6 +15,10 @@ update:
 	@./scripts/update-release.sh pyenv-virtualenv
 	@./scripts/update-python.sh python2
 	@./scripts/update-python.sh python3
+
+PRE_COMMIT_HOOKS = .git/hooks/pre-commit
+PRE_PUSH_HOOKS = .git/hooks/pre-push
+COMMIT_MSG_HOOKS = .git/hooks/commit-msg
 
 .PHONY: lint
 lint: install-git-hooks
