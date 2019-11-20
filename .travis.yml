@@ -151,7 +151,7 @@ jobs:
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8"
       os: linux
       dist: bionic
-      env: ANSIBLE_VERSION='<2.9.0'
+      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6'
 
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
