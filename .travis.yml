@@ -151,26 +151,12 @@ jobs:
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8"
       os: linux
       dist: bionic
-      env: ANSIBLE_VERSION='<2.9.0'
+      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
       osx_image: xcode10.1
-      env: FROM_PACKAGE_MANAGER='yes'
-    - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 10.2.1 with Homebrew"
-      os: osx
-      osx_image: xcode10.2
-      env: FROM_PACKAGE_MANAGER='yes'
-    - stage: test
-      name: "macOS 10.14.4 (Mojave) with Xcode 10.3 with Homebrew"
-      os: osx
-      osx_image: xcode10.3
-      env: FROM_PACKAGE_MANAGER='yes'
-    - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.0 with Homebrew"
-      os: osx
-      osx_image: xcode11
       env: FROM_PACKAGE_MANAGER='yes'
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 with Homebrew"
