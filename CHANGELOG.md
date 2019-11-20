@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.1.1] - 2019-11-20
+
+## Changed
+
+* Update to [pyenv 1.2.15][pyenv-1215]
+* Update to [Python 2.7.17][python-2717]
+* Update to [Python 3.7.5][python-375]
+
+[pyenv-1215]: https://github.com/pyenv/pyenv/releases/tag/v1.2.15
+[python-2717]: https://www.python.org/downloads/release/python-2717/
+[python-375]: https://www.python.org/downloads/release/python-375/
+
+## Development improvements
+
+* Improvements to development and test bash scripts
+* Remove Xcode 10.21.1, 10.3 and 11.0 builds on macOS 10.14
+* Do not install Ansible 2.8.6 when running tests
+
 ## [2.1.0] - 2019-11-03
 
 ### macOS Mojave support
@@ -161,6 +179,7 @@ and keep using the previous method.
 * set pyenv global version
 
 [Unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[2.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.1
 [2.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0
 [2.1.0-rc.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.2
 [2.1.0-rc.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.1
