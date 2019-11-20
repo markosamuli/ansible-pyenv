@@ -5,10 +5,16 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/blob/master/LICENSE)
 
-| Branch  | Status |
-|---------|--------|
-| master  | [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-pyenv)
-| develop | [![Build Status](https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=develop)](https://travis-ci.org/markosamuli/ansible-pyenv)
+| Branch  | Travis Builds | Code Quality |
+|---------|--------|--------------|
+| master  | [![Build Status][travis-master]][travis] | ![Build Status][gh-master] |
+| develop | [![Build Status][travis-develop]][travis] | ![Build Status][gh-develop] |
+
+[travis]: https://travis-ci.org/markosamuli/ansible-pyenv/branches
+[travis-master]: https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=master
+[travis-develop]: https://travis-ci.org/markosamuli/ansible-pyenv.svg?branch=develop
+[gh-master]: https://github.com/markosamuli/ansible-pyenv/workflows/Code%20Quality/badge.svg?branch=master
+[gh-develop]: https://github.com/markosamuli/ansible-pyenv/workflows/Code%20Quality/badge.svg?branch=develop
 
 Ansible role to install [pyenv] and [pyenv-virtualenv] on Ubuntu or macOS
 development machines.
