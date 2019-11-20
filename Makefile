@@ -1,24 +1,24 @@
-PRE_COMMIT_HOOKS = .git/hooks/pre-commit
-PRE_PUSH_HOOKS = .git/hooks/pre-push
-COMMIT_MSG_HOOKS = .git/hooks/commit-msg
-
 .PHONY: all
 all: install-git-hooks test-update lint test
 
 .PHONY: test
 test:
-	@./tests/run-tests
+	@./tests/run-tests.sh
 
 .PHONY: test-update
 test-update:
-	@./tests/update
+	@./tests/update.sh
 
 .PHONY: update
 update:
-	@./update-release pyenv
-	@./update-release pyenv-virtualenv
-	@./update-python python2
-	@./update-python python3
+	@./scripts/update-release.sh pyenv
+	@./scripts/update-release.sh pyenv-virtualenv
+	@./scripts/update-python.sh python2
+	@./scripts/update-python.sh python3
+
+PRE_COMMIT_HOOKS = .git/hooks/pre-commit
+PRE_PUSH_HOOKS = .git/hooks/pre-push
+COMMIT_MSG_HOOKS = .git/hooks/commit-msg
 
 .PHONY: lint
 lint: install-git-hooks

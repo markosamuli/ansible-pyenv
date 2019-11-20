@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-# Print error into STDERR
-error() {
-    echo "$@" 1>&2
-}
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$SCRIPTS_DIR")
+
+# shellcheck source=scripts/utils.sh
+source "${SCRIPTS_DIR}/utils.sh"
 
 # Get latest stable tag for a GitHub repository
 get_latest_cpython_version() {
@@ -37,32 +38,14 @@ get_latest_python37_version() {
 
 # Update Ansible variable
 update_python2_version() {
-    local key=pyenv_python2_version
     local version=$1
-    local file=defaults/main.yml
-    if test "$(uname)" = "Darwin"; then
-        sed -i.save -E "s/^($key):.*$/\1: \"${version}\"/" \
-            ${file}
-    else
-        sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
-            ${file}
-    fi
-    rm ${file}.save
+    update_default_variable "pyenv_python2_version" "$version"
 }
 
 # Update Ansible variable
 update_python3_version() {
-    local key=pyenv_python3_version
     local version=$1
-    local file=defaults/main.yml
-    if test "$(uname)" = "Darwin"; then
-        sed -i.save -E "s/^($key):.*$/\1: \"${version}\"/" \
-            ${file}
-    else
-        sed -i.save -r "s/^($key):.*$/\1: \"${version}\"/" \
-            ${file}
-    fi
-    rm ${file}.save
+    update_default_variable "pyenv_python3_version" "$version"
 }
 
 # Update all versions
@@ -84,30 +67,25 @@ update_versions() {
 
 # Update Python 2 version
 update_python2() {
-    PYTHON27_VERSION=$(get_latest_python27_version)
-    echo "Latest Python 2.7 release is ${PYTHON27_VERSION}"
-    update_python2_version "${PYTHON27_VERSION}"
+    local version
+    version=$(get_latest_python27_version)
+    echo "Latest Python 2.7 release is ${version}"
+    update_python2_version "${version}"
 }
 
 # Update Python 3 version
 update_python3() {
-    PYTHON37_VERSION=$(get_latest_python37_version)
-    echo "Latest Python 3.7 release is ${PYTHON37_VERSION}"
-    update_python3_version "${PYTHON37_VERSION}"
-}
-
-check_requirements() {
-    command -v curl >/dev/null || {
-        error "curl is not installed"
-        exit 1
-    }
-    command -v jq >/dev/null || {
-        error "jq not installed"
-        exit 1
-    }
+    local version
+    version=$(get_latest_python37_version)
+    echo "Latest Python 3.7 release is ${version}"
+    update_python3_version "${version}"
 }
 
 set -e
 
-check_requirements
+cd "${PROJECT_ROOT}"
+
+check_curl
+check_jq
+
 update_versions "$1"
