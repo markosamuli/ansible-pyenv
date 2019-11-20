@@ -163,16 +163,6 @@ jobs:
       osx_image: xcode10.2
       env: FROM_PACKAGE_MANAGER='yes'
     - stage: test
-      name: "macOS 10.14.4 (Mojave) with Xcode 10.3 with Homebrew"
-      os: osx
-      osx_image: xcode10.3
-      env: FROM_PACKAGE_MANAGER='yes'
-    - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.0 with Homebrew"
-      os: osx
-      osx_image: xcode11
-      env: FROM_PACKAGE_MANAGER='yes'
-    - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 with Homebrew"
       os: osx
       osx_image: xcode11.2
