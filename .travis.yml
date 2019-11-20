@@ -152,15 +152,11 @@ jobs:
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.9.0'
+
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
       osx_image: xcode10.1
-      env: FROM_PACKAGE_MANAGER='yes'
-    - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 10.2.1 with Homebrew"
-      os: osx
-      osx_image: xcode10.2
       env: FROM_PACKAGE_MANAGER='yes'
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 with Homebrew"
