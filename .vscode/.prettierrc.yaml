@@ -1,0 +1,14 @@
+# -*- mode: yaml -*-
+# vim:ts=2:sw=2:ai:si:syntax=yaml
+#
+# Prettier configuration options:
+# https://prettier.io/docs/en/options.html
+---
+printWidth: 80
+tabWidth: 4
+semi: true
+singleQuote: false
+useTabs: false
+trailingComma: none
+endOfLine: lf
+proseWrap: always

@@ -5,6 +5,9 @@ ansible.cfg
 # IDEs
 .vscode/*
 !.vscode/cSpell.json
+!.vscode/extensions.json
 
 # pyenv
 .python-version
+
+!.prettierrc.yaml
