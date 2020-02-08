@@ -68,11 +68,11 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':true,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':true}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':false,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':false}" \
         || travis_terminate 1
     fi
 
@@ -80,11 +80,11 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':true,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':true}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':false,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':false}" \
         || travis_terminate 1
     fi
 
@@ -92,13 +92,13 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'pyenv_install_from_package_manager':true,'pyenv_macos_untrusted_packages':true}" \
+      -e "{'pyenv_install_from_package_manager':true}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'pyenv_install_from_package_manager':failed,'pyenv_macos_untrusted_packages':true}" \
+      -e "{'pyenv_install_from_package_manager':failed}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)

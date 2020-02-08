@@ -9,6 +9,7 @@
 * Install [Python 3.8.1][python-381]
 * New variables `pyenv_python37_version` and `pyenv_python38_version`
 * Removed `pyenv_python2_version` and `pyenv_python3_version` variables
+* Removed macOS Mojave patch support
 
 [pyenv-1216]: https://github.com/pyenv/pyenv/releases/tag/v1.2.16
 [python-376]: https://www.python.org/downloads/release/python-376/

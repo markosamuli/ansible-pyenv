@@ -29,18 +29,6 @@ under user home directory.
 [pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
 [pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
 
-## macOS Mojave patch
-
-This patch is not enabled by default, but you can enable it with:
-
-```yaml
-pyenv_macos_mojave_patch: true
-```
-
-This role installs macOS SDK headers from
-`/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg`
-if they're not found in `/usr/include`.
-
 ## Install from Homebrew on macOS
 
 The default method to install pyenv and plugins on macOS is to use Homebrew.
