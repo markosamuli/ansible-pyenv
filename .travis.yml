@@ -4,7 +4,6 @@
 # Travis CI configuration
 # https://docs.travis-ci.com/
 ---
-
 # Run tests against pull requests and main branches only
 if: |
   type = pull_request OR \
@@ -68,11 +67,11 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':true,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':true}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':false,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':false}" \
         || travis_terminate 1
     fi
 
@@ -80,11 +79,11 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':true,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':true}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':false,'pyenv_macos_untrusted_packages':true}" \
+        -e "{'pyenv_install_from_package_manager':false}" \
         || travis_terminate 1
     fi
 
@@ -92,13 +91,13 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'pyenv_install_from_package_manager':true,'pyenv_macos_untrusted_packages':true}" \
+      -e "{'pyenv_install_from_package_manager':true}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'pyenv_install_from_package_manager':failed,'pyenv_macos_untrusted_packages':true}" \
+      -e "{'pyenv_install_from_package_manager':failed}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
@@ -115,7 +114,6 @@ stages:
 
 jobs:
   include:
-
     # Run validation stage in Linux with latest Ansible only
     - stage: validate
       name: Validate with pre-commit
@@ -138,11 +136,6 @@ jobs:
 
     # Run tests
     - stage: test
-      name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
-      os: linux
-      dist: xenial
-      env: ANSIBLE_VERSION='<2.7.0'
-    - stage: test
       name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
       os: linux
       dist: xenial
@@ -152,6 +145,11 @@ jobs:
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+    - stage: test
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.9"
+      os: linux
+      dist: bionic
+      env: ANSIBLE_VERSION='<2.10'
 
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"

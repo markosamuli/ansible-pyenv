@@ -5,9 +5,9 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/blob/master/LICENSE)
 
-| Branch  | Travis Builds | Code Quality |
-|---------|--------|--------------|
-| master  | [![Build Status][travis-master]][travis] | ![Build Status][gh-master] |
+| Branch  | Travis Builds                             | Code Quality                |
+| ------- | ----------------------------------------- | --------------------------- |
+| master  | [![Build Status][travis-master]][travis]  | ![Build Status][gh-master]  |
 | develop | [![Build Status][travis-develop]][travis] | ![Build Status][gh-develop] |
 
 [travis]: https://travis-ci.org/markosamuli/ansible-pyenv/branches
@@ -29,18 +29,6 @@ under user home directory.
 [pyenv-virtualenv]: https://github.com/pyenv/pyenv-virtualenv
 [pyenv-virtualenvwrapper]: https://github.com/pyenv/pyenv-virtualenvwrapper
 
-## macOS Mojave patch
-
-This patch is not enabled by default, but you can enable it with:
-
-```yaml
-pyenv_macos_mojave_patch: true
-```
-
-This role installs macOS SDK headers from
-`/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg`
-if they're not found in `/usr/include`.
-
 ## Install from Homebrew on macOS
 
 The default method to install pyenv and plugins on macOS is to use Homebrew.
@@ -54,18 +42,19 @@ before running this role.
 
 ## Installed Python versions
 
-This role installs [Python] versions defined in `pyenv_python_versions` variable.
+This role installs [Python][python] versions defined in `pyenv_python_versions`
+variable.
 
 To set global version, set `pyenv_global` variable to the desired version(s).
 
 ```yaml
-pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+pyenv_global: "{{ pyenv_python37_version }} system"
 ```
 
 This is configured to use latest Python 2 and Python 3 versions and the
 system version as default.
 
-[Python]: https://www.python.org
+[python]: https://www.python.org
 
 ## Changes to shell config files
 
@@ -134,20 +123,20 @@ Latest Python 2 and Python 3 versions are installed:
 
 ```yaml
 # Latest Python versions
-pyenv_python2_version: "2.7.16"
-pyenv_python3_version: "3.7.4"
+pyenv_python37_version: "3.7.6"
+pyenv_python38_version: "3.8.1"
 
 # Python versions to install
 pyenv_python_versions:
-  - "{{ pyenv_python2_version }}"
-  - "{{ pyenv_python3_version }}"
+  - "{{ pyenv_python37_version }}"
+  - "{{ pyenv_python38_version }}"
 ```
 
 Set global version:
 
 ```yaml
 # Set global pyenv version
-pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+pyenv_global: "{{ pyenv_python37_version }} system"
 ```
 
 Install virtualenvwrapper plugin:
@@ -199,16 +188,16 @@ Update [pyenv-virtualenv] release:
 ./update-release pyenv-virtualenv
 ```
 
-Update default [Python] 2.7 version:
-
-```bash
-./update-python python2
-```
-
 Update default [Python] 3.7 version:
 
 ```bash
-./update-python python3
+./update-python python37
+```
+
+Update default [Python] 3.8 version:
+
+```bash
+./update-python python38
 ```
 
 Update all versions:
@@ -250,12 +239,12 @@ make install-git-hooks
 
 ## Changes
 
-* [CHANGELOG.md](CHANGELOG.md)
+- [CHANGELOG.md](CHANGELOG.md)
 
 ## License
 
-* [MIT](LICENSE)
+- [MIT](LICENSE)
 
 ## Author Information
 
-* [@markosamuli](https://github.com/markosamuli)
+- [@markosamuli](https://github.com/markosamuli)

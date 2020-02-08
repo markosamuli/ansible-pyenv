@@ -1,5 +1,4 @@
 ---
-
 - name: Remove pyenv installed with Homebrew
   homebrew:
     name: pyenv

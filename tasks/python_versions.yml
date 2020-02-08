@@ -1,5 +1,4 @@
 ---
-
 - name: Install Python interpreters
   shell: >-
     . {{ pyenv_root }}/.pyenvrc &&
@@ -22,7 +21,7 @@
 - name: Set pyenv_global_active fact
   set_fact:
     pyenv_global_active: "{{ pyenv_global_version.stdout_lines |
-                          join(' ') | trim() }}"
+      join(' ') | trim() }}"
 
 - name: Check if 'system' version is available
   shell: >-

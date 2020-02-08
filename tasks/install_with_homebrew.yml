@@ -1,5 +1,4 @@
 ---
-
 - name: Install pyenv with Homebrew
   homebrew:
     name: pyenv

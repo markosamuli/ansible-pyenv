@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml",
+        "timonwong.shellcheck",
+        "vscoss.vscode-ansible",
+        "ms-python.python",
+        "davidanson.vscode-markdownlint",
+        "ms-azuretools.vscode-docker"
+    ]
+}

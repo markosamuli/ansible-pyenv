@@ -9,21 +9,21 @@ pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 pyenv_init_shell: true
 
 # Versions to install
-pyenv_version: "v1.2.15"
+pyenv_version: "v1.2.16"
 pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 
 # Latest Python versions
-pyenv_python2_version: "2.7.17"
-pyenv_python3_version: "3.7.5"
+pyenv_python37_version: "3.7.6"
+pyenv_python38_version: "3.8.1"
 
 # Python versions to install
 pyenv_python_versions:
-  - "{{ pyenv_python2_version }}"
-  - "{{ pyenv_python3_version }}"
+  - "{{ pyenv_python37_version }}"
+  - "{{ pyenv_python38_version }}"
 
 # Set global pyenv version
-pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+pyenv_global: "{{ pyenv_python37_version }} system"
 
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: false
@@ -34,10 +34,3 @@ pyenv_install_from_package_manager: true
 
 # Detect existing install
 pyenv_detect_existing_install: true
-
-# Allow expired Apple security certificates
-# https://eclecticlight.co/2019/10/18/beware-apple-security-certificates-after-24-october-they-may-have-expired/
-pyenv_macos_untrusted_packages: false
-
-# Patch for older Mojave + Xcode versions to make pyenv builds work
-pyenv_macos_mojave_patch: false
