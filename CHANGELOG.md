@@ -1,8 +1,38 @@
 # Changelog
 
+## [Unreleased] - 2020-02-08
+
+### Changed
+
+* Update to [pyenv 1.2.16][pyenv-1216]
+* Update to [Python 3.7.6][python-376]
+* Install [Python 3.8.1][python-381]
+* New variables `pyenv_python37_version` and `pyenv_python38_version`
+* Removed `pyenv_python2_version` and `pyenv_python3_version` variables
+
+[pyenv-1216]: https://github.com/pyenv/pyenv/releases/tag/v1.2.16
+[python-376]: https://www.python.org/downloads/release/python-376/
+[python-381]: https://www.python.org/downloads/release/python-381/
+
+### Python 2 support
+
+[Python 2][sunset-python-2] has reached end of life on January 1, 2020.
+
+This role will no longer install Python 2.7 by default.
+
+You can use the previous [2.1.1] version or customise the installed versions.
+
+[sunset-python-2]: https://www.python.org/doc/sunset-python-2/
+
+### Python 3 support
+
+This version adds Python 3.8 to installed versions.
+
+The default `global` version is set to Python 3.7.
+
 ## [2.1.1] - 2019-11-20
 
-## Changed
+### Changed
 
 * Update to [pyenv 1.2.15][pyenv-1215]
 * Update to [Python 2.7.17][python-2717]
@@ -12,7 +42,7 @@
 [python-2717]: https://www.python.org/downloads/release/python-2717/
 [python-375]: https://www.python.org/downloads/release/python-375/
 
-## Development improvements
+### Development improvements
 
 * Improvements to development and test bash scripts
 * Remove Xcode 10.21.1, 10.3 and 11.0 builds on macOS 10.14

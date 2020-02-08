@@ -13,8 +13,8 @@ test-update:
 update:
 	@./scripts/update-release.sh pyenv
 	@./scripts/update-release.sh pyenv-virtualenv
-	@./scripts/update-python.sh python2
-	@./scripts/update-python.sh python3
+	@./scripts/update-python.sh python37
+	@./scripts/update-python.sh python38
 
 PRE_COMMIT_HOOKS = .git/hooks/pre-commit
 PRE_PUSH_HOOKS = .git/hooks/pre-push

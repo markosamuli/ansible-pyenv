@@ -14,16 +14,16 @@ pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 
 # Latest Python versions
-pyenv_python2_version: "2.7.17"
-pyenv_python3_version: "3.7.6"
+pyenv_python37_version: "3.7.6"
+pyenv_python38_version: "3.8.1"
 
 # Python versions to install
 pyenv_python_versions:
-  - "{{ pyenv_python2_version }}"
-  - "{{ pyenv_python3_version }}"
+  - "{{ pyenv_python37_version }}"
+  - "{{ pyenv_python38_version }}"
 
 # Set global pyenv version
-pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+pyenv_global: "{{ pyenv_python37_version }} system"
 
 # Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: false

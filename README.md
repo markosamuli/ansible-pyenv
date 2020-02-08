@@ -59,7 +59,7 @@ This role installs [Python] versions defined in `pyenv_python_versions` variable
 To set global version, set `pyenv_global` variable to the desired version(s).
 
 ```yaml
-pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+pyenv_global: "{{ pyenv_python37_version }} system"
 ```
 
 This is configured to use latest Python 2 and Python 3 versions and the
@@ -134,20 +134,20 @@ Latest Python 2 and Python 3 versions are installed:
 
 ```yaml
 # Latest Python versions
-pyenv_python2_version: "2.7.16"
-pyenv_python3_version: "3.7.4"
+pyenv_python37_version: "3.7.6"
+pyenv_python38_version: "3.8.1"
 
 # Python versions to install
 pyenv_python_versions:
-  - "{{ pyenv_python2_version }}"
-  - "{{ pyenv_python3_version }}"
+  - "{{ pyenv_python37_version }}"
+  - "{{ pyenv_python38_version }}"
 ```
 
 Set global version:
 
 ```yaml
 # Set global pyenv version
-pyenv_global: "{{ pyenv_python2_version }} {{ pyenv_python3_version }} system"
+pyenv_global: "{{ pyenv_python37_version }} system"
 ```
 
 Install virtualenvwrapper plugin:
@@ -199,16 +199,16 @@ Update [pyenv-virtualenv] release:
 ./update-release pyenv-virtualenv
 ```
 
-Update default [Python] 2.7 version:
-
-```bash
-./update-python python2
-```
-
 Update default [Python] 3.7 version:
 
 ```bash
-./update-python python3
+./update-python python37
+```
+
+Update default [Python] 3.8 version:
+
+```bash
+./update-python python38
 ```
 
 Update all versions:
