@@ -10,6 +10,8 @@
 * New variables `pyenv_python37_version` and `pyenv_python38_version`
 * Removed `pyenv_python2_version` and `pyenv_python3_version` variables
 * Removed macOS Mojave patch support
+* Test with Ansible 2.9 on Travis CI
+* Remove Ansible 2.6 support and tests on Travis CI
 
 [pyenv-1216]: https://github.com/pyenv/pyenv/releases/tag/v1.2.16
 [python-376]: https://www.python.org/downloads/release/python-376/

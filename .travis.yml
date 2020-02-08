@@ -138,11 +138,6 @@ jobs:
 
     # Run tests
     - stage: test
-      name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
-      os: linux
-      dist: xenial
-      env: ANSIBLE_VERSION='<2.7.0'
-    - stage: test
       name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
       os: linux
       dist: xenial
@@ -152,6 +147,11 @@ jobs:
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+    - stage: test
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.9"
+      os: linux
+      dist: bionic
+      env: ANSIBLE_VERSION='<2.10'
 
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
