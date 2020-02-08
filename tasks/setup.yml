@@ -1,5 +1,4 @@
 ---
-
 - name: Make sure .pyenv directory exists
   file:
     path: "{{ pyenv_root }}"

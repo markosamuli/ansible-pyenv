@@ -20,8 +20,8 @@ galaxy_info:
         - eoan
     - name: MacOSX
       versions:
-        - '10.13'
-        - '10.14'
+        - "10.13"
+        - "10.14"
   galaxy_tags:
     - osx
     - macos

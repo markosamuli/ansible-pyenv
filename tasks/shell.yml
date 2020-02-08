@@ -1,5 +1,4 @@
 ---
-
 - name: Set path to .bashrc
   set_fact:
     pyenv_bashrc_path: "{{ pyenv_home }}/.bashrc"

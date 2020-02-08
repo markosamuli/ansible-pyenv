@@ -1,5 +1,4 @@
 ---
-
 - name: Install pyenv build requirements with Homebrew
   homebrew:
     name: "{{ pyenv_build_requirements }}"
