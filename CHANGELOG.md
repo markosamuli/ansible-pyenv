@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased] - 2020-02-08
+## [3.0.0] - 2020-02-08
 
 ### Changed
 
@@ -212,6 +212,7 @@ and keep using the previous method.
 - set pyenv global version
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+[3.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v3.0.0
 [2.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.1
 [2.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0
 [2.1.0-rc.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.2
