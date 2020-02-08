@@ -5,9 +5,9 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/blob/master/LICENSE)
 
-| Branch  | Travis Builds | Code Quality |
-|---------|--------|--------------|
-| master  | [![Build Status][travis-master]][travis] | ![Build Status][gh-master] |
+| Branch  | Travis Builds                             | Code Quality                |
+| ------- | ----------------------------------------- | --------------------------- |
+| master  | [![Build Status][travis-master]][travis]  | ![Build Status][gh-master]  |
 | develop | [![Build Status][travis-develop]][travis] | ![Build Status][gh-develop] |
 
 [travis]: https://travis-ci.org/markosamuli/ansible-pyenv/branches
@@ -42,7 +42,8 @@ before running this role.
 
 ## Installed Python versions
 
-This role installs [Python] versions defined in `pyenv_python_versions` variable.
+This role installs [Python][python] versions defined in `pyenv_python_versions`
+variable.
 
 To set global version, set `pyenv_global` variable to the desired version(s).
 
@@ -53,7 +54,7 @@ pyenv_global: "{{ pyenv_python37_version }} system"
 This is configured to use latest Python 2 and Python 3 versions and the
 system version as default.
 
-[Python]: https://www.python.org
+[python]: https://www.python.org
 
 ## Changes to shell config files
 
@@ -238,12 +239,12 @@ make install-git-hooks
 
 ## Changes
 
-* [CHANGELOG.md](CHANGELOG.md)
+- [CHANGELOG.md](CHANGELOG.md)
 
 ## License
 
-* [MIT](LICENSE)
+- [MIT](LICENSE)
 
 ## Author Information
 
-* [@markosamuli](https://github.com/markosamuli)
+- [@markosamuli](https://github.com/markosamuli)
