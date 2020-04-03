@@ -14,7 +14,7 @@ pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 
 # Latest Python versions
-pyenv_python37_version: "3.7.6"
+pyenv_python37_version: "3.7.7"
 pyenv_python38_version: "3.8.1"
 
 # Python versions to install
