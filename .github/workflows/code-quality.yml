@@ -8,8 +8,10 @@ on:
       - master
       - develop
       - "feature/**"
+      - "release/**"
     tags:
       - v2.*
+      - v3.*
 
 jobs:
   build:
