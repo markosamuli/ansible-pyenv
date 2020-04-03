@@ -1,5 +1,26 @@
 # Changelog
 
+Only the latest major version is maintained.
+
+## [Unreleased]
+
+Unreleased changes in the `develop` branch.
+
+[unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+
+## [3.0.1] - 2020-04-03
+
+### Changed
+
+- Update to [pyenv 1.2.18][pyenv-1218]
+- Update to [Python 3.7.7][python-377]
+- Update to [Python 3.8.2][python-382]
+
+[pyenv-1218]: https://github.com/pyenv/pyenv/releases/tag/v1.2.18
+[python-377]: https://www.python.org/downloads/release/python-377/
+[python-382]: https://www.python.org/downloads/release/python-382/
+[3.0.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v3.0.1
+
 ## [3.0.0] - 2020-02-08
 
 ### Changed
@@ -16,6 +37,7 @@
 [pyenv-1216]: https://github.com/pyenv/pyenv/releases/tag/v1.2.16
 [python-376]: https://www.python.org/downloads/release/python-376/
 [python-381]: https://www.python.org/downloads/release/python-381/
+[3.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v3.0.0
 
 ### Python 2 support
 
@@ -211,8 +233,6 @@ and keep using the previous method.
 - install Python versions
 - set pyenv global version
 
-[unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
-[3.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v3.0.0
 [2.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.1
 [2.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0
 [2.1.0-rc.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.2
