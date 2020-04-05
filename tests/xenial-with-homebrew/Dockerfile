@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM ubuntu:xenial
 
 RUN apt-get update && apt-get install -y \
     python-minimal \
@@ -34,5 +34,14 @@ VOLUME ["/home/${user}/${repository}"]
 ARG ansible_version="<2.9.0,!=2.8.6"
 ENV ANSIBLE_VERSION="${ansible_version}"
 RUN pip install ansible${ANSIBLE_VERSION}
+
+# Homebrew installationg dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential curl file git \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+ADD install_homebrew.sh /home/${user}/install_homebrew.sh
+RUN sudo -i -u ${user} /home/${user}/install_homebrew.sh
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

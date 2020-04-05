@@ -22,3 +22,5 @@ pyenv_build_requirements:
   - procps
 
 pyenv_install_shell: /bin/bash
+
+pyenv_brew_path: /home/linuxbrew/.linuxbrew/bin

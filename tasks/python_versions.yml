@@ -1,4 +1,16 @@
 ---
+- name: Remove readline from Homebrew on Linux
+  homebrew:
+    name: readline
+    state: absent
+    install_options: "ignore-dependencies"
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  register: pyenv_brew_readline_uninstall
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+
 - name: Install Python interpreters
   shell: >-
     . {{ pyenv_root }}/.pyenvrc &&
@@ -8,6 +20,18 @@
     creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
   with_items: "{{ pyenv_python_versions }}"
   environment: "{{ pyenv_install_environment }}"
+
+- name: Install readline with Homebrew on Linux # noqa 503
+  homebrew:
+    name: readline
+    state: present
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+    and pyenv_brew_readline_uninstall is defined
+    and pyenv_brew_readline_uninstall.changed
 
 - name: Get current global version
   shell: >-

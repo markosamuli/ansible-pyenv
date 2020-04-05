@@ -7,15 +7,34 @@ help:  ## print this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: all
-all: install-git-hooks test-update lint test ## run all linting and tests
+all: lint test ## run all linting and tests
 
 .PHONY: test
-test: ## test the role in Linux
-	@./tests/run-tests.sh
+test: update-test-images run-tests ## run tests
 
-.PHONY: test-update
-test-update: ## update test Docker images
-	@./tests/update.sh
+.PHONY: test-xenial
+test-xenial: update-test-images
+	@./tests/run-tests.sh xenial xenial-with-homebrew
+
+.PHONY: test-bionic
+test-bionic: update-test-images
+	@./tests/run-tests.sh bionic bionic-with-homebrew
+
+.PHONY: test-stretch
+test-stretch: update-test-images
+	@./tests/run-tests.sh stretch stretch-with-homebrew
+
+.PHONY: test-buster
+test-buster: update-test-images
+	@./tests/run-tests.sh buster buster-with-homebrew
+
+.PHONY: update-test-images
+update-test-images:
+	@./tests/update-test-images.sh
+
+.PHONY: run-tests
+run-tests:
+	@./tests/run-tests.sh
 
 .PHONY: update
 update: ## update pyenv and Python versions

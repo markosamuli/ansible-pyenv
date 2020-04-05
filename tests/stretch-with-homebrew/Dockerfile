@@ -1,4 +1,4 @@
-FROM %%FROM%%
+FROM debian:stretch
 
 RUN apt-get update && apt-get install -y \
     python-minimal \
@@ -6,11 +6,17 @@ RUN apt-get update && apt-get install -y \
     zsh \
     sudo \
     aptitude \
+    locales \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-ARG user=%%USER%%
-ARG repository=%%REPOSITORY%%
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
+ && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+ && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
+ && locale-gen en_US.UTF-8
+
+ARG user=test
+ARG repository=ansible-pyenv
 
 # Create test user
 RUN useradd -m ${user} -s /bin/bash \
@@ -25,8 +31,17 @@ RUN mkdir -p /home/${user}/${repository} \
  && chown -R ${user}:${user} /home/${user}/${repository}
 VOLUME ["/home/${user}/${repository}"]
 
-ARG ansible_version="%%ANSIBLE_VERSION%%"
+ARG ansible_version="<2.9.0,!=2.8.6"
 ENV ANSIBLE_VERSION="${ansible_version}"
 RUN pip install ansible${ANSIBLE_VERSION}
+
+# Homebrew installationg dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential curl file git \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+ADD install_homebrew.sh /home/${user}/install_homebrew.sh
+RUN sudo -i -u ${user} /home/${user}/install_homebrew.sh
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

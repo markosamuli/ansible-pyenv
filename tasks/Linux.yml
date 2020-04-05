@@ -6,3 +6,8 @@
 
 - name: Install with Git
   include_tasks: install_with_git.yml
+  when: not pyenv_homebrew_on_linux | bool
+
+- name: Install with Homebrew
+  include_tasks: install_with_homebrew.yml
+  when: pyenv_homebrew_on_linux | bool
