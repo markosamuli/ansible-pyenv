@@ -1,13 +1,63 @@
 ---
+- name: Set required pyenv version
+  set_fact:
+    pyenv_required_version: "{{ pyenv_version | regex_replace('^v(.*)$', '\\1') }}"
+
+- name: Homebrew path set
+  when:
+    - pyenv_brew_path is defined
+    - pyenv_brew_path != '' # noqa 602
+  block:
+    - name: Check brew binary exists
+      stat:
+        path: "{{ pyenv_brew_path }}/brew"
+      register: brew_st
+
+    - name: Fail if brew binary doesn't exist
+      fail:
+        msg: "brew not found in {{ pyenv_brew_path }}"
+      when: not brew_st.stat.exists | bool
+
 - name: Install pyenv with Homebrew
   homebrew:
     name: pyenv
+    path: "{{ pyenv_brew_path | default(omit) }}"
+    state: present
+    update_homebrew: false
+
+- name: Get brew info on pyenv package
+  command: "brew info pyenv --json"
+  register: brew_info
+  environment:
+    PATH: "{% if pyenv_brew_path is defined and pyenv_brew_path != '' %}{{ pyenv_brew_path }}:{% endif %}{{ ansible_env.PATH }}" # noqa 602
+  changed_when: false
+
+- name: Parse brew info output
+  set_fact:
+    brew_pyenv_info: "{{ brew_info.stdout | from_json | first }}"
+
+- name: Check if pyenv needs to be upgraded
+  set_fact:
+    brew_pyenv_update: "{{ brew_pyenv_info.linked_keg is version(pyenv_required_version, '<') }}"
+  when: brew_pyenv_info.linked_keg
+
+- name: Upgrade pyenv with Homebrew and update Homebrew itself
+  homebrew:
+    name: pyenv
+    path: "{{ pyenv_brew_path | default(omit) }}"
+    state: latest # noqa 403
+    update_homebrew: true
+  when:
+    - brew_pyenv_update is defined
+    - brew_pyenv_update | bool
 
 - name: Install pyenv-virtualenv with Homebrew
   homebrew:
     name: pyenv-virtualenv
+    path: "{{ pyenv_brew_path | default(omit) }}"
 
 - name: Install pyenv-virtualenvwrapper with Homebrew
   homebrew:
     name: pyenv-virtualenvwrapper
-  when: pyenv_virtualenvwrapper|bool
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  when: pyenv_virtualenvwrapper | bool

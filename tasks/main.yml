@@ -1,9 +1,8 @@
 ---
-# tasks file for markosamuli.pyenv
-
 - name: Load variables for the target system
   include_vars: "{{ item }}"
   with_first_found:
+    - "os/{{ ansible_distribution }}/{{ ansible_distribution_release }}.yml"
     - "os/{{ ansible_distribution }}.yml"
     - "os/{{ ansible_os_family }}.yml"
     - "os/default.yml"
@@ -16,10 +15,8 @@
   include_tasks: Darwin.yml
   when: "ansible_os_family == 'Darwin'"
 
-# Setup directories and configuration
 - import_tasks: setup.yml
 
-# Install Python versions
 - import_tasks: python_versions.yml
 
 - name: Initialise shell

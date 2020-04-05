@@ -19,3 +19,5 @@ pyenv_build_requirements:
   - liblzma-dev
   - python-openssl
   - git
+
+pyenv_build_requirements_with_homebrew: []

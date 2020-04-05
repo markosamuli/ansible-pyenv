@@ -29,6 +29,17 @@ before_install:
     fi
 
 install:
+  # Install Homebrew on Ubuntu
+  - >
+    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+      if [[ "$WITH_HOMEBREW_ON_LINUX" == "yes" ]]; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> /home/travis/.bash_profile
+        eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        brew --version
+      fi
+    fi
+
   # Install Ansible with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
@@ -64,17 +75,9 @@ script:
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
         -e "{'pyenv_install_from_package_manager':true}" \
         || travis_terminate 1
-    else
+    elif [[ "$WITH_HOMEBREW_ON_LINUX" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':false}" \
-        || travis_terminate 1
-    fi
-
-  # Debug idempotence test
-  - >
-    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
-      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'pyenv_install_from_package_manager':true}" \
+        -e "{'pyenv_homebrew_on_linux':true}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
@@ -86,13 +89,19 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'pyenv_install_from_package_manager':true}" \
+        -e "{'pyenv_install_from_package_manager':true}" \
+        | grep -q 'changed=0.*failed=0' \
+        && (echo 'Idempotence test: pass' && exit 0) \
+        || (echo 'Idempotence test: fail' && exit 1)
+    elif [[ "$WITH_HOMEBREW_ON_LINUX" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local \
+        -e "{'pyenv_homebrew_on_linux':true}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'pyenv_install_from_package_manager':failed}" \
+        -e "{'pyenv_install_from_package_manager':false}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
@@ -158,10 +167,34 @@ jobs:
           update: true
 
     - stage: test
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 and Homebrew"
+      os: linux
+      dist: bionic
+      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6' PIP_BIN='pip' WITH_HOMEBREW_ON_LINUX='yes'
+      addons:
+        apt:
+          packages:
+            - python-pip
+            - python-dev
+          update: true
+
+    - stage: test
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9"
       os: linux
       dist: focal
       env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes'
+      addons:
+        apt:
+          packages:
+            - python3-pip
+            - python3-dev
+          update: true
+
+    - stage: test
+      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 and Homebrew"
+      os: linux
+      dist: focal
+      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes' WITH_HOMEBREW_ON_LINUX='yes'
       addons:
         apt:
           packages:

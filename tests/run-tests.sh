@@ -40,6 +40,10 @@ stop() {
 build() {
     local image=$1
     local image_name="${ROLE_NAME}-${image}"
+    local base_image
+    base_image=$(grep "^FROM" "./tests/${image}/Dockerfile" | sed 's/FROM //')
+    echo "*** Pull base image ${base_image}"
+    docker pull "${base_image}"
     echo "*** Build image"
     docker build -t "${image_name}" "./tests/${image}"
 }
@@ -73,6 +77,22 @@ run_tests() {
 }
 
 # Run tests in the container
+run_tests_with_homebrew() {
+    local image=$1
+    local test_scripts=(
+        "test_syntax.sh"
+        "test_install_with_homebrew.sh"
+    )
+    for test_script in "${test_scripts[@]}"; do
+        start "${image}"
+        run_test_script "${image}" "${test_script}"
+        stop "${image}"
+        # Give Docker time to clean up
+        sleep 1
+    done
+}
+
+# Run tests in the container
 run_test_script() {
     local image=$1
     local test_script=$2
@@ -81,7 +101,7 @@ run_test_script() {
     docker exec -it \
         --user test \
         "${container_name}" \
-        "${TEST_HOME}/${ROLE_NAME}/tests/${test_script}"
+        bash -ilc "${TEST_HOME}/${ROLE_NAME}/tests/${test_script}"
 }
 
 trap finish EXIT
@@ -111,5 +131,9 @@ for i in "${images[@]}"; do
 done
 
 for i in "${images[@]}"; do
-    run_tests "$i"
+    if [[ $i == *"homebrew"* ]]; then
+        run_tests_with_homebrew "$i"
+    else
+        run_tests "$i"
+    fi
 done

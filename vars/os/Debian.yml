@@ -19,6 +19,9 @@ pyenv_build_requirements:
   - liblzma-dev
   - python-openssl
   - git
-  - procps
+
+pyenv_build_requirements_with_homebrew: []
 
 pyenv_install_shell: /bin/bash
+
+pyenv_brew_path: /home/linuxbrew/.linuxbrew/bin

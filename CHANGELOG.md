@@ -4,7 +4,9 @@ Only the latest major version is maintained.
 
 ## [Unreleased]
 
-Unreleased changes in the `develop` branch.
+Unreleased changes in the `develop` or `feature/*` branches.
+
+- Install `pyenv` with Homebrew on Linux
 
 - Upgrade `ansible-lint` to v4.3.3
 - Add missing directory permissions to ensure compatibility with the future

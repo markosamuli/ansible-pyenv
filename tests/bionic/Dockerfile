@@ -6,8 +6,14 @@ RUN apt-get update && apt-get install -y \
     zsh \
     sudo \
     aptitude \
+    locales \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
+ && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+ && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
+ && locale-gen en_US.UTF-8
 
 ARG user=test
 ARG repository=ansible-pyenv
