@@ -1,0 +1,8 @@
+bionic/*
+bionic-with-homebrew/*
+buster/*
+buster-with-homebrew/*
+stretch/*
+stretch-with-homebrew/*
+xenial/*
+xenial-with-homebrew/*
