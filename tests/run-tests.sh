@@ -6,14 +6,29 @@ PROJECT_ROOT=$(dirname "$TESTS_DIR")
 ROLE_NAME="$(basename "$PROJECT_ROOT")"
 TEST_HOME=/home/test
 
+IMAGES_DIR="images"
+
+error() {
+    echo "$@" 1>&2
+}
+
 # Detect Windows Subsystem for Linux
 detect_wsl() {
     is_wsl=0
-    if [ -e /proc/version ]; then
-        if grep -q Microsoft /proc/version; then
-            echo "*** Windows Subsystem for Linux detected"
-            is_wsl=1
-        fi
+    if [[ -d "/run/WSL" ]]; then
+        echo "*** Windows Subsystem for Linux (WSL2) detected"
+        is_wsl=1
+        wsl_version='WSL2'
+        return
+    fi
+    if [ ! -e /proc/version ]; then
+        return
+    fi
+    if grep -q Microsoft /proc/version; then
+        echo "*** Windows Subsystem for Linux (WSL1) detected"
+        is_wsl=1
+        wsl_version='WSL1'
+        return
     fi
 }
 
@@ -32,7 +47,7 @@ finish() {
 stop() {
     local image=$1
     local container_name="${ROLE_NAME}-${image}-tests"
-    echo "*** Stop containers"
+    echo "*** Stop container with ${image}"
     docker stop "${container_name}"
 }
 
@@ -40,12 +55,14 @@ stop() {
 build() {
     local image=$1
     local image_name="${ROLE_NAME}-${image}"
+    local image_dir="${TESTS_DIR}/${IMAGES_DIR}/${image}"
+    local dockerfile="${image_dir}/Dockerfile"
     local base_image
-    base_image=$(grep "^FROM" "./tests/${image}/Dockerfile" | sed 's/FROM //')
+    base_image=$(grep "^FROM" "${dockerfile}" | sed 's/FROM //')
     echo "*** Pull base image ${base_image}"
     docker pull "${base_image}"
-    echo "*** Build image"
-    docker build -t "${image_name}" "./tests/${image}"
+    echo "*** Build image ${image}"
+    docker build -t "${image_name}" "${image_dir}"
 }
 
 # Start container in the background
@@ -53,11 +70,15 @@ start() {
     local image=$1
     local image_name="${ROLE_NAME}-${image}"
     local container_name="${ROLE_NAME}-${image}-tests"
-    echo "*** Start container"
+    echo "*** Start container with image ${image}"
     docker run --rm -it -d \
+        -e "TEST_ENV=${image}" \
         -v "${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME}" \
         --name "${container_name}" \
-        "${image_name}"
+        "${image_name}" || {
+        error "failed to start container"
+        exit 1
+    }
 }
 
 # Run tests in the container
@@ -106,19 +127,25 @@ run_test_script() {
 
 trap finish EXIT
 
+if ! command -v docker /dev/null; then
+    error "docker not found"
+    exit 1
+fi
+
 detect_wsl
 
 cd "${TESTS_DIR}"
 
 images=("$@")
 if [ ${#images[@]} -eq 0 ]; then
-    images=(*/Dockerfile)
+    images=(images/*/Dockerfile)
+    images=("${images[@]/images\//}")
     images=("${images[@]/\/Dockerfile/}")
 fi
 
-cd "$PROJECT_ROOT"
+cd "${PROJECT_ROOT}"
 
-if [ "${is_wsl}" == "1" ]; then
+if [ "${is_wsl}" == "1" ] && [ "${wsl_version}" == "WSL1" ]; then
     MOUNT_ROOT="$(pwd -P | sed 's~/mnt/c/~c:/~')"
 else
     MOUNT_ROOT="$(pwd -P)"

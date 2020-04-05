@@ -49,3 +49,8 @@ indent_size = 2
 [Makefile]
 indent_style = tab
 indent_size = 2
+
+# Python
+[*.py]
+indent_style = space
+indent_size = 4

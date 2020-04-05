@@ -1,8 +1,6 @@
-FROM debian:stretch
+FROM {{ from }}
 
 RUN apt-get update && apt-get install -y \
-    python-minimal \
-    python-pip \
     zsh \
     sudo \
     aptitude \
@@ -15,8 +13,24 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
  && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
  && locale-gen en_US.UTF-8
 
-ARG user=test
-ARG repository=ansible-pyenv
+{% if python == 'python3' %}
+# Install python3 from APT
+RUN apt-get update && apt-get install -y \
+    python3-minimal \
+    python3-pip \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+{% else %}
+# Install python from APT
+RUN apt-get update && apt-get install -y \
+    python-minimal \
+    python-pip \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+{% endif %}
+
+ARG user={{ user }}
+ARG repository={{ repository }}
 
 # Create test user
 RUN useradd -m ${user} -s /bin/bash \
@@ -31,17 +45,25 @@ RUN mkdir -p /home/${user}/${repository} \
  && chown -R ${user}:${user} /home/${user}/${repository}
 VOLUME ["/home/${user}/${repository}"]
 
-ARG ansible_version="<2.9.0,!=2.8.6"
+ARG ansible_version={{ ansible_version }}
 ENV ANSIBLE_VERSION="${ansible_version}"
+{% if python == 'python3' %}
+RUN pip3 install ansible${ANSIBLE_VERSION}
+{% else %}
 RUN pip install ansible${ANSIBLE_VERSION}
+{% endif %}
 
+{% if install_homebrew %}
 # Homebrew installationg dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential curl file git \
+    build-essential curl file git procps \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 ADD install_homebrew.sh /home/${user}/install_homebrew.sh
-RUN sudo -i -u ${user} /home/${user}/install_homebrew.sh
+RUN chown ${user}:${user} /home/${user}/install_homebrew.sh \
+ && chmod u+x /home/${user}/install_homebrew.sh \
+ && sudo -i -u ${user} /home/${user}/install_homebrew.sh
+{% endif %}
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
