@@ -32,7 +32,7 @@ finish() {
 stop() {
     local image=$1
     local container_name="${ROLE_NAME}-${image}-tests"
-    echo "*** Stop containers"
+    echo "*** Stop container with ${image}"
     docker stop "${container_name}"
 }
 
@@ -44,7 +44,7 @@ build() {
     base_image=$(grep "^FROM" "./tests/${image}/Dockerfile" | sed 's/FROM //')
     echo "*** Pull base image ${base_image}"
     docker pull "${base_image}"
-    echo "*** Build image"
+    echo "*** Build image ${image}"
     docker build -t "${image_name}" "./tests/${image}"
 }
 
@@ -53,8 +53,9 @@ start() {
     local image=$1
     local image_name="${ROLE_NAME}-${image}"
     local container_name="${ROLE_NAME}-${image}-tests"
-    echo "*** Start container"
+    echo "*** Start container with image ${image}"
     docker run --rm -it -d \
+        -e "TEST_ENV=${image}" \
         -v "${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME}" \
         --name "${container_name}" \
         "${image_name}"
