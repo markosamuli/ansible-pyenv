@@ -3,11 +3,13 @@
   file:
     path: "{{ pyenv_root }}"
     state: directory
+    mode: "0755"
 
 - name: Make sure WORKON_HOME directory exists
   file:
     path: "{{ pyenv_virtualenvwrapper_home }}"
     state: directory
+    mode: "0755"
   when: pyenv_virtualenvwrapper|bool
 
 - name: Create .pyenvrc
