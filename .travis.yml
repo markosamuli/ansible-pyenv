@@ -150,7 +150,11 @@ jobs:
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.10'
-
+    - stage: test
+      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9"
+      os: linux
+      dist: focal
+      env: ANSIBLE_VERSION='<2.10'
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
