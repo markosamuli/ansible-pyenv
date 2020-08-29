@@ -9,6 +9,8 @@ if: |
   type = pull_request OR \
   branch IN (master, develop)
 
+dist: xenial
+os: linux
 language: generic
 
 before_install:
@@ -104,7 +106,7 @@ jobs:
       name: Validate with pre-commit
       os: linux
       dist: xenial
-      language: minimal
+      language: shell
       addons:
         apt:
           packages:
