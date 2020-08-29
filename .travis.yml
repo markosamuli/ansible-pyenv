@@ -151,19 +151,6 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 18.04 (Bionic) with Ansible 2.9"
-      os: linux
-      dist: bionic
-      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip'
-      addons:
-        apt:
-          packages:
-            - python-pip
-            - python-dev
-            - shellcheck
-          update: true
-
-    - stage: test
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9"
       os: linux
       dist: focal
