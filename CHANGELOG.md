@@ -8,6 +8,19 @@ Unreleased changes in the `develop` branch.
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
 
+## [3.0.2] - 2020-08-29
+
+### Changed
+
+- Update to [pyenv 1.2.20][pyenv-1220]
+- Update to [Python 3.7.8][python-378]
+- Update to [Python 3.8.5][python-385]
+
+[pyenv-1220]: https://github.com/pyenv/pyenv/releases/tag/v1.2.20
+[python-378]: https://www.python.org/downloads/release/python-378/
+[python-385]: https://www.python.org/downloads/release/python-385/
+[3.0.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v3.0.2
+
 ## [3.0.1] - 2020-04-03
 
 ### Changed
