@@ -6,6 +6,10 @@ Only the latest major version is maintained.
 
 Unreleased changes in the `develop` branch.
 
+- Upgrade `ansible-lint` to v4.3.3
+- Add missing directory permissions to ensure compatibility with the future
+  Ansible versions
+
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
 
 ## [3.0.2] - 2020-08-29
