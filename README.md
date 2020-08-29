@@ -119,7 +119,7 @@ pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 ```
 
-Latest Python 2 and Python 3 versions are installed:
+Latest Python 3.7 and Python 3.8 versions are installed:
 
 ```yaml
 # Latest Python versions
