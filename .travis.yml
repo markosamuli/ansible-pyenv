@@ -11,21 +11,6 @@ if: |
 
 language: generic
 
-# Install Ansible and Python development packages
-addons:
-  apt:
-    packages:
-      - python-pip
-      - python-dev
-      - shellcheck
-    update: true
-  snaps:
-    - shfmt
-  homebrew:
-    packages:
-      - ansible
-    update: true
-
 before_install:
   # Existing pyenv installation on Linux conflicts with ours
   - >
@@ -38,9 +23,9 @@ install:
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
       if [[ -z "$ANSIBLE_VERSION" ]]; then
-        pip install --user ansible
+        ${PIP_BIN} install --user ansible
       else
-        pip install --user ansible${ANSIBLE_VERSION}
+        ${PIP_BIN} install --user ansible${ANSIBLE_VERSION}
       fi
     fi
 
@@ -120,6 +105,13 @@ jobs:
       os: linux
       dist: xenial
       language: minimal
+      addons:
+        apt:
+          packages:
+            - python-pip
+            - python-dev
+            - shellcheck
+          update: true
       cache:
         directories:
           - $HOME/.cache/pre-commit/
@@ -139,32 +131,74 @@ jobs:
       name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
       os: linux
       dist: xenial
-      env: ANSIBLE_VERSION='<2.8.0'
+      env: ANSIBLE_VERSION='<2.8.0' PIP_BIN='pip'
+      addons:
+        apt:
+          packages:
+            - python-pip
+            - python-dev
+            - shellcheck
+          update: true
+
     - stage: test
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8"
       os: linux
       dist: bionic
-      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6' PIP_BIN='pip'
+      addons:
+        apt:
+          packages:
+            - python-pip
+            - python-dev
+            - shellcheck
+          update: true
+
     - stage: test
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.9"
       os: linux
       dist: bionic
-      env: ANSIBLE_VERSION='<2.10'
+      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip'
+      addons:
+        apt:
+          packages:
+            - python-pip
+            - python-dev
+            - shellcheck
+          update: true
+
     - stage: test
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9"
       os: linux
       dist: focal
-      env: ANSIBLE_VERSION='<2.10'
+      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3'
+      addons:
+        apt:
+          packages:
+            - python3-pip
+            - python3-dev
+          update: true
+
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
       osx_image: xcode10.1
       env: FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 with Homebrew"
       os: osx
       osx_image: xcode11.2
       env: FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
 
 notifications:
   webhooks:
