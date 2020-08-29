@@ -105,14 +105,13 @@ jobs:
     - stage: validate
       name: Validate with pre-commit
       os: linux
-      dist: xenial
+      dist: focal
       language: shell
       addons:
         apt:
           packages:
-            - python-pip
-            - python-dev
-            - shellcheck
+            - python3-pip
+            - python3-dev
           update: true
       cache:
         directories:
@@ -120,11 +119,8 @@ jobs:
       before_cache:
         - rm -f $HOME/.cache/pre-commit/pre-commit.log
       install:
-        # Fix ansible-lint installation issues
-        # https://github.com/ansible/ansible-lint/issues/590
-        - pip install --user virtualenv==16.3.0
         # Install pre-commit with pip
-        - SKIP=dockerfile_lint pip install --user pre-commit==1.21.0
+        - SKIP=dockerfile_lint pip3 install --user pre-commit==1.21.0
       script:
         - pre-commit run -a
 
