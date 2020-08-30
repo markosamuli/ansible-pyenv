@@ -24,12 +24,12 @@ jobs:
           node-version: "12.x"
       - uses: actions/setup-python@v1
         with:
-          python-version: "3.x"
+          python-version: "3.7"
           architecture: "x64"
       - name: Install dependencies
         run: |
           pip install virtualenv==16.3.0
-          pip install pre-commit
+          pip install pre-commit==1.21.0
           sudo snap install shfmt
           sudo apt-get install -y shellcheck
       - name: Cache pre-commit dependencies

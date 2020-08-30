@@ -130,7 +130,7 @@ jobs:
         # https://github.com/ansible/ansible-lint/issues/590
         - pip install --user virtualenv==16.3.0
         # Install pre-commit with pip
-        - SKIP=dockerfile_lint pip install --user pre-commit
+        - SKIP=dockerfile_lint pip install --user pre-commit==1.21.0
       script:
         - pre-commit run -a
 
