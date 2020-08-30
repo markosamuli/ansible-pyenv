@@ -14,6 +14,14 @@ os: linux
 language: generic
 
 before_install:
+  # Fix broken Travis Ubuntu 20.04 LTS images with GCC 9.2.1
+  # https://travis-ci.community/t/please-update-ubuntu-focal-20-04-lts-base-installation-due-to-a-compiling-error-with-gcc-9-2-1/8658
+  - >
+    if [[ "$UPGRADE_GCC" == "yes" ]]; then
+      sudo apt-get update
+      sudo apt-get install gcc --only-upgrade
+    fi
+
   # Existing pyenv installation on Linux conflicts with ours
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
@@ -154,7 +162,7 @@ jobs:
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9"
       os: linux
       dist: focal
-      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3'
+      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes'
       addons:
         apt:
           packages:
