@@ -11,7 +11,7 @@ if: |
 
 dist: xenial
 os: linux
-language: generic
+language: shell
 
 before_install:
   # Fix broken Travis Ubuntu 20.04 LTS images with GCC 9.2.1
@@ -114,7 +114,6 @@ jobs:
       name: Validate with pre-commit
       os: linux
       dist: focal
-      language: shell
       addons:
         apt:
           packages:
