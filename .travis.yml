@@ -141,7 +141,7 @@ jobs:
 
     # Run tests
     - stage: test
-      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 via Git"
       os: linux
       dist: xenial
       env: ANSIBLE_VERSION='<2.8.0' PIP_BIN='pip'
@@ -154,7 +154,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8"
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Git"
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.9.0,!=2.8.6' PIP_BIN='pip'
@@ -167,7 +167,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 and Homebrew"
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Homebrew"
       os: linux
       dist: bionic
       env: ANSIBLE_VERSION='<2.9.0,!=2.8.6' PIP_BIN='pip' WITH_HOMEBREW_ON_LINUX='yes'
@@ -179,7 +179,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9"
+      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
       os: linux
       dist: focal
       env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes'
@@ -191,7 +191,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 and Homebrew"
+      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Homebrew"
       os: linux
       dist: focal
       env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes' WITH_HOMEBREW_ON_LINUX='yes'
@@ -203,7 +203,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Git"
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Git"
       os: osx
       osx_image: xcode10.1
       env: FROM_PACKAGE_MANAGER='no'
@@ -214,7 +214,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Homebrew"
       os: osx
       osx_image: xcode10.1
       env: FROM_PACKAGE_MANAGER='yes'
@@ -225,7 +225,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.2 with Git"
+      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
       os: osx
       osx_image: xcode11.2
       env: FROM_PACKAGE_MANAGER='no'
@@ -236,7 +236,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.2 with Homebrew"
+      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
       os: osx
       osx_image: xcode11.2
       env: FROM_PACKAGE_MANAGER='yes'
@@ -247,7 +247,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 with Git"
+      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 via Git"
       os: osx
       osx_image: xcode11.6
       env: FROM_PACKAGE_MANAGER='no'
@@ -258,7 +258,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 with Homebrew"
+      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 via Homebrew"
       os: osx
       osx_image: xcode11.6
       env: FROM_PACKAGE_MANAGER='yes'
@@ -269,7 +269,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 12 with Git"
+      name: "macOS 10.15.5 (Mojave) with Xcode 12 via Git"
       os: osx
       osx_image: xcode12
       env: FROM_PACKAGE_MANAGER='no'
@@ -280,7 +280,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 12 with Homebrew"
+      name: "macOS 10.15.5 (Mojave) with Xcode 12 via Homebrew"
       os: osx
       osx_image: xcode12
       env: FROM_PACKAGE_MANAGER='yes'
