@@ -56,6 +56,12 @@ install:
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../\n' > ansible.cfg
 
+  # Set Python interpreter path
+  - >
+    if [[ -n "${PYTHON_INTERPRETER}" ]]; then
+      echo "interpreter_python=${PYTHON_INTERPRETER}" >> ansible.cfg
+    fi
+
 before_script:
   # https://github.com/travis-ci/travis-ci/issues/6307
   - >
@@ -144,7 +150,9 @@ jobs:
       name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 via Git"
       os: linux
       dist: xenial
-      env: ANSIBLE_VERSION='<2.8.0' PIP_BIN='pip'
+      env: >-
+        ANSIBLE_VERSION='<2.8.0'
+        PIP_BIN='pip'
       addons:
         apt:
           packages:
@@ -157,7 +165,9 @@ jobs:
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Git"
       os: linux
       dist: bionic
-      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6' PIP_BIN='pip'
+      env: >-
+        ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+        PIP_BIN='pip'
       addons:
         apt:
           packages:
@@ -170,7 +180,10 @@ jobs:
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Homebrew"
       os: linux
       dist: bionic
-      env: ANSIBLE_VERSION='<2.9.0,!=2.8.6' PIP_BIN='pip' WITH_HOMEBREW_ON_LINUX='yes'
+      env: >-
+        ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+        PIP_BIN='pip'
+        WITH_HOMEBREW_ON_LINUX='yes'
       addons:
         apt:
           packages:
@@ -182,7 +195,11 @@ jobs:
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
       os: linux
       dist: focal
-      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes'
+      env: >-
+        ANSIBLE_VERSION='<2.10'
+        PIP_BIN='pip3'
+        UPGRADE_GCC='yes'
+        PYTHON_INTERPRETER=auto
       addons:
         apt:
           packages:
@@ -194,7 +211,12 @@ jobs:
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Homebrew"
       os: linux
       dist: focal
-      env: ANSIBLE_VERSION='<2.10' PIP_BIN='pip3' UPGRADE_GCC='yes' WITH_HOMEBREW_ON_LINUX='yes'
+      env: >-
+        ANSIBLE_VERSION='<2.10'
+        PIP_BIN='pip3'
+        UPGRADE_GCC='yes'
+        WITH_HOMEBREW_ON_LINUX='yes'
+        PYTHON_INTERPRETER=auto
       addons:
         apt:
           packages:
@@ -206,7 +228,8 @@ jobs:
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Git"
       os: osx
       osx_image: xcode10.1
-      env: FROM_PACKAGE_MANAGER='no'
+      env: >-
+        FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
           packages:
@@ -217,7 +240,8 @@ jobs:
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Homebrew"
       os: osx
       osx_image: xcode10.1
-      env: FROM_PACKAGE_MANAGER='yes'
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
           packages:
@@ -228,7 +252,8 @@ jobs:
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
       os: osx
       osx_image: xcode11.2
-      env: FROM_PACKAGE_MANAGER='no'
+      env: >-
+        FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
           packages:
@@ -239,7 +264,8 @@ jobs:
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
       os: osx
       osx_image: xcode11.2
-      env: FROM_PACKAGE_MANAGER='yes'
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
           packages:
@@ -250,7 +276,8 @@ jobs:
       name: "macOS 10.15.5 (Mojave) with Xcode 11.6 via Git"
       os: osx
       osx_image: xcode11.6
-      env: FROM_PACKAGE_MANAGER='no'
+      env: >-
+        FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
           packages:
@@ -261,7 +288,8 @@ jobs:
       name: "macOS 10.15.5 (Mojave) with Xcode 11.6 via Homebrew"
       os: osx
       osx_image: xcode11.6
-      env: FROM_PACKAGE_MANAGER='yes'
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
           packages:
@@ -272,7 +300,8 @@ jobs:
       name: "macOS 10.15.5 (Mojave) with Xcode 12 via Git"
       os: osx
       osx_image: xcode12
-      env: FROM_PACKAGE_MANAGER='no'
+      env: >-
+        FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
           packages:
@@ -283,7 +312,8 @@ jobs:
       name: "macOS 10.15.5 (Mojave) with Xcode 12 via Homebrew"
       os: osx
       osx_image: xcode12
-      env: FROM_PACKAGE_MANAGER='yes'
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
           packages:
