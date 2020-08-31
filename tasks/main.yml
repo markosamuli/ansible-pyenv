@@ -17,8 +17,8 @@
 
 - import_tasks: setup.yml
 
-- import_tasks: python_versions.yml
-
 - name: Initialise shell
   include_tasks: shell.yml
   when: pyenv_init_shell|bool
+
+- import_tasks: python_versions.yml
