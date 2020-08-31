@@ -12,6 +12,7 @@ pyenv_build_requirements:
   - curl
   - llvm
   - libncurses5-dev
+  - libncursesw5-dev
   - xz-utils
   - tk-dev
   - libxml2-dev
