@@ -4,3 +4,4 @@ pyenv_build_requirements_with_homebrew:
   - openssl
   - readline
   - xz
+  - gcc
