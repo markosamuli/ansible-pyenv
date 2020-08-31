@@ -62,6 +62,34 @@ repos:
     hooks:
       - id: markdownlint
 
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        # Do not run on Git push
+        stages: [commit]
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.3
+    hooks:
+      - id: flake8
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.6.2
+    hooks:
+      - id: bandit
+
+  # Validate Python code with pylint using local environment
+  # to avoid 'import-error' issues.
+  - repo: local
+    hooks:
+      - id: pylint
+        name: Lint Python files with pylint
+        entry: python -m pylint
+        types: [python]
+        language: system
+        require_serial: false
+
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook.git
     rev: "2.0.0"
     hooks:
