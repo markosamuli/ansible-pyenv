@@ -246,6 +246,50 @@ jobs:
             - ansible
           update: true
 
+    - stage: test
+      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 with Git"
+      os: osx
+      osx_image: xcode11.6
+      env: FROM_PACKAGE_MANAGER='no'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
+      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 with Homebrew"
+      os: osx
+      osx_image: xcode11.6
+      env: FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
+      name: "macOS 10.15.5 (Mojave) with Xcode 12 with Git"
+      os: osx
+      osx_image: xcode12
+      env: FROM_PACKAGE_MANAGER='no'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
+      name: "macOS 10.15.5 (Mojave) with Xcode 12 with Homebrew"
+      os: osx
+      osx_image: xcode12
+      env: FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
 notifications:
   webhooks:
     - https://galaxy.ansible.com/api/v1/notifications/
