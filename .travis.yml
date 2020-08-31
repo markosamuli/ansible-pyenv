@@ -203,10 +203,32 @@ jobs:
           update: true
 
     - stage: test
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Git"
+      os: osx
+      osx_image: xcode10.1
+      env: FROM_PACKAGE_MANAGER='no'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 with Homebrew"
       os: osx
       osx_image: xcode10.1
       env: FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 11.2 with Git"
+      os: osx
+      osx_image: xcode11.2
+      env: FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
           packages:
