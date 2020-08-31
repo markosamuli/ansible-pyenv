@@ -147,6 +147,46 @@ jobs:
 
     # Run tests
     - stage: test
+      name: "macOS 10.15.5 (Catalina) with Xcode 12 via Homebrew"
+      os: osx
+      osx_image: xcode12
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
+      os: osx
+      osx_image: xcode11.2
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          packages:
+            - ansible
+          update: true
+
+    - stage: test
+      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
+      os: linux
+      dist: focal
+      env: >-
+        ANSIBLE_VERSION='<2.10'
+        PIP_BIN='pip3'
+        UPGRADE_GCC='yes'
+        PYTHON_INTERPRETER=auto
+      addons:
+        apt:
+          packages:
+            - python3-pip
+            - python3-dev
+          update: true
+
+    - stage: test
       name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 via Git"
       os: linux
       dist: xenial
@@ -189,22 +229,6 @@ jobs:
           packages:
             - python-pip
             - python-dev
-          update: true
-
-    - stage: test
-      name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
-      os: linux
-      dist: focal
-      env: >-
-        ANSIBLE_VERSION='<2.10'
-        PIP_BIN='pip3'
-        UPGRADE_GCC='yes'
-        PYTHON_INTERPRETER=auto
-      addons:
-        apt:
-          packages:
-            - python3-pip
-            - python3-dev
           update: true
 
     - stage: test
@@ -261,19 +285,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
-      os: osx
-      osx_image: xcode11.2
-      env: >-
-        FROM_PACKAGE_MANAGER='yes'
-      addons:
-        homebrew:
-          packages:
-            - ansible
-          update: true
-
-    - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 via Git"
+      name: "macOS 10.15.5 (Catalina) with Xcode 11.6 via Git"
       os: osx
       osx_image: xcode11.6
       env: >-
@@ -285,7 +297,7 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 11.6 via Homebrew"
+      name: "macOS 10.15.5 (Catalina) with Xcode 11.6 via Homebrew"
       os: osx
       osx_image: xcode11.6
       env: >-
@@ -297,23 +309,11 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 12 via Git"
+      name: "macOS 10.15.5 (Catalina) with Xcode 12 via Git"
       os: osx
       osx_image: xcode12
       env: >-
         FROM_PACKAGE_MANAGER='no'
-      addons:
-        homebrew:
-          packages:
-            - ansible
-          update: true
-
-    - stage: test
-      name: "macOS 10.15.5 (Mojave) with Xcode 12 via Homebrew"
-      os: osx
-      osx_image: xcode12
-      env: >-
-        FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
           packages:
