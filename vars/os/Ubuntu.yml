@@ -21,6 +21,7 @@ pyenv_build_requirements:
   - python-openssl
   - git
 
-pyenv_build_requirements_with_homebrew: []
+pyenv_build_requirements_with_homebrew:
+  - openssl
 
 pyenv_brew_path: /home/linuxbrew/.linuxbrew/bin
