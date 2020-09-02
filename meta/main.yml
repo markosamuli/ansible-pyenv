@@ -6,7 +6,7 @@ galaxy_info:
   author: Marko Samuli Kirves
   description: Installs pyenv and pyenv-virtualenv
   license: MIT
-  min_ansible_version: 2.7
+  min_ansible_version: 2.8
   github_branch: master
   platforms:
     - name: Debian
@@ -17,11 +17,12 @@ galaxy_info:
       versions:
         - xenial
         - bionic
-        - eoan
+        - focal
     - name: MacOSX
       versions:
         - "10.13"
         - "10.14"
+        - "10.15"
   galaxy_tags:
     - osx
     - macos

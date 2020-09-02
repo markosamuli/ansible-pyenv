@@ -8,12 +8,20 @@ export PROJECT_ROOT
 ANSIBLE_ROLES_PATH=$(dirname "$PROJECT_ROOT")
 export ANSIBLE_ROLES_PATH
 
+msg() {
+    local message="$*"
+    if [ -n "${TEST_ENV}" ]; then
+        message="[${TEST_ENV}] ${message}"
+    fi
+    echo "${message}"
+}
+
 syntax_check() {
     echo "*** Check syntax"
     if ansible-playbook tests/test.yml -i tests/inventory --syntax-check; then
-        echo "Syntax check: pass"
+        msg "Syntax check: pass"
     else
-        echo "Syntax check: fail"
+        msg "Syntax check: fail"
         return 1
     fi
 }
@@ -24,19 +32,19 @@ run_tests() {
     extra_vars=$(printf ",%s" "${ansible_vars[@]}")
     extra_vars="{${extra_vars:1}}"
 
-    echo "*** Run Ansible playbook"
+    msg "*** Run Ansible playbook"
     if run_playbook "${extra_vars}"; then
-        echo "Playbook run: pass"
+        msg "Playbook run: pass"
     else
-        echo "Playbook run: fail"
+        msg "Playbook run: fail"
         return 1
     fi
 
-    echo "*** Idempotence test"
+    msg "*** Idempotence test"
     if run_playbook "${extra_vars}" | grep -q 'changed=0.*failed=0'; then
-        echo "Idempotence test: pass"
+        msg "Idempotence test: pass"
     else
-        echo "Idempotence test: fail"
+        msg "Idempotence test: fail"
         return 1
     fi
 }

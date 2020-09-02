@@ -40,6 +40,22 @@ and keep using the previous method.
 If you want to migrate, backup and delete your existing `~/.pyenv` directory
 before running this role.
 
+## Install from Homebrew on Linux
+
+The role includes an experimental support for installing pyenv and plugins
+with Homebrew on Linux.
+
+The role doesn't install Homebrew on Linux itself and expects it to be installed
+in the default `/home/linuxbrew/.linuxbrew` location.
+
+Installing Python versions with pyenv on Linux when Homebrew installation exists
+has some known issues:
+
+- readline extension was not compiled, installed pyenv by Linuxbrew on
+  Ubuntu 16 [#1479][pyenv-1479]
+
+[pyenv-1479]: https://github.com/pyenv/pyenv/issues/1479
+
 ## Installed Python versions
 
 This role installs [Python][python] versions defined in `pyenv_python_versions`
@@ -98,7 +114,6 @@ fi
 Path to `~/.pyenv` is based on environment variables:
 
 ```yaml
-# Installation paths
 pyenv_home: "{{ ansible_env.HOME }}"
 pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 ```
@@ -106,59 +121,61 @@ pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 Update `.bashrc` and `.zshrc` files in user home directory:
 
 ```yaml
-# Update .bashrc and .zshrc shell scripts
 pyenv_init_shell: true
 ```
 
-Versions to install.
+Versions to install:
 
 ```yaml
-# Versions to install
 pyenv_version: "v1.2.13"
 pyenv_virtualenv_version: "v1.1.5"
 pyenv_virtualenvwrapper_version: "v20140609"
 ```
 
-Latest Python 2 and Python 3 versions are installed:
+Latest Python 3.7 and Python 3.8 versions:
 
 ```yaml
-# Latest Python versions
 pyenv_python37_version: "3.7.6"
 pyenv_python38_version: "3.8.1"
+```
 
-# Python versions to install
+Python 2 and Python 3 versions are installed by default:
+
+```yaml
 pyenv_python_versions:
   - "{{ pyenv_python37_version }}"
   - "{{ pyenv_python38_version }}"
 ```
 
-Set global version:
+Set global version to Python 3.7 with `system` fallback:
 
 ```yaml
-# Set global pyenv version
 pyenv_global: "{{ pyenv_python37_version }} system"
 ```
 
 Install virtualenvwrapper plugin:
 
 ```yaml
-# Optionally, install virtualenvwrapper plugin for pyenv
 pyenv_virtualenvwrapper: false
 pyenv_virtualenvwrapper_home: "{{ ansible_env.HOME }}/.virtualenvs"
 ```
 
-Install using Homebrew on macOS:
+Install using Homebrew package manager on macOS:
 
 ```yaml
-# Install using package manager where available
-pyenv_install_from_package_manager: false
+pyenv_install_from_package_manager: true
 ```
 
 Detect existing installation method and use that:
 
 ```yaml
-# Detect existing install
 pyenv_detect_existing_install: true
+```
+
+Install using Homebrew on Linux:
+
+```yaml
+pyenv_homebrew_on_linux: true
 ```
 
 ## Example Playbook
@@ -228,6 +245,12 @@ Use of `.pyenvrc` file and parts used for installing python version taken from
 [avanov.pyenv](https://github.com/avanov/ansible-galaxy-pyenv) role.
 
 ## Development
+
+Install development dependencies:
+
+```bash
+pip3 install -r requirements.dev.txt
+```
 
 Install [pre-commit] hooks:
 

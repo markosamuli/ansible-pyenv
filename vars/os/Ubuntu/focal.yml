@@ -15,9 +15,14 @@ pyenv_build_requirements:
   - libncursesw5-dev
   - xz-utils
   - tk-dev
+  - libxml2-dev
+  - libxmlsec1-dev
   - libffi-dev
   - liblzma-dev
-  - python-openssl
+  - python3-openssl
   - git
 
-pyenv_build_requirements_with_homebrew: []
+pyenv_build_requirements_with_homebrew:
+  - openssl
+
+pyenv_brew_path: /home/linuxbrew/.linuxbrew/bin
