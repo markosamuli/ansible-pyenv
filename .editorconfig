@@ -10,6 +10,8 @@ charset = utf-8
 
 # Shell scripts
 [*.sh]
+shell_variant      = bash # like -ln=bash
+switch_case_indent = true  # like -ci
 indent_style = space
 indent_size = 4
 

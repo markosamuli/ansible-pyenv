@@ -142,7 +142,13 @@ jobs:
         - rm -f $HOME/.cache/pre-commit/pre-commit.log
       install:
         - pip3 install --user -r requirements.dev.txt
+        - python --version
+        - shfmt -version
+        - shellcheck --version
+        - pre-commit --version
       script:
+        # shfmt version is too old
+        - export SKIP=shfmt
         - pre-commit run -a
 
     # Run tests
