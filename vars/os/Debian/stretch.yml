@@ -1,0 +1,29 @@
+---
+# https://github.com/pyenv/pyenv/wiki/common-build-problems
+pyenv_build_requirements:
+  - make
+  - build-essential
+  - libssl-dev
+  - zlib1g-dev
+  - libbz2-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - wget
+  - curl
+  - llvm
+  - libncurses5-dev
+  - libncursesw5-dev
+  - xz-utils
+  - tk-dev
+  - libffi-dev
+  - liblzma-dev
+  - python-openssl
+  - git
+
+pyenv_build_requirements_with_homebrew: []
+
+pyenv_install_shell: /bin/bash
+
+pyenv_brew_path: /home/linuxbrew/.linuxbrew/bin
+
+pyenv_homebrew_openssl_fix: true

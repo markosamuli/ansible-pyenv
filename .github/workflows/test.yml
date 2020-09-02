@@ -10,13 +10,15 @@ on:
       - "feature/**"
       - "release/**"
     tags:
-      - v2.*
-      - v3.*
+      - v.*
 
 jobs:
   focal:
     name: Test on Ubuntu 20.04 LTS (focal)
     runs-on: ubuntu-latest
+    env:
+      DISTRIB: ubuntu
+      RELEASE: focal
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -26,14 +28,20 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
-        run: ./tests/update_test_images.py --release=focal
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE}
       - name: Run tests with Git install
-        run: ./tests/run-tests.sh focal
+        run: ./tests/run-tests.sh ${RELEASE}
       - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh focal-with-homebrew
+        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
   bionic:
     name: Test on Ubuntu 18.04 LTS (bionic)
     runs-on: ubuntu-latest
+    env:
+      DISTRIB: ubuntu
+      RELEASE: bionic
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -43,14 +51,20 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
-        run: ./tests/update_test_images.py --release=bionic
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE}
       - name: Run tests with Git install
-        run: ./tests/run-tests.sh bionic
+        run: ./tests/run-tests.sh ${RELEASE}
       - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh bionic-with-homebrew
+        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
   xenial:
     name: Test on Ubuntu 16.04 LTS (xenial)
     runs-on: ubuntu-latest
+    env:
+      DISTRIB: ubuntu
+      RELEASE: xenial
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -60,14 +74,20 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
-        run: ./tests/update_test_images.py --release=xenial
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE}
       - name: Run tests with Git install
-        run: ./tests/run-tests.sh xenial
+        run: ./tests/run-tests.sh ${RELEASE}
       - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh xenial-with-homebrew
+        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
   stretch:
     name: Test on Debian stretch
     runs-on: ubuntu-latest
+    env:
+      DISTRIB: debian
+      RELEASE: stretch
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -77,14 +97,20 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
-        run: ./tests/update_test_images.py --release=stretch
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE}
       - name: Run tests with Git install
-        run: ./tests/run-tests.sh stretch
+        run: ./tests/run-tests.sh ${RELEASE}
       - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh stretch-with-homebrew
+        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
   buster:
     name: Test on Debian buster
     runs-on: ubuntu-latest
+    env:
+      DISTRIB: debian
+      RELEASE: buster
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -94,8 +120,11 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
-        run: ./tests/update_test_images.py --release=buster
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE}
       - name: Run tests with Git install
-        run: ./tests/run-tests.sh buster
+        run: ./tests/run-tests.sh ${RELEASE}
       - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh buster-with-homebrew
+        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
