@@ -8,6 +8,8 @@ TEST_HOME=/home/test
 
 IMAGES_DIR="images"
 
+docker_run_opts=()
+
 error() {
     echo "$@" 1>&2
 }
@@ -71,7 +73,8 @@ start() {
     local image_name="${ROLE_NAME}-${image}"
     local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Start container with image ${image}"
-    docker run --rm -it -d \
+    docker run --rm -d \
+        "${docker_run_opts[@]}" \
         -e "TEST_ENV=${image}" \
         -v "${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME}" \
         --name "${container_name}" \
@@ -119,7 +122,8 @@ run_test_script() {
     local test_script=$2
     local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Run tests with ${test_script} in ${image}"
-    docker exec -it \
+    docker exec \
+        "${docker_run_opts[@]}" \
         --user test \
         "${container_name}" \
         bash -ilc "${TEST_HOME}/${ROLE_NAME}/tests/${test_script}"
@@ -133,6 +137,10 @@ if ! command -v docker /dev/null; then
 fi
 
 detect_wsl
+
+if [ -z "$CI" ]; then
+    docker_run_opts+=("-it")
+fi
 
 cd "${TESTS_DIR}"
 
