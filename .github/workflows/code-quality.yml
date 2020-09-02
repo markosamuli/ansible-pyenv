@@ -10,8 +10,7 @@ on:
       - "feature/**"
       - "release/**"
     tags:
-      - v2.*
-      - v3.*
+      - v.*
 
 jobs:
   build:
