@@ -16,7 +16,7 @@ clean: clean-test-images ## clean generated files
 test: update-test-images run-tests ## run tests
 
 tests/images/%/Dockerfile:
-	$(MAKE) update-test-images
+	./tests/update_test_images.py --dockerfile=$@
 
 .PHONY: test-xenial
 test-xenial: tests/images/xenial/Dockerfile tests/images/xenial-with-homebrew/Dockerfile
