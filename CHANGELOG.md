@@ -2,17 +2,76 @@
 
 Only the latest major version is maintained.
 
-## [Unreleased]
+## Homebrew on Linux, Ubuntu 20.04 LTS, macOS Catalina - 2020-09-02
 
 Unreleased changes in the `develop` or `feature/*` branches.
 
-- Install `pyenv` with Homebrew on Linux
+### Homebrew on Linux
 
+The main purpose of this feature is to allow testing of the Homebrew
+installation on my Windows and Linux development environments inside
+Ubuntu and Debian Docker containers.
+
+This should be considered experimental and not the preferred way to
+install pyenv on Linux as it comes with a few quirks.
+
+To address known issue with pyenv on Homebrew on Linux, the Homebrew
+readline package is automatically uninstalled and then reinstalled
+while building Python versions with this role.
+
+### Changed
+
+- Install `pyenv` with Homebrew on Linux
 - Upgrade `ansible-lint` to v4.3.3
 - Add missing directory permissions to ensure compatibility with the future
-  Ansible versions
+  Ansible versions.
 
-[unreleased]: https://github.com/markosamuli/ansible-pyenv/commits/develop
+### Fixed
+
+- Ubuntu: Add missing `libncursesw5-dev` dependency
+- Ubuntu: Install openssl when installing via Homebrew
+- Fix issue with first time Python installs failing as pyenv has not been
+  set up in the user's shell profile.
+- macOS: Ensure `gcc` is installed as recommended by Homebrew installer
+- Add permissions to the Git repositories while cloning as the default file and
+  directory permissions will change in the future Ansible versions.
+
+### CI: Travis
+
+- Run preferred OS builds first
+- macOS: Run test builds on macOS 10.15 (Catalina)
+- Ubuntu: Use Ansible 2.12 `auto` detection on Ubuntu 20.04 LTS instead of the
+  `auto_legacy` detection from Ansible 2.8 to detect the Python 3 version
+  correctly.
+- Ubuntu: Remove Ubuntu 18.04 LTS Ansible 2.9 build
+- Use Ubuntu 20.04 LTS for running `pre-commit` tests
+
+### CI: pre-commit
+
+- Upgrade to `pre-commit` v2.7.0
+- Format Python code with black
+- Lint Python files with flake8 and pylint
+- Test Python files for security issues with bandit
+- Add pylint config compatible with black code formatting
+- Add Python development dependencies into requirements.dev.txt
+
+### CI: GitHub
+
+- Use the latest Python 3.x version for running tests
+
+### CI: Tests with Docker images
+
+- Update Docker images with Python and Jinja2 templates
+- Add Ubuntu 20.04 LTS support
+- Do not store test Docker image files in the repository
+- Add support for running tests on WSL2
+- Install `procps` on Homebrew test images
+- Fix missing script permissions caused development environment on Windows FS
+
+### Breaking changes
+
+- Require Python 3.6 or newer
+- Require Ansible 2.8 or newer
 
 ## [3.0.2] - 2020-08-29
 
