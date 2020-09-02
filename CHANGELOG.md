@@ -2,9 +2,20 @@
 
 Only the latest major version is maintained.
 
-## Homebrew on Linux, Ubuntu 20.04 LTS, macOS Catalina - 2020-09-02
+## [4.0.0] - 2020-09-02
 
-Unreleased changes in the `develop` or `feature/*` branches.
+This release adds (experimental) support for installing `pyenv` via Homebrew on
+Linux.
+
+Add support and fixes for installing `pyenv` on Ubuntu 20.04 LTS and
+macOS Catalina.
+
+[4.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v4.0.0
+
+### Breaking changes
+
+- Require Python 3.6 or newer
+- Require Ansible 2.8 or newer
 
 ### Homebrew on Linux
 
@@ -67,11 +78,6 @@ while building Python versions with this role.
 - Add support for running tests on WSL2
 - Install `procps` on Homebrew test images
 - Fix missing script permissions caused development environment on Windows FS
-
-### Breaking changes
-
-- Require Python 3.6 or newer
-- Require Ansible 2.8 or newer
 
 ## [3.0.2] - 2020-08-29
 
