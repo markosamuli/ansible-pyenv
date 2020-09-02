@@ -20,7 +20,8 @@ pyenv_build_requirements:
   - python-openssl
   - git
 
-pyenv_build_requirements_with_homebrew: []
+pyenv_build_requirements_with_homebrew:
+  - openssl
 
 pyenv_install_shell: /bin/bash
 
