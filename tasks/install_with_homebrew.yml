@@ -26,10 +26,10 @@
     update_homebrew: false
 
 - name: Get brew info on pyenv package
-  command: "brew info pyenv --json"
+  shell: "brew info pyenv --json" # noqa 305
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
   register: brew_info
-  environment:
-    PATH: "{% if pyenv_brew_path is defined and pyenv_brew_path != '' %}{{ pyenv_brew_path }}:{% endif %}{{ ansible_env.PATH }}" # noqa 602
   changed_when: false
 
 - name: Parse brew info output
