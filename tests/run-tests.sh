@@ -236,9 +236,11 @@ cd "${TESTS_DIR}"
 images=("$@")
 if [ ${#images[@]} -eq 0 ]; then
     images=(images/*/Dockerfile)
-    images=("${images[@]/images\//}")
-    images=("${images[@]/\/Dockerfile/}")
 fi
+images=("${images[@]/${PROJECT_ROOT}\//}")
+images=("${images[@]/tests\//}")
+images=("${images[@]/images\//}")
+images=("${images[@]/\/Dockerfile/}")
 
 cd "${PROJECT_ROOT}"
 

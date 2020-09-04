@@ -13,30 +13,46 @@ all: lint test ## run all linting and tests
 clean: clean-test-images ## clean generated files
 
 .PHONY: test
-test: update-test-images run-tests ## run tests
+test: update-test-images run-tests ## run all tests
 
 tests/images/%/Dockerfile:
 	./tests/update_test_images.py --dockerfile=$@
 
+xenial_images = $(shell ./tests/update_test_images.py --list-only --release=xenial)
+
 .PHONY: test-xenial
-test-xenial: tests/images/xenial/Dockerfile tests/images/xenial-with-homebrew/Dockerfile
-	./tests/run-tests.sh xenial xenial-with-homebrew
+test-xenial: $(xenial_images)
+	./tests/run-tests.sh $(xenial_images)
+
+bionic_images = $(shell ./tests/update_test_images.py --list-only --release=bionic)
 
 .PHONY: test-bionic
-test-bionic: tests/images/bionic/Dockerfile tests/images/bionic-with-homebrew/Dockerfile
-	./tests/run-tests.sh bionic bionic-with-homebrew
+test-bionic: $(bionic_images)
+	./tests/run-tests.sh $(bionic_images)
+
+focal_images = $(shell ./tests/update_test_images.py --list-only --release=focal)
 
 .PHONY: test-focal
-test-focal: tests/images/focal/Dockerfile tests/images/focal-with-homebrew/Dockerfile
-	./tests/run-tests.sh focal focal-with-homebrew
+test-focal: $(focal_images)
+	./tests/run-tests.sh $(focal_images)
+
+stretch_images = $(shell ./tests/update_test_images.py --list-only --release=stretch)
 
 .PHONY: test-stretch
-test-stretch: tests/images/stretch/Dockerfile tests/images/stretch-with-homebrew/Dockerfile
-	./tests/run-tests.sh stretch stretch-with-homebrew
+test-stretch: $(stretch_images)
+	./tests/run-tests.sh $(stretch_images)
+
+buster_images = $(shell ./tests/update_test_images.py --list-only --release=buster)
 
 .PHONY: test-buster
-test-buster: tests/images/buster/Dockerfile tests/images/buster-with-homebrew/Dockerfile
-	./tests/run-tests.sh buster buster-with-homebrew
+test-buster: $(buster_images)
+	./tests/run-tests.sh $(buster_images)
+
+homebrew_images = $(shell ./tests/update_test_images.py --list-only --no-git)
+
+.PHONY: test-homebrew
+test-homebrew: $(homebrew_images)
+	./tests/run-tests.sh $(homebrew_images)
 
 .PHONY: update-test-images
 update-test-images:
