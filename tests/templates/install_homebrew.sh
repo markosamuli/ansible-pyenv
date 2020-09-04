@@ -8,4 +8,10 @@ set -e
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-echo "eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >>~/.profile
+echo "" >>"${HOME}/.profile"
+echo "eval \$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >>"${HOME}/.profile"
+
+echo "" >>"${HOME}/.zprofile"
+echo "eval \$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >>"${HOME}/.zprofile"
+
+brew --version
