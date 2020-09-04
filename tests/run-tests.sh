@@ -10,6 +10,7 @@ IMAGES_DIR="images"
 
 docker_run_opts=()
 
+debug="false"
 test_with_git="true"
 test_with_homebrew="true"
 
@@ -175,6 +176,17 @@ run_test_script() {
     }
 }
 
+debug_image() {
+    local image=$1
+    local container_name="${ROLE_NAME}-${image}-tests"
+    start "${image}"
+    docker exec \
+        "${docker_run_opts[@]}" \
+        --user test \
+        "${container_name}" \
+        bash -il
+}
+
 if ! command -v docker /dev/null; then
     error "docker not found"
     exit 1
@@ -185,6 +197,10 @@ POSITIONAL=()
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
+        --debug)
+            debug="true"
+            shift
+            ;;
         --with-git)
             test_with_git="true"
             shift
@@ -237,9 +253,17 @@ for i in "${images[@]}"; do
     }
 done
 
-for i in "${images[@]}"; do
-    run_tests "$i" || {
-        error "failed tests in $i"
+if [ "${debug}" == "true" ]; then
+    if [ ${#images[@]} -gt 1 ]; then
+        error "limit to one Docker image to debug"
         exit 1
-    }
-done
+    fi
+    debug_image "${images[0]}"
+else
+    for i in "${images[@]}"; do
+        run_tests "$i" || {
+            error "failed tests in $i"
+            exit 1
+        }
+    done
+fi
