@@ -26,10 +26,10 @@
     update_homebrew: false
 
 - name: Get brew info on pyenv package
-  command: "brew info pyenv --json"
+  shell: "brew info pyenv --json" # noqa 305
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
   register: brew_info
-  environment:
-    PATH: "{% if pyenv_brew_path is defined and pyenv_brew_path != '' %}{{ pyenv_brew_path }}:{% endif %}{{ ansible_env.PATH }}" # noqa 602
   changed_when: false
 
 - name: Parse brew info output
@@ -55,9 +55,13 @@
   homebrew:
     name: pyenv-virtualenv
     path: "{{ pyenv_brew_path | default(omit) }}"
+    state: present
+    update_homebrew: false
 
 - name: Install pyenv-virtualenvwrapper with Homebrew
   homebrew:
     name: pyenv-virtualenvwrapper
     path: "{{ pyenv_brew_path | default(omit) }}"
+    state: present
+    update_homebrew: false
   when: pyenv_virtualenvwrapper | bool

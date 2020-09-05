@@ -2,6 +2,55 @@
 
 Only the latest major version is maintained.
 
+## Unreleased - 2020-09-04
+
+### Fixed
+
+- Run `brew into` in Ansible `shell` module instead of `command` to use the
+  existing shell environment.
+- Do not use Homebrew OpenSSL on Debian stretch or Ubuntu xenial to fix Python
+  3.7 and 3.8 install failing due to OpenSSL not being found.
+- Debian: Install `python3-openssl` instead of `python-openssl` on Debian
+  buster.
+- Add `black` compatible `flake8` configuration.
+
+### Changed
+
+Improved `run-tests.sh` script and error handling if any of the tests fail.
+
+- Add `--debug` option to the `run-tests.sh` script that will start a
+  container with an interactive shell to allow ad-hoc commands to be
+  executed inside the container.
+
+Improve the `update_test_images.py` script to allow additional options to
+be provided from the command line.
+
+- Use `click` in the `update_test_images.py` script to allow additional options
+  to be provided.
+- Add `--list-only` option to return the Dockerfile build target paths
+  only so I can use these in my Makefile.
+- Add `--distrib` option to update only images matching the specified
+  Linux distribution.
+- Add `--release` option to update only images matching the specified
+  Linux distribution release.
+- Add `--git/--no-git` option to update only images for testing the Git
+  installation method.
+- Add `--homebrew/--no-homebrew` option to update only for testing the
+  Homebrew installation method.
+- Add `--dockerfile` option to allow images to be specified by the target
+  Dockerfile path. This is used by the Makefile to match existing build
+  targets.
+
+### CI: Travis
+
+- Skip `shfmt` pre-commit hook as the CLI version is too old and causes
+  issues with some formatting.
+
+### CI: GitHub
+
+- Test on Debian and Ubuntu using Docker images on GitHub Actions.
+- Install `shfmt` via Go modules instead of using Snap packages.
+
 ## [4.0.0] - 2020-09-02
 
 This release adds (experimental) support for installing `pyenv` via Homebrew on

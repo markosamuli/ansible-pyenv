@@ -11,6 +11,18 @@
     ansible_system == 'Linux'
     and pyenv_homebrew_on_linux | bool
 
+- name: Unlink Homebrew OpenSSL on Linux
+  homebrew:
+    name: openssl
+    state: unlinked
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  register: pyenv_brew_openssl_unlink
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+    and pyenv_homebrew_openssl_fix | bool
+
 - name: Install Python interpreters
   shell: >-
     . {{ pyenv_root }}/.pyenvrc &&
@@ -32,6 +44,19 @@
     and pyenv_homebrew_on_linux | bool
     and pyenv_brew_readline_uninstall is defined
     and pyenv_brew_readline_uninstall.changed
+
+- name: Link Homebrew OpenSSL on Linux # noqa 503
+  homebrew:
+    name: openssl
+    state: linked
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+    and pyenv_homebrew_openssl_fix | bool
+    and pyenv_brew_openssl_unlink is defined
+    and pyenv_brew_openssl_unlink.changed
 
 - name: Get current global version
   shell: >-

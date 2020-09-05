@@ -7,6 +7,9 @@ import os
 import stat
 from pathlib import Path
 from shutil import copyfile
+from typing import Iterable, Tuple
+
+import click
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 FILE = Path(__file__).resolve()
@@ -25,21 +28,40 @@ env = Environment(
 )
 
 
-def create_dockerfile(
-    docker_image: str,
+def build_target(
     docker_tag: str,
     install_homebrew: bool = False,
-    python: str = None,
-):
+) -> Tuple[str, str]:
     """
-    Create Dockerfile in the target directory
+    Return build target information
     """
+
     target_dir = docker_tag
     if install_homebrew:
         target_dir = f"{target_dir}-with-homebrew"
 
     target_dir = os.path.join(IMAGES_DIR, target_dir)
     target_file = os.path.join(target_dir, "Dockerfile")
+
+    return target_dir, target_file
+
+
+def create_dockerfile(
+    docker_image: str,
+    docker_tag: str,
+    install_homebrew: bool = False,
+    python: str = None,
+    list_only: bool = False,
+) -> Tuple[str, str]:
+    """
+    Create Dockerfile in the target directory
+    """
+    target_dir, target_file = build_target(
+        docker_tag, install_homebrew=install_homebrew
+    )
+
+    if list_only:
+        return target_dir, target_file
 
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
@@ -73,48 +95,95 @@ def create_dockerfile(
             copyfile(src_script, dst_script)
             os.chmod(dst_script, stat.S_IXUSR | stat.S_IRUSR | stat.S_IWUSR)
 
+    return target_dir, target_file
 
-def update_dockerfile(docker_image: str, docker_tag: str, python: str = None):
+
+DEBIAN = "debian"
+UBUNTU = "ubuntu"
+
+images = {
+    "debian": {"stretch": {}, "buster": {}},
+    "ubuntu": {"focal": {"python": "python3"}, "xenial": {}, "bionic": {}},
+}
+
+
+def list_distributions() -> Iterable[str]:
     """
-    Generate Dockerfile
+    List available distributions
     """
-    create_dockerfile(docker_image, docker_tag, python=python)
+    return images.keys()
 
 
-def update_dockerfile_with_homebrew(
-    docker_image: str, docker_tag: str, python: str = None
+def list_releases() -> Iterable[str]:
+    """
+    List available releases
+    """
+    releases = []
+    for distrib_releases in images.values():
+        for release in distrib_releases.keys():
+            releases.append(release)
+    return releases
+
+
+def parse_dockerfile(dockerfile) -> Tuple[str, str, str]:
+    """
+    Parse build target information from the Dockerfile path
+    """
+    git = True
+    homebrew = False
+    image = dockerfile.replace("tests/images/", "").replace("/Dockerfile", "")
+    if "-with-homebrew" in image:
+        image = image.replace("-with-homebrew", "")
+        git = False
+        homebrew = True
+    if image not in list_releases():
+        raise ValueError(f"invalid build target {dockerfile}")
+    return image, git, homebrew
+
+
+@click.command()
+@click.option(
+    "--distrib", type=click.Choice(list_distributions(), case_sensitive=False)
+)
+@click.option("--release", type=click.Choice(list_releases(), case_sensitive=False))
+@click.option("--git/--no-git", default=True)
+@click.option("--homebrew/--no-homebrew", default=True)
+@click.option("--dockerfile", type=str)
+@click.option("--list-only", is_flag=True)
+def update_test_images(  # pylint: disable=too-many-arguments
+    distrib: str,
+    release: str,
+    git: bool,
+    homebrew: bool,
+    dockerfile: str,
+    list_only: bool,
 ):
-    """
-    Generate Dockerfile with Homebrew installation
-    """
-    create_dockerfile(
-        docker_image,
-        docker_tag,
-        python=python,
-        install_homebrew=True,
-    )
-
-
-def main():
     """
     Generate Docker images for supported Ubuntu and Debian releases
     """
 
-    ubuntu_python3_releases = ["focal"]
-    for tag in ubuntu_python3_releases:
-        update_dockerfile("ubuntu", tag, python="python3")
-        update_dockerfile_with_homebrew("ubuntu", tag, python="python3")
+    if dockerfile:
+        release, git, homebrew = parse_dockerfile(dockerfile)
 
-    ubuntu_releases = ["xenial", "bionic"]
-    for tag in ubuntu_releases:
-        update_dockerfile("ubuntu", tag)
-        update_dockerfile_with_homebrew("ubuntu", tag)
-
-    debian_releases = ["stretch", "buster"]
-    for tag in debian_releases:
-        update_dockerfile("debian", tag)
-        update_dockerfile_with_homebrew("debian", tag)
+    for image, releases in images.items():
+        if distrib and image != distrib:
+            continue
+        for tag, config in releases.items():
+            if release and tag != release:
+                continue
+            if git:
+                _, target_file = create_dockerfile(
+                    image, tag, list_only=list_only, **config
+                )
+                if list_only:
+                    print(os.path.relpath(target_file, PROJECT_ROOT))
+            if homebrew:
+                _, target_file = create_dockerfile(
+                    image, tag, list_only=list_only, install_homebrew=True, **config
+                )
+                if list_only:
+                    print(os.path.relpath(target_file, PROJECT_ROOT))
 
 
 if __name__ == "__main__":
-    main()
+    update_test_images()  # pylint: disable=no-value-for-parameter

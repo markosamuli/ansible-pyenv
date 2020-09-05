@@ -8,6 +8,12 @@ TEST_HOME=/home/test
 
 IMAGES_DIR="images"
 
+docker_run_opts=()
+
+debug="false"
+test_with_git="true"
+test_with_homebrew="true"
+
 error() {
     echo "$@" 1>&2
 }
@@ -29,6 +35,20 @@ detect_wsl() {
         is_wsl=1
         wsl_version='WSL1'
         return
+    fi
+}
+
+setup_mount_root() {
+    if [ "${is_wsl}" == "1" ] && [ "${wsl_version}" == "WSL1" ]; then
+        MOUNT_ROOT="$(pwd -P | sed 's~/mnt/c/~c:/~')"
+    else
+        MOUNT_ROOT="$(pwd -P)"
+    fi
+}
+
+setup_docker_opts() {
+    if [ -z "$CI" ]; then
+        docker_run_opts+=("-it")
     fi
 }
 
@@ -71,7 +91,8 @@ start() {
     local image_name="${ROLE_NAME}-${image}"
     local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Start container with image ${image}"
-    docker run --rm -it -d \
+    docker run --rm -d \
+        "${docker_run_opts[@]}" \
         -e "TEST_ENV=${image}" \
         -v "${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME}" \
         --name "${container_name}" \
@@ -81,86 +102,170 @@ start() {
     }
 }
 
-# Run tests in the container
 run_tests() {
+    local image=$1
+    if [[ $image == *"homebrew"* ]]; then
+        if [ "${test_with_homebrew}" == "true" ]; then
+            run_tests_with_homebrew "$image" || {
+                error "failed Homebrew installation in ${image}"
+                return 1
+            }
+        fi
+    else
+        if [ "${test_with_git}" == "true" ]; then
+            run_tests_with_git "$image" || {
+                error "failed Git installation in ${image}"
+                return 1
+            }
+        fi
+    fi
+}
+
+run_tests_with_git() {
     local image=$1
     local test_scripts=(
         "test_syntax.sh"
         "test_install.sh"
     )
+    local failed=0
+    echo "*** Run tests installing with Git install"
     for test_script in "${test_scripts[@]}"; do
         start "${image}"
-        run_test_script "${image}" "${test_script}"
+        run_test_script "${image}" "${test_script}" || failed=1
         stop "${image}"
         # Give Docker time to clean up
         sleep 1
     done
+    if [ "${failed}" -gt "0" ]; then
+        return "${failed}"
+    fi
 }
 
-# Run tests in the container
 run_tests_with_homebrew() {
     local image=$1
     local test_scripts=(
         "test_syntax.sh"
         "test_install_with_homebrew.sh"
     )
+    local failed=0
+    echo "*** Run tests installing with Homebrew install"
     for test_script in "${test_scripts[@]}"; do
         start "${image}"
-        run_test_script "${image}" "${test_script}"
+        run_test_script "${image}" "${test_script}" || failed=1
         stop "${image}"
         # Give Docker time to clean up
         sleep 1
     done
+    if [ "${failed}" -gt "0" ]; then
+        return "${failed}"
+    fi
 }
 
-# Run tests in the container
 run_test_script() {
     local image=$1
     local test_script=$2
     local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Run tests with ${test_script} in ${image}"
-    docker exec -it \
+    docker exec \
+        "${docker_run_opts[@]}" \
         --user test \
         "${container_name}" \
-        bash -ilc "${TEST_HOME}/${ROLE_NAME}/tests/${test_script}"
+        bash -ilc "${TEST_HOME}/${ROLE_NAME}/tests/${test_script}" || {
+        error "${test_script} on ${image} failed"
+        return 1
+    }
 }
 
-trap finish EXIT
+debug_image() {
+    local image=$1
+    local container_name="${ROLE_NAME}-${image}-tests"
+    start "${image}"
+    docker exec \
+        "${docker_run_opts[@]}" \
+        --user test \
+        "${container_name}" \
+        bash -il
+}
 
 if ! command -v docker /dev/null; then
     error "docker not found"
     exit 1
 fi
 
+# Parse command line arguments
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        --debug)
+            debug="true"
+            shift
+            ;;
+        --with-git)
+            test_with_git="true"
+            shift
+            ;;
+        --without-git)
+            test_with_git="false"
+            shift
+            ;;
+        --with-homebrew)
+            test_with_homebrew="true"
+            shift
+            ;;
+        --without-homebrew)
+            test_with_homebrew="false"
+            shift
+            ;;
+        *)                     # unknown option
+            POSITIONAL+=("$1") # save it in an array for later
+            shift              # past argument
+            ;;
+    esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+trap finish EXIT
+
 detect_wsl
+
+setup_docker_opts
 
 cd "${TESTS_DIR}"
 
 images=("$@")
 if [ ${#images[@]} -eq 0 ]; then
     images=(images/*/Dockerfile)
-    images=("${images[@]/images\//}")
-    images=("${images[@]/\/Dockerfile/}")
 fi
+images=("${images[@]/${PROJECT_ROOT}\//}")
+images=("${images[@]/tests\//}")
+images=("${images[@]/images\//}")
+images=("${images[@]/\/Dockerfile/}")
 
 cd "${PROJECT_ROOT}"
 
-if [ "${is_wsl}" == "1" ] && [ "${wsl_version}" == "WSL1" ]; then
-    MOUNT_ROOT="$(pwd -P | sed 's~/mnt/c/~c:/~')"
-else
-    MOUNT_ROOT="$(pwd -P)"
-fi
+setup_mount_root
 
 set -e
 
 for i in "${images[@]}"; do
-    build "$i"
+    build "$i" || {
+        error "failed to build $i"
+        exit 1
+    }
 done
 
-for i in "${images[@]}"; do
-    if [[ $i == *"homebrew"* ]]; then
-        run_tests_with_homebrew "$i"
-    else
-        run_tests "$i"
+if [ "${debug}" == "true" ]; then
+    if [ ${#images[@]} -gt 1 ]; then
+        error "limit to one Docker image to debug"
+        exit 1
     fi
-done
+    debug_image "${images[0]}"
+else
+    for i in "${images[@]}"; do
+        run_tests "$i" || {
+            error "failed tests in $i"
+            exit 1
+        }
+    done
+fi

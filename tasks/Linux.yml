@@ -3,6 +3,7 @@
   become: true
   package:
     name: "{{ pyenv_build_requirements }}"
+    state: present
 
 - name: Install pyenv build requirements with Homebrew
   become: false

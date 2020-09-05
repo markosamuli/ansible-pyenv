@@ -25,11 +25,18 @@ jobs:
         with:
           python-version: "3.x"
           architecture: "x64"
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.14"
       - name: Install dependencies
         run: |
           pip3 install -r requirements.dev.txt
-          sudo snap install shfmt
+          GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
           sudo apt-get install -y shellcheck
+          python --version
+          shfmt -version
+          shellcheck --version
+          pre-commit --version
       - name: Cache pre-commit dependencies
         uses: actions/cache@preview
         with:
