@@ -2,7 +2,12 @@
 
 Only the latest major version is maintained.
 
-## Unreleased - 2020-09-04
+## [4.0.1] - 2020-09-05
+
+This release addresses installation issues and adds additional test environments
+using Docker images.
+
+[4.0.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v4.0.1
 
 ### Fixed
 
