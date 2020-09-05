@@ -55,9 +55,13 @@
   homebrew:
     name: pyenv-virtualenv
     path: "{{ pyenv_brew_path | default(omit) }}"
+    state: present
+    update_homebrew: false
 
 - name: Install pyenv-virtualenvwrapper with Homebrew
   homebrew:
     name: pyenv-virtualenvwrapper
     path: "{{ pyenv_brew_path | default(omit) }}"
+    state: present
+    update_homebrew: false
   when: pyenv_virtualenvwrapper | bool
