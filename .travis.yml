@@ -269,6 +269,7 @@ jobs:
       addons:
         homebrew:
           brewfile: Brewfile.travis
+          update: true
 
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
