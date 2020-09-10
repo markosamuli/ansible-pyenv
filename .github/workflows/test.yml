@@ -20,11 +20,10 @@ jobs:
       DISTRIB: ubuntu
       RELEASE: focal
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
-          architecture: "x64"
+          python-version: "3.8"
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
@@ -43,11 +42,10 @@ jobs:
       DISTRIB: ubuntu
       RELEASE: bionic
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
-          architecture: "x64"
+          python-version: "3.8"
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
@@ -66,11 +64,10 @@ jobs:
       DISTRIB: ubuntu
       RELEASE: xenial
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
-          architecture: "x64"
+          python-version: "3.8"
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
@@ -89,11 +86,10 @@ jobs:
       DISTRIB: debian
       RELEASE: stretch
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
-          architecture: "x64"
+          python-version: "3.8"
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
@@ -112,11 +108,10 @@ jobs:
       DISTRIB: debian
       RELEASE: buster
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
-          architecture: "x64"
+          python-version: "3.8"
       - name: Install dependencies
         run: pip3 install -r requirements.dev.txt
       - name: Update test images
