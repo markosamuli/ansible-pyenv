@@ -171,6 +171,7 @@ jobs:
       addons:
         homebrew:
           brewfile: Brewfile.travis
+          update: true
 
     - stage: test
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
