@@ -37,7 +37,7 @@ jobs:
           shellcheck --version
           pre-commit --version
       - name: Cache pre-commit dependencies
-        uses: actions/cache@preview
+        uses: actions/cache@v2
         with:
           path: ~/.cache/pre-commit/
           # yamllint disable-line rule:line-length
