@@ -160,9 +160,7 @@ jobs:
         FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
@@ -172,9 +170,7 @@ jobs:
         FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
@@ -262,9 +258,7 @@ jobs:
         FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Homebrew"
@@ -274,9 +268,7 @@ jobs:
         FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
@@ -286,9 +278,7 @@ jobs:
         FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "macOS 10.15.5 (Catalina) with Xcode 11.6 via Git"
@@ -298,9 +288,7 @@ jobs:
         FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "macOS 10.15.5 (Catalina) with Xcode 11.6 via Homebrew"
@@ -310,9 +298,7 @@ jobs:
         FROM_PACKAGE_MANAGER='yes'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
     - stage: test
       name: "macOS 10.15.5 (Catalina) with Xcode 12 via Git"
@@ -322,9 +308,7 @@ jobs:
         FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
-          packages:
-            - ansible
-          update: true
+          brewfile: Brewfile.travis
 
 notifications:
   webhooks:
