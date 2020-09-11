@@ -6,13 +6,22 @@ Only the latest major version is maintained.
 
 Unreleased changes.
 
+[unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
+
+## [4.0.2] - 2020-09-11
+
 ### Fixed
 
+- Update apt cache when installing Linux dependencies to fix issue with build
+  requirements failing to install on fresh installations [#37][issue37]
+  ([@papierukartka][papierukartka])
 - Run GitHub [Test](.github/workflows/test.yml) and
   [Code Quality](.github/workflows/code-quality.yml) workflows on `bugfix/*`
   branches and pull requests targeting the `develop` or `master` branches
 
-[unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
+[issue37]: https://github.com/markosamuli/ansible-pyenv/issues/37
+[papierukartka]: https://github.com/papierukartka
+[4.0.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v4.0.2
 
 ## [4.0.1] - 2020-09-05
 
