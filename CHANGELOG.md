@@ -8,7 +8,9 @@ Unreleased changes.
 
 ### Fixed
 
-- Run GitHub Actions Test and Code Quality workflows on `bugfix/*` branches
+- Run GitHub [Test](.github/workflows/test.yml) and
+  [Code Quality](.github/workflows/code-quality.yml) workflows on `bugfix/*`
+  branches and pull requests targeting the `develop` or `master` branches
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
 
