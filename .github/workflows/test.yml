@@ -7,6 +7,7 @@ on:
     branches:
       - master
       - develop
+      - "bugfix/**"
       - "feature/**"
       - "release/**"
     tags:

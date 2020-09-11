@@ -2,6 +2,16 @@
 
 Only the latest major version is maintained.
 
+## [Unreleased][unreleased]
+
+Unreleased changes.
+
+### Fixed
+
+- Run GitHub Actions Test and Code Quality workflows on `bugfix/*` branches
+
+[unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
+
 ## [4.0.1] - 2020-09-05
 
 This release addresses installation issues and adds additional test environments
@@ -371,6 +381,7 @@ and keep using the previous method.
 - install Python versions
 - set pyenv global version
 
+[2.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.1
 [2.1.1]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.1
 [2.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0
 [2.1.0-rc.2]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v2.1.0-rc.2
