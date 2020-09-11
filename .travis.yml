@@ -43,11 +43,7 @@ install:
   # Install Ansible with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      if [[ -z "$ANSIBLE_VERSION" ]]; then
-        ${PIP_BIN} install --user ansible
-      else
-        ${PIP_BIN} install --user ansible${ANSIBLE_VERSION}
-      fi
+      ${PIP_BIN:-pip} install --user ansible${ANSIBLE_VERSION:-}
     fi
 
   # Check Ansible version
@@ -152,26 +148,6 @@ jobs:
         - pre-commit run -a
 
     # Run tests
-    - stage: test
-      name: "macOS 10.15.5 (Catalina) with Xcode 12 via Homebrew"
-      os: osx
-      osx_image: xcode12
-      env: >-
-        FROM_PACKAGE_MANAGER='yes'
-      addons:
-        homebrew:
-          brewfile: Brewfile.travis
-
-    - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
-      os: osx
-      osx_image: xcode11.2
-      env: >-
-        FROM_PACKAGE_MANAGER='yes'
-      addons:
-        homebrew:
-          brewfile: Brewfile.travis
-          update: true
 
     - stage: test
       name: "Ubuntu 20.04 (Focal Fossa) with Ansible 2.9 via Git"
@@ -190,27 +166,11 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 via Git"
-      os: linux
-      dist: xenial
-      env: >-
-        ANSIBLE_VERSION='<2.8.0'
-        PIP_BIN='pip'
-      addons:
-        apt:
-          packages:
-            - python-pip
-            - python-dev
-            - shellcheck
-          update: true
-
-    - stage: test
       name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Git"
       os: linux
       dist: bionic
       env: >-
         ANSIBLE_VERSION='<2.9.0,!=2.8.6'
-        PIP_BIN='pip'
       addons:
         apt:
           packages:
@@ -220,18 +180,59 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Homebrew"
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 via Git"
       os: linux
-      dist: bionic
+      dist: xenial
       env: >-
-        ANSIBLE_VERSION='<2.9.0,!=2.8.6'
-        PIP_BIN='pip'
-        WITH_HOMEBREW_ON_LINUX='yes'
+        ANSIBLE_VERSION='<2.8.0'
       addons:
         apt:
           packages:
             - python-pip
             - python-dev
+            - shellcheck
+          update: true
+
+    - stage: test
+      name: "macOS 10.15.5 (Catalina) with Xcode 12 via Homebrew"
+      os: osx
+      osx_image: xcode12
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          brewfile: Brewfile.travis
+
+    - stage: test
+      name: "macOS 10.15.5 (Catalina) with Xcode 11.6 via Homebrew"
+      os: osx
+      osx_image: xcode11.6
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          brewfile: Brewfile.travis
+
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
+      os: osx
+      osx_image: xcode11.2
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          brewfile: Brewfile.travis
+          update: true
+
+    - stage: test
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Homebrew"
+      os: osx
+      osx_image: xcode10.1
+      env: >-
+        FROM_PACKAGE_MANAGER='yes'
+      addons:
+        homebrew:
+          brewfile: Brewfile.travis
           update: true
 
     - stage: test
@@ -252,30 +253,23 @@ jobs:
           update: true
 
     - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Git"
-      os: osx
-      osx_image: xcode10.1
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 via Homebrew"
+      os: linux
+      dist: bionic
       env: >-
-        FROM_PACKAGE_MANAGER='no'
+        ANSIBLE_VERSION='<2.9.0,!=2.8.6'
+        WITH_HOMEBREW_ON_LINUX='yes'
       addons:
-        homebrew:
-          brewfile: Brewfile.travis
-
-    - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Homebrew"
-      os: osx
-      osx_image: xcode10.1
-      env: >-
-        FROM_PACKAGE_MANAGER='yes'
-      addons:
-        homebrew:
-          brewfile: Brewfile.travis
+        apt:
+          packages:
+            - python-pip
+            - python-dev
           update: true
 
     - stage: test
-      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
+      name: "macOS 10.15.5 (Catalina) with Xcode 12 via Git"
       os: osx
-      osx_image: xcode11.2
+      osx_image: xcode12
       env: >-
         FROM_PACKAGE_MANAGER='no'
       addons:
@@ -293,19 +287,19 @@ jobs:
           brewfile: Brewfile.travis
 
     - stage: test
-      name: "macOS 10.15.5 (Catalina) with Xcode 11.6 via Homebrew"
+      name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
       os: osx
-      osx_image: xcode11.6
+      osx_image: xcode11.2
       env: >-
-        FROM_PACKAGE_MANAGER='yes'
+        FROM_PACKAGE_MANAGER='no'
       addons:
         homebrew:
           brewfile: Brewfile.travis
 
     - stage: test
-      name: "macOS 10.15.5 (Catalina) with Xcode 12 via Git"
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Git"
       os: osx
-      osx_image: xcode12
+      osx_image: xcode10.1
       env: >-
         FROM_PACKAGE_MANAGER='no'
       addons:
