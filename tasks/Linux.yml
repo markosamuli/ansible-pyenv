@@ -4,6 +4,7 @@
   package:
     name: "{{ pyenv_build_requirements }}"
     state: present
+    update_cache: true
 
 - name: Install pyenv build requirements with Homebrew
   become: false
