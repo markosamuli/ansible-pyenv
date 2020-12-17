@@ -1,2 +1,5 @@
 exclude_paths:
 - .travis.yml
+
+warn_list:
+    - '305'

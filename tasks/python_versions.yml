@@ -25,8 +25,7 @@
 
 - name: Install Python interpreters
   shell: >-
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv install {{ item }}
+    {{ pyenv_root }}/bin/pyenv install {{ item }}
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
     creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
@@ -60,8 +59,7 @@
 
 - name: Get current global version
   shell: >-
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv global
+    {{ pyenv_root }}/bin/pyenv global
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   register: pyenv_global_version
@@ -75,8 +73,7 @@
 - name: Check if 'system' version is available
   shell: >-
     set -o pipefail &&
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv versions | grep -q system
+    {{ pyenv_root }}/bin/pyenv versions | grep -q system
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   register: pyenv_versions_grep_system
@@ -91,9 +88,8 @@
 
 - name: Set pyenv global version to '{{ pyenv_global }}'
   shell: >-
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv global {{ pyenv_global }} &&
-    pyenv rehash
+    {{ pyenv_root }}/bin/pyenv global &&
+    {{ pyenv_root }}/bin/pyenv rehash
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   when: "pyenv_global is defined and pyenv_global_active != pyenv_global"
