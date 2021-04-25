@@ -15,6 +15,9 @@ Unreleased changes.
 
 ### Changed
 
+Remove links to Travis CI as the [tests are no longer working][travis] for
+open source projects.
+
 Remove support for old operating systems:
 
 - Use Ubuntu 20.04 LTS as the default environment on Travis
@@ -34,6 +37,7 @@ Update development dependencies with vulnerabilities:
 - Bump jinja2 from 2.11.2 to 2.11.3
 
 [pip-tools]: https://github.com/jazzband/pip-tools
+[travis]: https://github.com/markosamuli/ansible-pyenv/issues/45
 
 ## [4.0.2] - 2020-09-11
 
