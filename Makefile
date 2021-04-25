@@ -26,7 +26,6 @@ test_deps = setup-dev-requirements
 xenial_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=xenial)
 bionic_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bionic)
 focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal)
-stretch_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=stretch)
 buster_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=buster)
 homebrew_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --no-git)
 
@@ -84,11 +83,6 @@ test-bionic: $(test_deps)
 test-focal: $(test_deps)
 	$(MAKE) $(focal_images)
 	./tests/run-tests.sh $(focal_images)
-
-.PHONY: test-stretch
-test-stretch: $(test_deps)
-	$(MAKE) $(stretch_images)
-	./tests/run-tests.sh $(stretch_images)
 
 .PHONY: test-buster
 test-buster: $(test_deps)
