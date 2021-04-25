@@ -45,7 +45,7 @@ repos:
         files: \.(yaml|yml)$
 
   - repo: https://github.com/syntaqx/git-hooks
-    rev: v0.0.16
+    rev: v0.0.17
     hooks:
       - id: shellcheck
       - id: shfmt
