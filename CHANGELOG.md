@@ -15,6 +15,10 @@ Remove support for old operating systems:
 - Use Ubuntu 20.04 LTS as the default environment on Travis
 - Remove Ubuntu 16.04 LTS tests from Travis pipeline
 - Remove macOS High Sierra tests from Travis pipeline
+- Manage development dependencies with [pip-tools]
+- Use local virtualenv when running tasks in the Makefile
+
+[pip-tools]: https://github.com/jazzband/pip-tools
 
 ## [4.0.2] - 2020-09-11
 

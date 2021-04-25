@@ -10,4 +10,7 @@ ansible.cfg
 # pyenv
 .python-version
 
+# virtualenv
+venv/
+
 !.prettierrc.yaml

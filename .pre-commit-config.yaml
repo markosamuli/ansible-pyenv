@@ -79,13 +79,20 @@ repos:
     hooks:
       - id: bandit
 
+  - repo: https://github.com/jazzband/pip-tools
+    rev: 6.1.0
+    hooks:
+      - id: pip-compile
+        files: ^requirements\.dev\.(in|txt)$
+        args: [requirements.dev.in, --output-file, requirements.dev.txt]
+
   # Validate Python code with pylint using local environment
   # to avoid 'import-error' issues.
   - repo: local
     hooks:
       - id: pylint
         name: Lint Python files with pylint
-        entry: python -m pylint
+        entry: ./scripts/pylint.sh
         types: [python]
         language: system
         require_serial: false

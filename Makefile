@@ -1,10 +1,42 @@
+###
+# Makefile configuration
+###
 
-.PHONY: default
-default: help
+.DEFAULT_GOAL := help
+
+# We want our output silent by default, use VERBOSE=1 make <command> ...
+# to get verbose output.
+ifndef VERBOSE
+.SILENT:
+endif
+
+###
+# Define environment variables in the beginning of the file
+###
+
+VENV := venv
+
+###
+# Define local variables after environment variables
+###
+
+setup_deps = setup-dev-requirements
+test_deps = setup-dev-requirements
+
+xenial_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=xenial)
+bionic_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bionic)
+focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal)
+stretch_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=stretch)
+buster_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=buster)
+homebrew_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --no-git)
+
+###
+# This Makefile uses self-documenting help commands
+###
 
 .PHONY: help
 help:  ## print this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort -d | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: all
 all: lint test ## run all linting and tests
@@ -15,48 +47,62 @@ clean: clean-test-images ## clean generated files
 .PHONY: test
 test: update-test-images run-tests ## run all tests
 
-tests/images/%/Dockerfile:
-	./tests/update_test_images.py --dockerfile=$@
+.PHONY:
+setup: $(setup_deps) ## install development dependencies
 
-xenial_images = $(shell ./tests/update_test_images.py --list-only --release=xenial)
+.PHONY: setup-dev-requirements
+setup-dev-requirements: requirements.dev.txt | $(VENV)/bin/pip-sync
+	$(VENV)/bin/pip-sync requirements.dev.txt
+
+$(VENV)/bin/python:
+	python -m venv $(VENV)
+
+$(VENV)/bin/pip-sync $(VENV)/bin/pip-compile: | $(VENV)/bin/python
+	$(VENV)/bin/pip install pip-tools
+
+$(VENV)/bin/pylint: setup-dev-requirements
+
+$(VENV)/bin/pre-commit: setup-dev-requirements
+
+requirements.dev.txt: requirements.dev.in | $(VENV)/bin/pip-compile
+	$(VENV)/bin/pip-compile requirements.dev.in --output-file requirements.dev.txt
+
+tests/images/%/Dockerfile: | $(VENV)/bin/python
+	$(VENV)/bin/python ./tests/update_test_images.py --dockerfile=$@
 
 .PHONY: test-xenial
-test-xenial: $(xenial_images)
+test-xenial: $(test_deps)
+	$(MAKE) $(xenial_images)
 	./tests/run-tests.sh $(xenial_images)
 
-bionic_images = $(shell ./tests/update_test_images.py --list-only --release=bionic)
-
 .PHONY: test-bionic
-test-bionic: $(bionic_images)
+test-bionic: $(test_deps)
+	$(MAKE) $(bionic_images)
 	./tests/run-tests.sh $(bionic_images)
 
-focal_images = $(shell ./tests/update_test_images.py --list-only --release=focal)
-
 .PHONY: test-focal
-test-focal: $(focal_images)
+test-focal: $(test_deps)
+	$(MAKE) $(focal_images)
 	./tests/run-tests.sh $(focal_images)
 
-stretch_images = $(shell ./tests/update_test_images.py --list-only --release=stretch)
-
 .PHONY: test-stretch
-test-stretch: $(stretch_images)
+test-stretch: $(test_deps)
+	$(MAKE) $(stretch_images)
 	./tests/run-tests.sh $(stretch_images)
 
-buster_images = $(shell ./tests/update_test_images.py --list-only --release=buster)
-
 .PHONY: test-buster
-test-buster: $(buster_images)
+test-buster: $(test_deps)
+	$(MAKE) $(buster_images)
 	./tests/run-tests.sh $(buster_images)
 
-homebrew_images = $(shell ./tests/update_test_images.py --list-only --no-git)
-
 .PHONY: test-homebrew
-test-homebrew: $(homebrew_images)
+test-homebrew: $(test_deps)
+	$(MAKE) $(homebrew_images)
 	./tests/run-tests.sh $(homebrew_images)
 
 .PHONY: update-test-images
-update-test-images:
-	./tests/update_test_images.py
+update-test-images: $(test_deps)
+	$(VENV)/bin/python ./tests/update_test_images.py
 
 .PHONY: run-tests
 run-tests:
@@ -79,17 +125,17 @@ PRE_PUSH_HOOKS = .git/hooks/pre-push
 COMMIT_MSG_HOOKS = .git/hooks/commit-msg
 
 .PHONY: lint
-lint: install-git-hooks  ## lint all files
-	pre-commit run -a
+lint: install-git-hooks | $(VENV)/bin/pre-commit ## lint all files
+	$(VENV)/bin/pre-commit run -a
 
 .PHONY: install-git-hooks
 install-git-hooks: $(PRE_COMMIT_HOOKS) $(PRE_PUSH_HOOKS) $(COMMIT_MSG_HOOKS)
 
 $(PRE_COMMIT_HOOKS):
-	pre-commit install --install-hooks
+	$(VENV)/bin/pre-commit install --install-hooks
 
 $(PRE_PUSH_HOOKS):
-	pre-commit install --install-hooks -t pre-push
+	$(VENV)/bin/pre-commit install --install-hooks -t pre-push
 
 $(COMMIT_MSG_HOOKS):
-	pre-commit install --install-hooks -t commit-msg
+	$(VENV)/bin/pre-commit install --install-hooks -t commit-msg

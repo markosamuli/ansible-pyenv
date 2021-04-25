@@ -246,10 +246,10 @@ Use of `.pyenvrc` file and parts used for installing python version taken from
 
 ## Development
 
-Install development dependencies:
+Install development dependencies in a local virtualenv:
 
 ```bash
-pip3 install -r requirements.dev.txt
+make setup
 ```
 
 Install [pre-commit] hooks:

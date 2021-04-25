@@ -144,7 +144,7 @@ jobs:
         - pre-commit --version
       script:
         # shfmt version is too old
-        - export SKIP=shfmt
+        - export SKIP=shfmt,pip-compile
         - pre-commit run -a
 
     # Run tests
