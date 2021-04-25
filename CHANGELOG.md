@@ -25,6 +25,7 @@ Improve local development setup:
 
 - Manage development dependencies with [pip-tools]
 - Use local virtualenv when running tasks in the Makefile
+- Update bandit from 1.6.2 to 1.7.0
 
 Update development dependencies with vulnerabilities:
 
