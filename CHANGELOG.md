@@ -8,6 +8,14 @@ Unreleased changes.
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
 
+### Changes
+
+Remove support for old operating systems:
+
+- Use Ubuntu 20.04 LTS as the default environment on Travis
+- Remove Ubuntu 16.04 LTS tests from Travis pipeline
+- Remove macOS High Sierra tests from Travis pipeline
+
 ## [4.0.2] - 2020-09-11
 
 ### Fixed
