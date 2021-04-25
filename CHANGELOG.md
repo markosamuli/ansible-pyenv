@@ -18,8 +18,8 @@ Unreleased changes.
 Remove support for old operating systems:
 
 - Use Ubuntu 20.04 LTS as the default environment on Travis
-- Remove Ubuntu 16.04 LTS tests from Travis pipeline
-- Remove macOS High Sierra tests from Travis pipeline
+- Remove Ubuntu 16.04 LTS tests
+- Remove macOS High Sierra tests
 - Remove Debian stretch tests
 
 Improve local development setup:
