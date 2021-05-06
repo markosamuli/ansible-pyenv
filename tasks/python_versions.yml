@@ -1,99 +1,26 @@
 ---
-- name: Remove readline from Homebrew on Linux
-  homebrew:
-    name: readline
-    state: absent
-    install_options: "ignore-dependencies"
-    path: "{{ pyenv_brew_path | default(omit) }}"
-  register: pyenv_brew_readline_uninstall
-  changed_when: false
-  when: >-
-    ansible_system == 'Linux'
-    and pyenv_homebrew_on_linux | bool
+- name: Check environment variables
+  assert:
+    that:
+      - "pyenv_bin_path is defined"
+    msg: "pyenv binary path not defined"
 
-- name: Unlink Homebrew OpenSSL on Linux
-  homebrew:
-    name: openssl
-    state: unlinked
-    path: "{{ pyenv_brew_path | default(omit) }}"
-  register: pyenv_brew_openssl_unlink
-  changed_when: false
-  when: >-
-    ansible_system == 'Linux'
-    and pyenv_homebrew_on_linux | bool
-    and pyenv_homebrew_openssl_fix | bool
-
-- name: Install Python interpreters
-  shell: >-
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv install {{ item }}
-  args:
-    executable: "{{ pyenv_install_shell | default(omit) }}"
-    creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
-  with_items: "{{ pyenv_python_versions }}"
-  environment: "{{ pyenv_install_environment }}"
-
-- name: Install readline with Homebrew on Linux # noqa 503
-  homebrew:
-    name: readline
-    state: present
-    path: "{{ pyenv_brew_path | default(omit) }}"
-  changed_when: false
-  when: >-
-    ansible_system == 'Linux'
-    and pyenv_homebrew_on_linux | bool
-    and pyenv_brew_readline_uninstall is defined
-    and pyenv_brew_readline_uninstall.changed
-
-- name: Link Homebrew OpenSSL on Linux # noqa 503
-  homebrew:
-    name: openssl
-    state: linked
-    path: "{{ pyenv_brew_path | default(omit) }}"
-  changed_when: false
-  when: >-
-    ansible_system == 'Linux'
-    and pyenv_homebrew_on_linux | bool
-    and pyenv_homebrew_openssl_fix | bool
-    and pyenv_brew_openssl_unlink is defined
-    and pyenv_brew_openssl_unlink.changed
-
-- name: Get current global version
-  shell: >-
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv global
-  args:
-    executable: "{{ pyenv_install_shell | default(omit) }}"
-  register: pyenv_global_version
+- name: Check that pyenv binary exists
+  stat:
+    path: "{{ pyenv_bin_path }}"
+  register: pyenv_bin_st
+  failed_when: not pyenv_bin_st.stat.exists
   changed_when: false
 
-- name: Set pyenv_global_active fact
-  set_fact:
-    pyenv_global_active: "{{ pyenv_global_version.stdout_lines |
-      join(' ') | trim() }}"
+- name: Install python versions with Git install
+  include_tasks: python_versions_with_git.yml
+  when: (ansible_system == 'Linux' and not pyenv_homebrew_on_linux) or
+    (ansible_os_family == 'Darwin' and not pyenv_install_from_package_manager)
 
-- name: Check if 'system' version is available
-  shell: >-
-    set -o pipefail &&
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv versions | grep -q system
-  args:
-    executable: "{{ pyenv_install_shell | default(omit) }}"
-  register: pyenv_versions_grep_system
-  changed_when: false
-  failed_when: false
-  when: "'system' in pyenv_global"
+- name: Install python versions with Homebrew install
+  include_tasks: python_versions_with_homebrew.yml
+  when: (ansible_system == 'Linux' and pyenv_homebrew_on_linux) or
+    (ansible_os_family == 'Darwin' and pyenv_install_from_package_manager)
 
-- name: Remove 'system' from pyenv_global
-  set_fact:
-    pyenv_global: "{{ pyenv_global | replace('system', '') | trim() }}"
-  when: "'system' in pyenv_global and pyenv_versions_grep_system.rc != 0"
-
-- name: Set pyenv global version to '{{ pyenv_global }}'
-  shell: >-
-    . {{ pyenv_root }}/.pyenvrc &&
-    pyenv global {{ pyenv_global }} &&
-    pyenv rehash
-  args:
-    executable: "{{ pyenv_install_shell | default(omit) }}"
-  when: "pyenv_global is defined and pyenv_global_active != pyenv_global"
+- name: Set global version
+  include_tasks: global_version.yml

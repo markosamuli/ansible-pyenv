@@ -1,0 +1,36 @@
+---
+- name: Get current global version # noqa 305
+  shell: >-
+    {{ pyenv_bin_path }} global
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
+  register: pyenv_global_version
+  changed_when: false
+
+- name: Set pyenv_global_active fact
+  set_fact:
+    pyenv_global_active: "{{ pyenv_global_version.stdout_lines |
+      join(' ') | trim() }}"
+
+- name: Check if 'system' version is available # noqa 305
+  shell: >-
+    {{ pyenv_bin_path }} versions
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
+  register: pyenv_versions
+  changed_when: false
+  failed_when: false
+  when: "'system' in pyenv_global"
+
+- name: Remove 'system' from pyenv_global
+  set_fact:
+    pyenv_global: "{{ pyenv_global | replace('system', '') | trim() }}"
+  when: "'system' in pyenv_global and 'system' not in pyenv_versions.stdout"
+
+- name: Set pyenv global version to '{{ pyenv_global }}'
+  shell: >-
+    {{ pyenv_bin_path }} global {{ pyenv_global }} &&
+    {{ pyenv_bin_path }} rehash
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
+  when: "pyenv_global is defined and pyenv_global_active != pyenv_global"
