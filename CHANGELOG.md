@@ -8,6 +8,11 @@ Unreleased changes.
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
 
+### Breaking changes
+
+- Use Python 3.8 as the default version
+- Do not install Python 3.7 automatically
+
 ### Fixed
 
 - Do not print `docker` path in run-tests.sh
@@ -41,8 +46,9 @@ Update development dependencies with vulnerabilities:
 - Update pylint from 2.5.2 to 2.7.0
 - Bump jinja2 from 2.11.2 to 2.11.3
 
-Update versions:
+Update pyenv and Python versions:
 
+- Install Python 3.9.4
 - Update pyenv to 1.2.27
 - Update default python versions to 3.7.8 and 3.8.9
 
