@@ -36,6 +36,11 @@ Update development dependencies with vulnerabilities:
 - Update pylint from 2.5.2 to 2.7.0
 - Bump jinja2 from 2.11.2 to 2.11.3
 
+Update versions:
+
+- Update pyenv to 1.2.27
+- Update default python versions to 3.7.8 and 3.8.9
+
 [pip-tools]: https://github.com/jazzband/pip-tools
 [travis]: https://github.com/markosamuli/ansible-pyenv/issues/45
 
