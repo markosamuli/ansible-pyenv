@@ -12,15 +12,12 @@ galaxy_info:
     - name: Debian
       versions:
         - buster
-        - stretch
     - name: Ubuntu
       versions:
-        - xenial
         - bionic
         - focal
     - name: MacOSX
       versions:
-        - "10.13"
         - "10.14"
         - "10.15"
   galaxy_tags:

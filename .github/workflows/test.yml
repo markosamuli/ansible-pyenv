@@ -62,50 +62,6 @@ jobs:
         run: ./tests/run-tests.sh ${RELEASE}
       - name: Run tests with Homebrew install
         run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
-  xenial:
-    name: Test on Ubuntu 16.04 LTS (xenial)
-    runs-on: ubuntu-latest
-    env:
-      DISTRIB: ubuntu
-      RELEASE: xenial
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-      - name: Install dependencies
-        run: pip3 install -r requirements.dev.txt
-      - name: Update test images
-        run: |
-          ./tests/update_test_images.py \
-            --distrib=${DISTRIB} \
-            --release=${RELEASE}
-      - name: Run tests with Git install
-        run: ./tests/run-tests.sh ${RELEASE}
-      - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
-  stretch:
-    name: Test on Debian stretch
-    runs-on: ubuntu-latest
-    env:
-      DISTRIB: debian
-      RELEASE: stretch
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-      - name: Install dependencies
-        run: pip3 install -r requirements.dev.txt
-      - name: Update test images
-        run: |
-          ./tests/update_test_images.py \
-            --distrib=${DISTRIB} \
-            --release=${RELEASE}
-      - name: Run tests with Git install
-        run: ./tests/run-tests.sh ${RELEASE}
-      - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
   buster:
     name: Test on Debian buster
     runs-on: ubuntu-latest

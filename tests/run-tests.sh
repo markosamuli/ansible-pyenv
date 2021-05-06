@@ -187,7 +187,7 @@ debug_image() {
         bash -il
 }
 
-if ! command -v docker /dev/null; then
+if ! command -v docker >/dev/null; then
     error "docker not found"
     exit 1
 fi

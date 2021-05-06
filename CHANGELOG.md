@@ -8,6 +8,37 @@ Unreleased changes.
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
 
+### Fixed
+
+- Do not print `docker` path in run-tests.sh
+- Failing `shellcheck` pre-commit hook
+
+### Changed
+
+Remove links to Travis CI as the [tests are no longer working][travis] for
+open source projects.
+
+Remove support for old operating systems:
+
+- Use Ubuntu 20.04 LTS as the default environment on Travis
+- Remove Ubuntu 16.04 LTS tests
+- Remove macOS High Sierra tests
+- Remove Debian stretch tests
+
+Improve local development setup:
+
+- Manage development dependencies with [pip-tools]
+- Use local virtualenv when running tasks in the Makefile
+- Update bandit from 1.6.2 to 1.7.0
+
+Update development dependencies with vulnerabilities:
+
+- Update pylint from 2.5.2 to 2.7.0
+- Bump jinja2 from 2.11.2 to 2.11.3
+
+[pip-tools]: https://github.com/jazzband/pip-tools
+[travis]: https://github.com/markosamuli/ansible-pyenv/issues/45
+
 ## [4.0.2] - 2020-09-11
 
 ### Fixed

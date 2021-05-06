@@ -9,7 +9,7 @@ if: |
   type = pull_request OR \
   branch IN (master, develop)
 
-dist: xenial
+dist: focal
 os: linux
 language: shell
 
@@ -144,7 +144,7 @@ jobs:
         - pre-commit --version
       script:
         # shfmt version is too old
-        - export SKIP=shfmt
+        - export SKIP=shfmt,pip-compile
         - pre-commit run -a
 
     # Run tests
@@ -180,20 +180,6 @@ jobs:
           update: true
 
     - stage: test
-      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 via Git"
-      os: linux
-      dist: xenial
-      env: >-
-        ANSIBLE_VERSION='<2.8.0'
-      addons:
-        apt:
-          packages:
-            - python-pip
-            - python-dev
-            - shellcheck
-          update: true
-
-    - stage: test
       name: "macOS 10.15.5 (Catalina) with Xcode 12 via Homebrew"
       os: osx
       osx_image: xcode12
@@ -217,17 +203,6 @@ jobs:
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Homebrew"
       os: osx
       osx_image: xcode11.2
-      env: >-
-        FROM_PACKAGE_MANAGER='yes'
-      addons:
-        homebrew:
-          brewfile: Brewfile.travis
-          update: true
-
-    - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Homebrew"
-      os: osx
-      osx_image: xcode10.1
       env: >-
         FROM_PACKAGE_MANAGER='yes'
       addons:
@@ -290,16 +265,6 @@ jobs:
       name: "macOS 10.14 (Mojave) with Xcode 11.2 via Git"
       os: osx
       osx_image: xcode11.2
-      env: >-
-        FROM_PACKAGE_MANAGER='no'
-      addons:
-        homebrew:
-          brewfile: Brewfile.travis
-
-    - stage: test
-      name: "macOS 10.13 (High Sierra) with Xcode 10.1 via Git"
-      os: osx
-      osx_image: xcode10.1
       env: >-
         FROM_PACKAGE_MANAGER='no'
       addons:
