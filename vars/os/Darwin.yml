@@ -5,3 +5,5 @@ pyenv_build_requirements_with_homebrew:
   - readline
   - xz
   - gcc
+
+pyenv_brew_path: /usr/local/bin

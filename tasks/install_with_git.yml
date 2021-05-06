@@ -17,3 +17,8 @@
     dest: "{{ pyenv_root }}/plugins/pyenv-virtualenvwrapper"
     version: "{{ pyenv_virtualenvwrapper_version }}"
   when: pyenv_virtualenvwrapper|bool
+
+- name: Set path to pyenv binary
+  set_fact:
+    pyenv_bin_path: "{{ pyenv_root }}/bin/pyenv"
+  when: pyenv_bin_path is undefined

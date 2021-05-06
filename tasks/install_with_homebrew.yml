@@ -4,9 +4,7 @@
     pyenv_required_version: "{{ pyenv_version | regex_replace('^v(.*)$', '\\1') }}"
 
 - name: Homebrew path set
-  when:
-    - pyenv_brew_path is defined
-    - pyenv_brew_path != '' # noqa 602
+  when: pyenv_brew_path is defined and pyenv_brew_path != '' # noqa 602
   block:
     - name: Check brew binary exists
       stat:
@@ -18,6 +16,10 @@
         msg: "brew not found in {{ pyenv_brew_path }}"
       when: not brew_st.stat.exists | bool
 
+    - name: Set path to brew binary
+      set_fact:
+        pyenv_brew_bin_path: "{{ pyenv_brew_path }}/brew"
+
 - name: Install pyenv with Homebrew
   homebrew:
     name: pyenv
@@ -25,8 +27,22 @@
     state: present
     update_homebrew: false
 
+- name: Set path to pyenv binary
+  when: pyenv_bin_path is undefined
+  block:
+    - name: Get pyenv installation prefix
+      shell: "{{ pyenv_brew_bin_path | default('brew') }} --prefix pyenv" # noqa 305
+      args:
+        executable: "{{ pyenv_install_shell | default(omit) }}"
+      register: pyenv_brew_prefix
+      changed_when: false
+
+    - name: Set path to pyenv binary
+      set_fact:
+        pyenv_bin_path: "{{ pyenv_brew_prefix.stdout }}/bin/pyenv"
+
 - name: Get brew info on pyenv package
-  shell: "brew info pyenv --json" # noqa 305
+  shell: "{{ pyenv_brew_bin_path | default('brew') }} info pyenv --json" # noqa 305
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   register: brew_info

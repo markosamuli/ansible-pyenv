@@ -1,0 +1,58 @@
+---
+- name: Remove readline from Homebrew on Linux
+  homebrew:
+    name: readline
+    state: absent
+    install_options: "ignore-dependencies"
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  register: pyenv_brew_readline_uninstall
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+
+- name: Unlink Homebrew OpenSSL on Linux
+  homebrew:
+    name: openssl
+    state: unlinked
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  register: pyenv_brew_openssl_unlink
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+    and pyenv_homebrew_openssl_fix | bool
+
+- name: Install Python interpreters # noqa 305
+  shell: >-
+    {{ pyenv_bin_path }} install {{ item }}
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
+    creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
+  with_items: "{{ pyenv_python_versions }}"
+  environment: "{{ pyenv_install_environment }}"
+
+- name: Install readline with Homebrew on Linux # noqa 503
+  homebrew:
+    name: readline
+    state: present
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+    and pyenv_brew_readline_uninstall is defined
+    and pyenv_brew_readline_uninstall.changed
+
+- name: Link Homebrew OpenSSL on Linux # noqa 503
+  homebrew:
+    name: openssl
+    state: linked
+    path: "{{ pyenv_brew_path | default(omit) }}"
+  changed_when: false
+  when: >-
+    ansible_system == 'Linux'
+    and pyenv_homebrew_on_linux | bool
+    and pyenv_homebrew_openssl_fix | bool
+    and pyenv_brew_openssl_unlink is defined
+    and pyenv_brew_openssl_unlink.changed

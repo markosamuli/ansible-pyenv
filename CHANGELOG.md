@@ -15,6 +15,11 @@ Unreleased changes.
 
 ### Changed
 
+Use `pyenv` binary directly instead of loading the `.pyenvrc` file as suggested
+by [@KentBrockman](https://github.com/KentBrockman) in [PR #39][pr39]. This will
+allow installation of the role using remote SSH connections without the need
+for interactive shell.
+
 Remove links to Travis CI as the [tests are no longer working][travis] for
 open source projects.
 
@@ -43,6 +48,7 @@ Update versions:
 
 [pip-tools]: https://github.com/jazzband/pip-tools
 [travis]: https://github.com/markosamuli/ansible-pyenv/issues/45
+[pr39]: https://github.com/markosamuli/ansible-pyenv/pull/39
 
 ## [4.0.2] - 2020-09-11
 
