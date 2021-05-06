@@ -8,6 +8,12 @@ Unreleased changes.
 
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
 
+## [5.0.0] - 2021-05-06
+
+New release tested with remote install on macOS and Ubuntu Linux.
+
+[5.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v5.0.0
+
 ### Breaking changes
 
 - Use Python 3.8 as the default version
