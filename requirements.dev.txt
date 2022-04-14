@@ -26,8 +26,10 @@ filelock==3.0.12
     # via virtualenv
 gitdb==4.0.7
     # via gitpython
-gitpython==3.1.14
-    # via bandit
+gitpython==3.1.27
+    # via
+    #   -r requirements.dev.in
+    #   bandit
 identify==2.2.4
     # via pre-commit
 isort==5.8.0
