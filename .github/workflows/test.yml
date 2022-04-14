@@ -5,15 +5,11 @@ name: Test
 on:
   pull_request:
     branches:
-      - master
-      - develop
+      - "**"
   push:
     branches:
       - master
       - develop
-      - "bugfix/**"
-      - "feature/**"
-      - "release/**"
     tags:
       - v.*
 
