@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements.dev.txt requirements.dev.in
 #
-astroid==2.5.0
+astroid==2.11.2
     # via pylint
 bandit==1.7.4
     # via -r requirements.dev.in
@@ -16,6 +16,8 @@ click==8.1.2
     # via
     #   -r requirements.dev.in
     #   black
+dill==0.3.4
+    # via pylint
 distlib==0.3.4
     # via virtualenv
 filelock==3.6.0
@@ -49,10 +51,11 @@ pbr==5.8.1
 platformdirs==2.5.1
     # via
     #   black
+    #   pylint
     #   virtualenv
 pre-commit==2.18.1
     # via -r requirements.dev.in
-pylint==2.7.0
+pylint==2.13.5
     # via -r requirements.dev.in
 pyyaml==6.0
     # via
@@ -65,12 +68,15 @@ smmap==5.0.0
 stevedore==3.5.0
     # via bandit
 toml==0.10.2
-    # via
-    #   pre-commit
-    #   pylint
+    # via pre-commit
 tomli==2.0.1
-    # via black
+    # via
+    #   black
+    #   pylint
 virtualenv==20.14.1
     # via pre-commit
 wrapt==1.12.1
     # via astroid
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
