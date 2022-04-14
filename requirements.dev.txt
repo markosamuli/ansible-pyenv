@@ -4,41 +4,37 @@
 #
 #    pip-compile --output-file=requirements.dev.txt requirements.dev.in
 #
-appdirs==1.4.4
-    # via
-    #   black
-    #   virtualenv
 astroid==2.5.0
     # via pylint
 bandit==1.7.4
     # via -r requirements.dev.in
-black==20.8b1
+black==22.3.0
     # via -r requirements.dev.in
-cfgv==3.2.0
+cfgv==3.3.1
     # via pre-commit
-click==7.1.2
+click==8.1.2
     # via
     #   -r requirements.dev.in
     #   black
-distlib==0.3.1
+distlib==0.3.4
     # via virtualenv
-filelock==3.0.12
+filelock==3.6.0
     # via virtualenv
-gitdb==4.0.7
+gitdb==4.0.9
     # via gitpython
 gitpython==3.1.27
     # via
     #   -r requirements.dev.in
     #   bandit
-identify==2.2.4
+identify==2.4.12
     # via pre-commit
-isort==5.8.0
+isort==5.10.1
     # via pylint
 jinja2==2.11.3
     # via -r requirements.dev.in
-lazy-object-proxy==1.6.0
+lazy-object-proxy==1.7.1
     # via astroid
-markupsafe==1.1.1
+markupsafe==2.1.1
     # via jinja2
 mccabe==0.6.1
     # via pylint
@@ -46,36 +42,35 @@ mypy-extensions==0.4.3
     # via black
 nodeenv==1.6.0
     # via pre-commit
-pathspec==0.8.1
+pathspec==0.9.0
     # via black
-pbr==5.5.1
+pbr==5.8.1
     # via stevedore
-pre-commit==2.12.1
+platformdirs==2.5.1
+    # via
+    #   black
+    #   virtualenv
+pre-commit==2.18.1
     # via -r requirements.dev.in
 pylint==2.7.0
     # via -r requirements.dev.in
-pyyaml==5.4.1
+pyyaml==6.0
     # via
     #   bandit
     #   pre-commit
-regex==2021.4.4
-    # via black
-six==1.15.0
+six==1.16.0
     # via virtualenv
-smmap==4.0.0
+smmap==5.0.0
     # via gitdb
-stevedore==3.3.0
+stevedore==3.5.0
     # via bandit
 toml==0.10.2
     # via
-    #   black
     #   pre-commit
     #   pylint
-typed-ast==1.4.3
+tomli==2.0.1
     # via black
-typing-extensions==3.7.4.3
-    # via black
-virtualenv==20.4.4
+virtualenv==20.14.1
     # via pre-commit
 wrapt==1.12.1
     # via astroid

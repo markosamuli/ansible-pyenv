@@ -1,6 +1,6 @@
 bandit==1.7.4
-black==20.8b1
-click==7.1.2
+black==22.3.0
+click>=8.0.0
 jinja2==2.11.3
 pylint==2.7.0
 pre-commit<3,>=2.7.0
