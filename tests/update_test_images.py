@@ -20,7 +20,7 @@ IMAGES_DIR = os.path.join(TESTS_DIR, "images")
 
 TEST_USER = "test"
 REPOSITORY = os.path.basename(PROJECT_ROOT)
-ANSIBLE_VERSION = "<2.9.0,!=2.8.6"
+ANSIBLE_VERSION = "<6.0.0"
 
 env = Environment(
     autoescape=select_autoescape(["html", "htm", "xml"]),
