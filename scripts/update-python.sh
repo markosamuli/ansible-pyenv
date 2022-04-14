@@ -19,10 +19,11 @@ get_latest_cpython_version() {
         jq --arg version_tag "${target_version}" \
             -r 'map(select(.object.type == "tag"))
             | map(select(.ref | test("refs/tags/" + $version_tag)))
-            | map(select(.ref | test("rc") | not))
+            | map(select(.ref | test("rc|0[ab][0-9]") | not))
             | map(.ref)
             | map(capture("refs/tags/v(?<version>.*)"))
-            | sort_by(.version) | last | .version'
+            | sort_by(.version | split(".") | map(tonumber))
+            | last | .version'
     # @formatter:on
 }
 
