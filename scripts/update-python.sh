@@ -26,29 +26,6 @@ get_latest_cpython_version() {
     # @formatter:on
 }
 
-# Get latest stable tag for a GitHub repository
-get_latest_python37_version() {
-    get_latest_cpython_version "v3.7"
-}
-
-# Get latest stable tag for a GitHub repository
-get_latest_python38_version() {
-    get_latest_cpython_version "v3.8"
-}
-
-# Update Ansible variable
-update_python37_version() {
-    local version=$1
-    update_default_variable "pyenv_python37_version" "$version"
-}
-
-# Update Ansible variable
-update_python38_version() {
-    local version=$1
-    update_default_variable "pyenv_python38_version" "$version"
-}
-
-# Update all versions
 update_versions() {
     local target=$1
     if [ -z "${target}" ]; then
@@ -59,32 +36,29 @@ update_versions() {
         error "Python 2.7 is no longer supported"
         exit 1
     elif [ "${target}" == "python3" ]; then
-        error "Use python37 or python38 as the target version"
+        error "Use python37, python38 or python310 as the target version"
         exit 1
     elif [ "${target}" == "python37" ]; then
-        update_python37
+        update_python "python37" "3.7"
     elif [ "${target}" == "python38" ]; then
-        update_python38
+        update_python "python38" "3.8"
+    elif [ "${target}" == "python39" ]; then
+        update_python "python39" "3.9"
+    elif [ "${target}" == "python310" ]; then
+        update_python "python310" "3.10"
     else
         error "Unknown target version: ${target}"
         exit 1
     fi
 }
 
-# Update Python 3.7 version
-update_python37() {
-    local version
-    version=$(get_latest_python37_version)
-    echo "Latest Python 3.7 release is ${version}"
-    update_python37_version "${version}"
-}
-
-# Update Python 3.8 version
-update_python38() {
-    local version
-    version=$(get_latest_python38_version)
-    echo "Latest Python 3.8 release is ${version}"
-    update_python38_version "${version}"
+update_python() {
+    local target=$1
+    local target_version=$2
+    local latest_version
+    latest_version=$(get_latest_cpython_version "v${target_version}")
+    echo "Latest Python ${target_version} release is ${latest_version}"
+    update_default_variable "pyenv_${target}_version" "${latest_version}"
 }
 
 set -e

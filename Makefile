@@ -107,6 +107,8 @@ update: ## update pyenv and Python versions
 	./scripts/update-release.sh pyenv-virtualenv
 	./scripts/update-python.sh python37
 	./scripts/update-python.sh python38
+	./scripts/update-python.sh python39
+	./scripts/update-python.sh python310
 
 PRE_COMMIT_HOOKS = .git/hooks/pre-commit
 PRE_PUSH_HOOKS = .git/hooks/pre-push
