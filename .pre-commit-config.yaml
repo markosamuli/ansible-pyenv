@@ -19,8 +19,8 @@ repos:
       - id: check-yaml
 
   # Format JSON, Markdown and YAML files with Prettier.
-  - repo: https://github.com/prettier/prettier
-    rev: "1.19.1"
+  - repo: https://github.com/pre-commit/mirrors-prettier.git
+    rev: "v2.6.2"
     hooks:
       - id: prettier
         name: Format JSON, Markdown and YAML files
