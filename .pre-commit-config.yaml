@@ -34,7 +34,7 @@ repos:
         verbose: false
 
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.16.0
+    rev: v1.26.3
     hooks:
       - id: yamllint
 
