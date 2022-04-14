@@ -39,7 +39,7 @@ repos:
       - id: yamllint
 
   - repo: https://github.com/ansible/ansible-lint.git
-    rev: v4.3.3
+    rev: v6.0.2
     hooks:
       - id: ansible-lint
         files: \.(yaml|yml)$

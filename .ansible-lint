@@ -1,2 +1,7 @@
+---
 exclude_paths:
-- .travis.yml
+  - .travis.yml
+
+warn_list:
+  - fqcn-builtins # Use FQCN for builtin actions.
+  - yaml # Violations reported by yamllint.
