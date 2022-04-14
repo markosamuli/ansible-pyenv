@@ -1,7 +1,9 @@
 ---
 exclude_paths:
+  - .ansible-lint
   - .travis.yml
+  - .github/workflows/code-quality.yml
+  - .github/workflows/test.yml
 
 warn_list:
-  - fqcn-builtins # Use FQCN for builtin actions.
   - yaml # Violations reported by yamllint.

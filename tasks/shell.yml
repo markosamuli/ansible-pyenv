@@ -1,21 +1,22 @@
 ---
 - name: Set path to .bashrc
-  set_fact:
+  ansible.builtin.set_fact:
     pyenv_bashrc_path: "{{ pyenv_home }}/.bashrc"
   when: pyenv_bashrc_path is undefined
 
 - name: Check whether .bashrc file exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ pyenv_bashrc_path }}"
   register: pyenv_bashrc_st
 
 - name: Resolve .bashrc symlink
-  set_fact:
+  ansible.builtin.set_fact:
     pyenv_bashrc_path: "{{ pyenv_bashrc_st.stat.lnk_source }}"
   when: pyenv_bashrc_st.stat.exists and pyenv_bashrc_st.stat.islnk
 
 - name: Check whether .pyenvrc is loaded in .bashrc
-  command: grep -EFq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_bashrc_path }}
+  ansible.builtin.command: >-
+    grep -EFq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_bashrc_path }}
   register: check_bashrc
   ignore_errors: true
   changed_when: false
@@ -23,7 +24,7 @@
   when: pyenv_bashrc_st.stat.exists
 
 - name: Load pyenv in .bashrc
-  blockinfile:
+  ansible.builtin.blockinfile:
     dest: "{{ pyenv_bashrc_path }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
     block: |
@@ -38,22 +39,23 @@
   when: pyenv_bashrc_st.stat.exists and check_bashrc.rc != 0
 
 - name: Set path to .zshrc
-  set_fact:
+  ansible.builtin.set_fact:
     pyenv_zshrc_path: "{{ pyenv_home }}/.zshrc"
   when: pyenv_zshrc_path is undefined
 
 - name: Check whether .zshrc exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ pyenv_zshrc_path }}"
   register: pyenv_zshrc_st
 
 - name: Resolve .zshrc symlink
-  set_fact:
+  ansible.builtin.set_fact:
     pyenv_zshrc_path: "{{ pyenv_zshrc_st.stat.lnk_source }}"
   when: pyenv_zshrc_st.stat.exists and pyenv_zshrc_st.stat.islnk
 
 - name: Check whether .pyenvrc is loaded in .zshrc
-  command: grep -Fq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_zshrc_path }}
+  ansible.builtin.command: >-
+    grep -Fq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_zshrc_path }}
   register: check_zshrc
   ignore_errors: true
   changed_when: false
@@ -61,7 +63,7 @@
   when: pyenv_zshrc_st.stat.exists
 
 - name: Load pyenv in .zshrc
-  blockinfile:
+  ansible.builtin.blockinfile:
     dest: "{{ pyenv_zshrc_path }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
     block: |

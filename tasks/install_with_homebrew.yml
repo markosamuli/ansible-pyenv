@@ -1,23 +1,23 @@
 ---
 - name: Set required pyenv version
-  set_fact:
+  ansible.builtin.set_fact:
     pyenv_required_version: "{{ pyenv_version | regex_replace('^v(.*)$', '\\1') }}"
 
 - name: Homebrew path set
   when: pyenv_brew_path is defined and pyenv_brew_path != '' # noqa 602
   block:
     - name: Check brew binary exists
-      stat:
+      ansible.builtin.stat:
         path: "{{ pyenv_brew_path }}/brew"
       register: brew_st
 
     - name: Fail if brew binary doesn't exist
-      fail:
+      ansible.builtin.fail:
         msg: "brew not found in {{ pyenv_brew_path }}"
       when: not brew_st.stat.exists | bool
 
     - name: Set path to brew binary
-      set_fact:
+      ansible.builtin.set_fact:
         pyenv_brew_bin_path: "{{ pyenv_brew_path }}/brew"
 
 - name: Install pyenv with Homebrew
@@ -31,29 +31,29 @@
   when: pyenv_bin_path is undefined
   block:
     - name: Get pyenv installation prefix
-      shell: "{{ pyenv_brew_bin_path | default('brew') }} --prefix pyenv" # noqa 305
+      ansible.builtin.shell: "{{ pyenv_brew_bin_path | default('brew') }} --prefix pyenv" # noqa 305
       args:
         executable: "{{ pyenv_install_shell | default(omit) }}"
       register: pyenv_brew_prefix
       changed_when: false
 
     - name: Set path to pyenv binary
-      set_fact:
+      ansible.builtin.set_fact:
         pyenv_bin_path: "{{ pyenv_brew_prefix.stdout }}/bin/pyenv"
 
 - name: Get brew info on pyenv package
-  shell: "{{ pyenv_brew_bin_path | default('brew') }} info pyenv --json" # noqa 305
+  ansible.builtin.shell: "{{ pyenv_brew_bin_path | default('brew') }} info pyenv --json" # noqa 305
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"
   register: brew_info
   changed_when: false
 
 - name: Parse brew info output
-  set_fact:
+  ansible.builtin.set_fact:
     brew_pyenv_info: "{{ brew_info.stdout | from_json | first }}"
 
 - name: Check if pyenv needs to be upgraded
-  set_fact:
+  ansible.builtin.set_fact:
     brew_pyenv_update: "{{ brew_pyenv_info.linked_keg is version(pyenv_required_version, '<') }}"
   when: brew_pyenv_info.linked_keg
 

@@ -1,7 +1,7 @@
 ---
 - name: Install pyenv build requirements
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ pyenv_build_requirements }}"
     state: present
     update_cache: true

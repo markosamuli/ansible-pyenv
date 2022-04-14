@@ -1,6 +1,6 @@
 ---
 - name: Load variables for the target system
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "os/{{ ansible_distribution }}/{{ ansible_distribution_release }}.yml"
     - "os/{{ ansible_distribution }}.yml"
