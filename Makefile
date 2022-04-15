@@ -24,7 +24,7 @@ setup_deps = setup-dev-requirements
 test_deps = setup-dev-requirements
 
 focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal)
-buster_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=buster)
+bullseye_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bullseye)
 homebrew_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --no-git)
 
 ###
@@ -72,10 +72,10 @@ test-focal: $(test_deps)
 	$(MAKE) $(focal_images)
 	./tests/run-tests.sh $(focal_images)
 
-.PHONY: test-buster
-test-buster: $(test_deps)
-	$(MAKE) $(buster_images)
-	./tests/run-tests.sh $(buster_images)
+.PHONY: test-bullseye
+test-bullseye: $(test_deps)
+	$(MAKE) $(bullseye_images)
+	./tests/run-tests.sh $(bullseye_images)
 
 .PHONY: test-homebrew
 test-homebrew: $(test_deps)
