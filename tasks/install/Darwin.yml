@@ -1,7 +1,6 @@
 ---
 - name: Install pyenv build requirements with Homebrew
-  homebrew:
-    name: "{{ pyenv_build_requirements_with_homebrew }}"
+  include_tasks: homebrew_build_requirements.yml
 
 - name: Detect existing pyenv install
   include_tasks: detect_existing_install.yml

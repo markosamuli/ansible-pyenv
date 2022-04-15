@@ -1,0 +1,5 @@
+---
+- name: Install pyenv build requirements with Homebrew
+  become: false
+  homebrew:
+    name: "{{ pyenv_build_requirements_with_homebrew }}"
