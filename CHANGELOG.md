@@ -2,16 +2,24 @@
 
 Only the latest major version is maintained.
 
-## [Unreleased][unreleased]
+## [6.1.0] - 2022-04-15
 
-Unreleased changes.
+Fix breaking changes introduced in pyenv 2.0.0.
 
-[unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
+[6.1.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v6.1.0
+
+### Fixed
+
+- Move PATH configuration to `.zprofile`, `.bash_profile` and `.profile` files
+- Add `community.general` into collections to make `homebrew` available on new
+  Ansible versions
 
 ## [6.0.0] - 2022-04-15
 
 Use pyenv 2.2.5, Python 3.10 and add support for installing with Homebrew on
 Apple M1 chips.
+
+[6.0.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v6.0.0
 
 ### Breaking changes
 
