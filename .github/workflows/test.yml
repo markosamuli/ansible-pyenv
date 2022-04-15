@@ -14,6 +14,22 @@ on:
       - v.*
 
 jobs:
+  macos:
+    name: Test on macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Ansible
+        run: |
+          brew update
+          brew install ansible
+      - name: Test syntax
+        run: |
+          ./tests/test_syntax.sh
+      - name: Test install
+        run: |
+          ./tests/test_install.sh
+
   focal:
     name: Test on Ubuntu 20.04 LTS (focal)
     runs-on: ubuntu-latest
