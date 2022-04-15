@@ -102,8 +102,10 @@ DEBIAN = "debian"
 UBUNTU = "ubuntu"
 
 images = {
-    "debian": {"buster": {}},
-    "ubuntu": {"focal": {"python": "python3"}, "bionic": {}},
+    "debian": {"buster": {"python": "python3"}},
+    "ubuntu": {
+        "focal": {"python": "python3"},
+    },
 }
 
 

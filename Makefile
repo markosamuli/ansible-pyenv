@@ -23,7 +23,6 @@ VENV := venv
 setup_deps = setup-dev-requirements
 test_deps = setup-dev-requirements
 
-bionic_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bionic)
 focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal)
 buster_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=buster)
 homebrew_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --no-git)
@@ -67,11 +66,6 @@ requirements.dev.txt: requirements.dev.in | $(VENV)/bin/pip-compile
 
 tests/images/%/Dockerfile: | $(VENV)/bin/python
 	$(VENV)/bin/python ./tests/update_test_images.py --dockerfile=$@
-
-.PHONY: test-bionic
-test-bionic: $(test_deps)
-	$(MAKE) $(bionic_images)
-	./tests/run-tests.sh $(bionic_images)
 
 .PHONY: test-focal
 test-focal: $(test_deps)
