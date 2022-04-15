@@ -5,7 +5,7 @@ RUN pacman --noconfirm -S ansible sudo
 
 {% if install_homebrew %}
 # Homebrew installationg dependencies
-RUN pacman --noconfirm -S base-devel git
+RUN pacman --noconfirm -S base-devel git ruby
 {% endif %}
 
 ARG user={{ user }}
