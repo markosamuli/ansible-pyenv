@@ -6,13 +6,19 @@ Only the latest major version is maintained.
 
 Unreleased changes.
 
-Support for installing with Homebrew on Apple M1 chips.
+[unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
+
+## [6.0.0] - 2022-04-15
+
+Use pyenv 2.2.5, Python 3.10 and add support for installing with Homebrew on
+Apple M1 chips.
 
 ### Breaking changes
 
 - Update pyenv from 1.2.27 to 2.2.5
 - Use Python 3.10 as the default version
 - Do not install Python 3.8 or Python 3.9 by default
+- Require Ansible 2.10
 
 ### Changed
 
@@ -20,13 +26,18 @@ Support for installing with Homebrew on Apple M1 chips.
 - Update Python 3.7.9 to 3.7.13
 - Update Python 3.8.9 to 3.8.13
 - Update Python 3.9.4 to 3.9.11
+- Run tests on the CI with Python 3.10
+- Update pre-commit hooks to the latest versions
 
 ### Fixed
 
+- Added build requirements for Debian bullseye
 - Python version update script was not sorting versions correctly
 - Update Homebrew installation path to `/opt/homebrew` on Apple M1 chips
-
-[unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
+- Do not try to run tests with Homebrew on Linux on ARM
+- Upgrade jinja2 to 3.1.1
+- Upgrade gitpython to 3.1.27
+- shfmt install on CI pipelines
 
 ## [5.0.0] - 2021-05-06
 
