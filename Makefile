@@ -23,11 +23,7 @@ VENV := venv
 setup_deps = setup-dev-requirements
 test_deps = setup-dev-requirements
 
-ifeq ($(shell uname -m),arm64)
-	TEST_RUN_OPTS = --without-homebrew
-	TEST_IMAGE_OPTS = --no-homebrew
-endif
-
+archlinux_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=archlinux $(TEST_IMAGE_OPTS))
 ubuntu_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=ubuntu $(TEST_IMAGE_OPTS))
 debian_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=debian $(TEST_IMAGE_OPTS))
 focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal $(TEST_IMAGE_OPTS))
@@ -94,11 +90,13 @@ test-bullseye: $(test_deps)
 	$(MAKE) $(bullseye_images)
 	./tests/run-tests.sh $(bullseye_images) $(TEST_RUN_OPTS)
 
+.PHONY: test-archlinux
+test-archlinux: $(test_deps)
+	$(MAKE) $(archlinux_images)
+	./tests/run-tests.sh $(archlinux_images) $(TEST_RUN_OPTS)
+
 .PHONY: test-homebrew
 test-homebrew: $(test_deps)
-ifeq ($(shell uname -m),arm64)
-	$(error "Homebrew on Linux is not supported on ARM")
-endif
 	$(MAKE) $(homebrew_images)
 	./tests/run-tests.sh $(homebrew_images)
 

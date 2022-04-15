@@ -30,7 +30,7 @@ jobs:
         run: |
           ./tests/test_install.sh
 
-  focal:
+  ubuntu:
     name: Test on Ubuntu 20.04 LTS (focal)
     runs-on: ubuntu-latest
     env:
@@ -53,12 +53,35 @@ jobs:
       - name: Run tests with Homebrew install
         run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
 
-  bullseye:
+  debian:
     name: Test on Debian bullseye
     runs-on: ubuntu-latest
     env:
       DISTRIB: debian
       RELEASE: bullseye
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip3 install -r requirements.dev.txt
+      - name: Update test images
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE}
+      - name: Run tests with Git install
+        run: ./tests/run-tests.sh ${RELEASE}
+      - name: Run tests with Homebrew install
+        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
+
+  archlinux:
+    name: Test on Arch Linux
+    runs-on: ubuntu-latest
+    env:
+      DISTRIB: archlinux
+      RELEASE: archlinux
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
