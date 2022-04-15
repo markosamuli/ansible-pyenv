@@ -6,6 +6,26 @@ Only the latest major version is maintained.
 
 Unreleased changes.
 
+Support for installing with Homebrew on Apple M1 chips.
+
+### Breaking changes
+
+- Update pyenv from 1.2.27 to 2.2.5
+- Use Python 3.10 as the default version
+- Do not install Python 3.8 or Python 3.9 by default
+
+### Changed
+
+- Add Python 3.10.3
+- Update Python 3.7.9 to 3.7.13
+- Update Python 3.8.9 to 3.8.13
+- Update Python 3.9.4 to 3.9.11
+
+### Fixed
+
+- Python version update script was not sorting versions correctly
+- Update Homebrew installation path to `/opt/homebrew` on Apple M1 chips
+
 [unreleased]: https://github.com/markosamuli/ansible-pyenv/tree/develop
 
 ## [5.0.0] - 2021-05-06

@@ -24,7 +24,7 @@
     and pyenv_homebrew_openssl_fix | bool
 
 - name: Install Python interpreters # noqa 305
-  shell: >-
+  ansible.builtin.shell: >-
     {{ pyenv_bin_path }} install {{ item }}
   args:
     executable: "{{ pyenv_install_shell | default(omit) }}"

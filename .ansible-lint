@@ -1,2 +1,9 @@
+---
 exclude_paths:
-- .travis.yml
+  - .ansible-lint
+  - .travis.yml
+  - .github/workflows/code-quality.yml
+  - .github/workflows/test.yml
+
+warn_list:
+  - yaml # Violations reported by yamllint.

@@ -1,6 +1,6 @@
 ---
 - name: Check if ~/.pyenv directory already exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ pyenv_root }}"
   register: pyenv_root_st
 
@@ -8,16 +8,16 @@
   when: pyenv_root_st.stat.exists
   block:
     - name: Check if ~/.pyenv directory is a Git repository
-      stat:
+      ansible.builtin.stat:
         path: "{{ pyenv_root }}/.git"
       register: pyenv_root_git_st
 
     - name: Install from Homebrew
-      set_fact:
+      ansible.builtin.set_fact:
         pyenv_install_from_package_manager: true
       when: not pyenv_root_git_st.stat.exists
 
     - name: Install from Git
-      set_fact:
+      ansible.builtin.set_fact:
         pyenv_install_from_package_manager: false
       when: pyenv_root_git_st.stat.exists

@@ -23,9 +23,15 @@ VENV := venv
 setup_deps = setup-dev-requirements
 test_deps = setup-dev-requirements
 
-bionic_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bionic)
-focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal)
-buster_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=buster)
+ifeq ($(shell uname -m),arm64)
+	TEST_RUN_OPTS = --without-homebrew
+	TEST_IMAGE_OPTS = --no-homebrew
+endif
+
+ubuntu_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=ubuntu $(TEST_IMAGE_OPTS))
+debian_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=debian $(TEST_IMAGE_OPTS))
+focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal $(TEST_IMAGE_OPTS))
+bullseye_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bullseye $(TEST_IMAGE_OPTS))
 homebrew_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --no-git)
 
 ###
@@ -68,33 +74,41 @@ requirements.dev.txt: requirements.dev.in | $(VENV)/bin/pip-compile
 tests/images/%/Dockerfile: | $(VENV)/bin/python
 	$(VENV)/bin/python ./tests/update_test_images.py --dockerfile=$@
 
-.PHONY: test-bionic
-test-bionic: $(test_deps)
-	$(MAKE) $(bionic_images)
-	./tests/run-tests.sh $(bionic_images)
+.PHONY: test-ubuntu
+test-ubuntu: $(test_deps)
+	$(MAKE) $(ubuntu_images)
+	./tests/run-tests.sh $(ubuntu_images) $(TEST_RUN_OPTS)
 
 .PHONY: test-focal
 test-focal: $(test_deps)
 	$(MAKE) $(focal_images)
-	./tests/run-tests.sh $(focal_images)
+	./tests/run-tests.sh $(focal_images) $(TEST_RUN_OPTS)
 
-.PHONY: test-buster
-test-buster: $(test_deps)
-	$(MAKE) $(buster_images)
-	./tests/run-tests.sh $(buster_images)
+.PHONY: test-debian
+test-debian: $(test_deps)
+	$(MAKE) $(debian_images)
+	./tests/run-tests.sh $(debian_images) $(TEST_RUN_OPTS)
+
+.PHONY: test-bullseye
+test-bullseye: $(test_deps)
+	$(MAKE) $(bullseye_images)
+	./tests/run-tests.sh $(bullseye_images) $(TEST_RUN_OPTS)
 
 .PHONY: test-homebrew
 test-homebrew: $(test_deps)
+ifeq ($(shell uname -m),arm64)
+	$(error "Homebrew on Linux is not supported on ARM")
+endif
 	$(MAKE) $(homebrew_images)
 	./tests/run-tests.sh $(homebrew_images)
 
 .PHONY: update-test-images
 update-test-images: $(test_deps)
-	$(VENV)/bin/python ./tests/update_test_images.py
+	$(VENV)/bin/python ./tests/update_test_images.py $(TEST_IMAGE_OPTS)
 
 .PHONY: run-tests
 run-tests:
-	./tests/run-tests.sh
+	./tests/run-tests.sh $(TEST_RUN_OPTS)
 
 .PHONY: clean-test-images
 clean-test-images:
@@ -107,6 +121,8 @@ update: ## update pyenv and Python versions
 	./scripts/update-release.sh pyenv-virtualenv
 	./scripts/update-python.sh python37
 	./scripts/update-python.sh python38
+	./scripts/update-python.sh python39
+	./scripts/update-python.sh python310
 
 PRE_COMMIT_HOOKS = .git/hooks/pre-commit
 PRE_PUSH_HOOKS = .git/hooks/pre-push

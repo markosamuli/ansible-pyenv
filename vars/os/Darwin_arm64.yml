@@ -1,0 +1,9 @@
+---
+pyenv_build_requirements: []
+pyenv_build_requirements_with_homebrew:
+  - openssl
+  - readline
+  - xz
+  - gcc
+
+pyenv_brew_path: /opt/homebrew/bin
