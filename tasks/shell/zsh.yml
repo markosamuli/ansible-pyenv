@@ -1,39 +1,100 @@
 ---
-- name: Set path to .zshrc
-  ansible.builtin.set_fact:
-    pyenv_zshrc_path: "{{ pyenv_home }}/.zshrc"
-  when: pyenv_zshrc_path is undefined
+- name: Configure .zprofile
+  block:
+    - name: Set path to .zprofile
+      ansible.builtin.set_fact:
+        pyenv_zprofile_path: "{{ pyenv_home }}/.zprofile"
+      when: pyenv_zprofile_path is undefined
 
-- name: Check whether .zshrc exists
-  ansible.builtin.stat:
-    path: "{{ pyenv_zshrc_path }}"
-  register: pyenv_zshrc_st
+    - name: Check whether .zprofile exists
+      ansible.builtin.stat:
+        path: "{{ pyenv_zprofile_path }}"
+      register: pyenv_zprofile_st
 
-- name: Resolve .zshrc symlink
-  ansible.builtin.set_fact:
-    pyenv_zshrc_path: "{{ pyenv_zshrc_st.stat.lnk_source }}"
-  when: pyenv_zshrc_st.stat.exists and pyenv_zshrc_st.stat.islnk
+    - name: Resolve .zprofile symlink
+      ansible.builtin.set_fact:
+        pyenv_zprofile_path: "{{ pyenv_zprofile_st.stat.lnk_source }}"
+      when: pyenv_zprofile_st.stat.exists and pyenv_zprofile_st.stat.islnk
 
-- name: Check whether .pyenvrc is loaded in .zshrc
-  ansible.builtin.command: >-
-    grep -Fq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_zshrc_path }}
-  register: check_zshrc
-  ignore_errors: true
-  changed_when: false
-  failed_when: false
-  when: pyenv_zshrc_st.stat.exists
+    - name: Check whether pyenv is loaded in .zprofile
+      ansible.builtin.command: >-
+        grep -Fq 'eval "$(pyenv init --path)"' {{ pyenv_zprofile_path }}
+      register: check_zprofile
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_zprofile_st.stat.exists
 
-- name: Load pyenv in .zshrc
-  ansible.builtin.blockinfile:
-    dest: "{{ pyenv_zshrc_path }}"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
-    block: |
-      if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
-        source $HOME/.pyenv/.pyenvrc
-        if [ -e "$HOME/.pyenv/completions/pyenv.zsh" ]; then
-          source $HOME/.pyenv/completions/pyenv.zsh
-        elif [ -e "/usr/local/opt/pyenv/completions/pyenv.zsh" ]; then
-          source /usr/local/opt/pyenv/completions/pyenv.zsh
-        fi
-      fi
-  when: pyenv_zshrc_st.stat.exists and check_zshrc.rc != 0
+    - name: Configure .zprofile and create if missing
+      when: not pyenv_zprofile_st.stat.exists or check_zprofile.rc != 0
+      block:
+        - name: Load pyenv in .zprofile (Git checkout)
+          ansible.builtin.blockinfile:
+            dest: "{{ pyenv_zprofile_path }}"
+            create: true
+            mode: "0644"
+            marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+            block: |
+              export PYENV_ROOT="$HOME/.pyenv"
+              export PATH="$PYENV_ROOT/bin:$PATH"
+              eval "$(pyenv init --path)"
+          when: (ansible_system == 'Linux' and not pyenv_homebrew_on_linux) or
+            (ansible_os_family == 'Darwin' and not pyenv_install_from_package_manager)
+        - name: Load pyenv in .zprofile (Homebrew install)
+          ansible.builtin.blockinfile:
+            dest: "{{ pyenv_zprofile_path }}"
+            create: true
+            mode: "0644"
+            marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+            block: |
+              eval "$(pyenv init --path)"
+          when: (ansible_system == 'Linux' and pyenv_homebrew_on_linux) or
+            (ansible_os_family == 'Darwin' and pyenv_install_from_package_manager)
+
+- name: Configure .zshrc
+  block:
+    - name: Set path to .zshrc
+      ansible.builtin.set_fact:
+        pyenv_zshrc_path: "{{ pyenv_home }}/.zshrc"
+      when: pyenv_zshrc_path is undefined
+
+    - name: Check whether .zshrc exists
+      ansible.builtin.stat:
+        path: "{{ pyenv_zshrc_path }}"
+      register: pyenv_zshrc_st
+
+    - name: Resolve .zshrc symlink
+      ansible.builtin.set_fact:
+        pyenv_zshrc_path: "{{ pyenv_zshrc_st.stat.lnk_source }}"
+      when: pyenv_zshrc_st.stat.exists and pyenv_zshrc_st.stat.islnk
+
+    - name: Check whether .pyenvrc is loaded in .zshrc
+      ansible.builtin.command: >-
+        grep -Fq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_zshrc_path }}
+      register: check_zshrc_pyenvrc
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_zshrc_st.stat.exists
+
+    - name: Check whether pyenv is loaded in .zshrc
+      ansible.builtin.command: >-
+        grep -Fq 'eval "$(pyenv init -)"' {{ pyenv_zshrc_path }}
+      register: check_zshrc_pyenv
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_zshrc_st.stat.exists
+
+    - name: Load pyenv in .zshrc
+      ansible.builtin.blockinfile:
+        dest: "{{ pyenv_zshrc_path }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+        block: |
+          if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
+            source $HOME/.pyenv/.pyenvrc
+          fi
+      when:
+        - pyenv_zshrc_st.stat.exists
+        - check_zshrc_pyenvrc.rc != 0
+        - check_zshrc_pyenv.rc != 0

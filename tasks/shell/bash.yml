@@ -1,39 +1,154 @@
 ---
-- name: Set path to .bashrc
-  ansible.builtin.set_fact:
-    pyenv_bashrc_path: "{{ pyenv_home }}/.bashrc"
-  when: pyenv_bashrc_path is undefined
+- name: Find .bash_profile and .profile files
+  block:
+    - name: Set path to .bash_profile
+      ansible.builtin.set_fact:
+        pyenv_bash_profile_path: "{{ pyenv_home }}/.bash_profile"
+      when: pyenv_bash_profile_path is undefined
 
-- name: Check whether .bashrc file exists
-  ansible.builtin.stat:
-    path: "{{ pyenv_bashrc_path }}"
-  register: pyenv_bashrc_st
+    - name: Check whether .bash_profile exists
+      ansible.builtin.stat:
+        path: "{{ pyenv_bash_profile_path }}"
+      register: pyenv_bash_profile_st
 
-- name: Resolve .bashrc symlink
-  ansible.builtin.set_fact:
-    pyenv_bashrc_path: "{{ pyenv_bashrc_st.stat.lnk_source }}"
-  when: pyenv_bashrc_st.stat.exists and pyenv_bashrc_st.stat.islnk
+    - name: Set path to .profile
+      ansible.builtin.set_fact:
+        pyenv_profile_path: "{{ pyenv_home }}/.profile"
+      when: pyenv_profile_path is undefined
 
-- name: Check whether .pyenvrc is loaded in .bashrc
-  ansible.builtin.command: >-
-    grep -EFq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_bashrc_path }}
-  register: check_bashrc
-  ignore_errors: true
-  changed_when: false
-  failed_when: false
-  when: pyenv_bashrc_st.stat.exists
+    - name: Check whether .profile exists
+      ansible.builtin.stat:
+        path: "{{ pyenv_profile_path }}"
+      register: pyenv_profile_st
 
-- name: Load pyenv in .bashrc
-  ansible.builtin.blockinfile:
-    dest: "{{ pyenv_bashrc_path }}"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
-    block: |
-      if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
-        source $HOME/.pyenv/.pyenvrc
-        if [ -e "$HOME/.pyenv/completions/pyenv.bash" ]; then
-          source $HOME/.pyenv/completions/pyenv.bash
-        elif [ -e "/usr/local/opt/pyenv/completions/pyenv.bash" ]; then
-          source /usr/local/opt/pyenv/completions/pyenv.bash
-        fi
-      fi
-  when: pyenv_bashrc_st.stat.exists and check_bashrc.rc != 0
+- name: Configure .bash_profile
+  when: pyenv_bash_profile_st.stat.exists
+  block:
+    - name: Resolve .bash_profile symlink
+      ansible.builtin.set_fact:
+        pyenv_bash_profile_path: "{{ pyenv_bash_profile_st.stat.lnk_source }}"
+      when: pyenv_bash_profile_st.stat.exists and pyenv_bash_profile_st.stat.islnk
+
+    - name: Check whether pyenv is loaded in .bash_profile
+      ansible.builtin.command: >-
+        grep -Fq 'eval "$(pyenv init --path)"' {{ pyenv_bash_profile_path }}
+      register: check_bash_profile
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_bash_profile_st.stat.exists
+
+    - name: Load pyenv in .bash_profile
+      ansible.builtin.blockinfile:
+        dest: "{{ pyenv_bash_profile_path }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+        block: |
+          export PYENV_ROOT="$HOME/.pyenv"
+          export PATH="$PYENV_ROOT/bin:$PATH"
+          eval "$(pyenv init --path)"
+      when: pyenv_bash_profile_st.stat.exists and check_bash_profile.rc != 0
+
+    - name: Create new .bash_profile
+      ansible.builtin.blockinfile:
+        dest: "{{ pyenv_bash_profile_path }}"
+        create: true
+        mode: "0644"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+        block: |
+          export PYENV_ROOT="$HOME/.pyenv"
+          export PATH="$PYENV_ROOT/bin:$PATH"
+          eval "$(pyenv init --path)"
+          if [ -f ~/.bashrc ]; then
+            source ~/.bashrc
+          fi
+      when: not pyenv_bash_profile_st.stat.exists
+
+- name: Configure .profile
+  when: not pyenv_bash_profile_st.stat.exists
+  block:
+    - name: Resolve .profile symlink
+      ansible.builtin.set_fact:
+        pyenv_profile_path: "{{ pyenv_profile_st.stat.lnk_source }}"
+      when: pyenv_profile_st.stat.exists and pyenv_profile_st.stat.islnk
+
+    - name: Check whether pyenv is loaded in .profile
+      ansible.builtin.command: >-
+        grep -Fq 'eval "$(pyenv init --path)"' {{ pyenv_profile_path }}
+      register: check_profile
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_profile_st.stat.exists
+
+    - name: Load pyenv in .profile
+      ansible.builtin.blockinfile:
+        dest: "{{ pyenv_profile_path }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+        block: |
+          export PYENV_ROOT="$HOME/.pyenv"
+          export PATH="$PYENV_ROOT/bin:$PATH"
+          eval "$(pyenv init --path)"
+      when: pyenv_profile_st.stat.exists and check_profile.rc != 0
+
+    - name: Create new .profile
+      ansible.builtin.blockinfile:
+        dest: "{{ pyenv_profile_path }}"
+        create: true
+        mode: "0644"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+        block: |
+          export PYENV_ROOT="$HOME/.pyenv"
+          export PATH="$PYENV_ROOT/bin:$PATH"
+          eval "$(pyenv init --path)"
+          if [ -n "$PS1" -a -n "$BASH_VERSION" ] && [ -f ~/.bashrc ]; then
+            source ~/.bashrc
+          fi
+      when: not pyenv_profile_st.stat.exists
+
+- name: Configure .bashrc
+  block:
+    - name: Set path to .bashrc
+      ansible.builtin.set_fact:
+        pyenv_bashrc_path: "{{ pyenv_home }}/.bashrc"
+      when: pyenv_bashrc_path is undefined
+
+    - name: Check whether .bashrc file exists
+      ansible.builtin.stat:
+        path: "{{ pyenv_bashrc_path }}"
+      register: pyenv_bashrc_st
+
+    - name: Resolve .bashrc symlink
+      ansible.builtin.set_fact:
+        pyenv_bashrc_path: "{{ pyenv_bashrc_st.stat.lnk_source }}"
+      when: pyenv_bashrc_st.stat.exists and pyenv_bashrc_st.stat.islnk
+
+    - name: Check whether .pyenvrc is loaded in .bashrc
+      ansible.builtin.command: >-
+        grep -EFq 'source $HOME/.pyenv/.pyenvrc' {{ pyenv_bashrc_path }}
+      register: check_bashrc_pyenvrc
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_bashrc_st.stat.exists
+
+    - name: Check whether pyenv is loaded in .bashrc
+      ansible.builtin.command: >-
+        grep -EFq 'eval "$(pyenv init -)"' {{ pyenv_bashrc_path }}
+      register: check_bashrc_pyenv
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      when: pyenv_bashrc_st.stat.exists
+
+    - name: Load pyenv in .bashrc
+      ansible.builtin.blockinfile:
+        dest: "{{ pyenv_bashrc_path }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+        block: |
+          if [ -e "$HOME/.pyenv/.pyenvrc" ]; then
+            source $HOME/.pyenv/.pyenvrc
+          fi
+      when:
+        - pyenv_bashrc_st.stat.exists
+        - check_bashrc_pyenvrc.rc != 0
+        - check_bashrc_pyenv.rc != 0
