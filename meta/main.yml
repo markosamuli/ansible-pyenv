@@ -15,10 +15,9 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - focal
-    - name: MacOSX
+    - name: macOS
       versions:
-        - "10.14"
-        - "10.15"
+        - "Monterey"
   galaxy_tags:
     - osx
     - macos
