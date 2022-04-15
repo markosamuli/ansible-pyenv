@@ -93,8 +93,7 @@ jobs:
         run: |
           ./tests/update_test_images.py \
             --distrib=${DISTRIB} \
-            --release=${RELEASE}
+            --release=${RELEASE} \
+            --no-homebrew
       - name: Run tests with Git install
         run: ./tests/run-tests.sh ${RELEASE}
-      - name: Run tests with Homebrew install
-        run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
