@@ -30,14 +30,19 @@ jobs:
         run: |
           ./tests/test_install.sh
 
-  focal:
-    name: Test on Ubuntu 20.04 LTS (focal)
+  ubuntu:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distrib: [ubuntu]
+        release: [focal]
+        install_with: [git, homebrew]
+    name: Test - ${{ matrix.distrib }} ${{ matrix.release }} - ${{ matrix.install_with }}
     env:
-      DISTRIB: ubuntu
-      RELEASE: focal
+      DISTRIB: ${{ matrix.distrib }}
+      RELEASE: ${{ matrix.release }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: "3.10"
@@ -50,17 +55,24 @@ jobs:
             --release=${RELEASE}
       - name: Run tests with Git install
         run: ./tests/run-tests.sh ${RELEASE}
+        if: ${{ matrix.install_with == 'git' }}
       - name: Run tests with Homebrew install
         run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
+        if: ${{ matrix.install_with == 'homebrew' }}
 
-  bullseye:
-    name: Test on Debian bullseye
+  debian:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distrib: [debian]
+        release: [bullseye]
+        install_with: [git, homebrew]
+    name: Test - ${{ matrix.distrib }} ${{ matrix.release }} - ${{ matrix.install_with }}
     env:
-      DISTRIB: debian
-      RELEASE: bullseye
+      DISTRIB: ${{ matrix.distrib }}
+      RELEASE: ${{ matrix.release }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: "3.10"
@@ -73,5 +85,35 @@ jobs:
             --release=${RELEASE}
       - name: Run tests with Git install
         run: ./tests/run-tests.sh ${RELEASE}
+        if: ${{ matrix.install_with == 'git' }}
       - name: Run tests with Homebrew install
         run: ./tests/run-tests.sh ${RELEASE}-with-homebrew
+        if: ${{ matrix.install_with == 'homebrew' }}
+
+  archlinux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distrib: [archlinux]
+        release: [archlinux]
+        install_with: [git]
+    name: Test - ${{ matrix.distrib }} ${{ matrix.release }} - ${{ matrix.install_with }}
+    env:
+      DISTRIB: ${{ matrix.distrib }}
+      RELEASE: ${{ matrix.release }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip3 install -r requirements.dev.txt
+      - name: Update test images
+        run: |
+          ./tests/update_test_images.py \
+            --distrib=${DISTRIB} \
+            --release=${RELEASE} \
+            --no-homebrew
+      - name: Run tests with Git install
+        run: ./tests/run-tests.sh ${RELEASE}
+        if: ${{ matrix.install_with == 'git' }}

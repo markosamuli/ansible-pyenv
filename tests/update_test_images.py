@@ -46,12 +46,14 @@ def build_target(
     return target_dir, target_file
 
 
+# pylint: disable=too-many-arguments,too-many-locals
 def create_dockerfile(
     docker_image: str,
     docker_tag: str,
     install_homebrew: bool = False,
     python: str = None,
     list_only: bool = False,
+    os_family: str = None,
 ) -> Tuple[str, str]:
     """
     Create Dockerfile in the target directory
@@ -62,6 +64,9 @@ def create_dockerfile(
 
     if list_only:
         return target_dir, target_file
+
+    if not os_family:
+        raise Exception("os_family not defined")
 
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
@@ -77,7 +82,7 @@ def create_dockerfile(
 
     print(f"*** Updating {target_file}")
 
-    template = env.get_template("Dockerfile.jinja2")
+    template = env.get_template(f"Dockerfile.{os_family}.jinja2")
     dockerfile_data = template.render(ctx)
     with open(target_file, "w", encoding="utf-8") as dockerfile:
         dockerfile.write(dockerfile_data)
@@ -98,14 +103,12 @@ def create_dockerfile(
     return target_dir, target_file
 
 
-DEBIAN = "debian"
-UBUNTU = "ubuntu"
-
 images = {
-    "debian": {"bullseye": {"python": "python3"}},
+    "debian": {"bullseye": {"python": "python3", "os_family": "debian"}},
     "ubuntu": {
-        "focal": {"python": "python3"},
+        "focal": {"python": "python3", "os_family": "debian"},
     },
+    "archlinux": {"archlinux": {"os_family": "archlinux"}},
 }
 
 

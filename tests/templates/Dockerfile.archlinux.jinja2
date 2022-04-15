@@ -1,0 +1,36 @@
+FROM archlinux:latest
+
+RUN pacman --noconfirm -Syu
+RUN pacman --noconfirm -S ansible sudo
+
+{% if install_homebrew %}
+# Homebrew installationg dependencies
+RUN pacman --noconfirm -S base-devel git ruby
+{% endif %}
+
+ARG user={{ user }}
+ARG repository={{ repository }}
+
+# Create test user
+RUN useradd -m ${user} -s /bin/bash \
+    && echo "${user}:${user}" | chpasswd \
+    && groupadd sudo \
+    && gpasswd -a ${user} sudo \
+    && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN touch /home/${user}/.zshrc \
+    && chown -R ${user}:${user} /home/${user}
+
+# Create directory for code
+RUN mkdir -p /home/${user}/${repository} \
+    && chown -R ${user}:${user} /home/${user}/${repository}
+VOLUME ["/home/${user}/${repository}"]
+
+{% if install_homebrew %}
+# Install Homebrew
+ADD install_homebrew.sh /home/${user}/install_homebrew.sh
+RUN chown ${user}:${user} /home/${user}/install_homebrew.sh \
+    && chmod u+x /home/${user}/install_homebrew.sh \
+    && sudo -i -u ${user} /home/${user}/install_homebrew.sh
+{% endif %}
+
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

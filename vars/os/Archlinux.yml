@@ -1,0 +1,8 @@
+---
+pyenv_build_requirements:
+  - git
+  - base-devel
+  - openssl
+  - zlib
+  - xz
+pyenv_build_requirements_with_homebrew: []
