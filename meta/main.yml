@@ -25,3 +25,5 @@ galaxy_info:
     - python
     - development
 dependencies: []
+collections:
+  - community.general
