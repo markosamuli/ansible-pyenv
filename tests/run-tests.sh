@@ -6,6 +6,12 @@ PROJECT_ROOT=$(dirname "$TESTS_DIR")
 ROLE_NAME="$(basename "$PROJECT_ROOT")"
 TEST_HOME=/home/test
 
+if [[ $(uname -m) == arm64 ]]; then
+    USE_BUILDKIT=${USE_BUILDKIT:-true}
+else
+    USE_BUILDKIT=${USE_BUILDKIT:-false}
+fi
+
 IMAGES_DIR="images"
 
 docker_run_opts=()
@@ -18,7 +24,6 @@ error() {
     echo "$@" 1>&2
 }
 
-# Detect Windows Subsystem for Linux
 detect_wsl() {
     is_wsl=0
     if [[ -d "/run/WSL" ]]; then
@@ -52,7 +57,6 @@ setup_docker_opts() {
     fi
 }
 
-# Stop all containers
 finish() {
     local containers=""
     containers=$(docker ps -q --filter=name="${ROLE_NAME}")
@@ -63,7 +67,6 @@ finish() {
     fi
 }
 
-# Stop container
 stop() {
     local image=$1
     local container_name="${ROLE_NAME}-${image}-tests"
@@ -71,7 +74,6 @@ stop() {
     docker stop "${container_name}"
 }
 
-# Build image
 build() {
     local image=$1
     local image_name="${ROLE_NAME}-${image}"
@@ -85,14 +87,30 @@ build() {
     docker build -t "${image_name}" "${image_dir}"
 }
 
-# Start container in the background
+build_using_buildkit() {
+    local image=$1
+    local platform=$2
+    local image_name="${ROLE_NAME}-${image}"
+    local image_dir="${TESTS_DIR}/${IMAGES_DIR}/${image}"
+    local dockerfile="${image_dir}/Dockerfile"
+    echo "*** Build image ${image}"
+    docker buildx build --platform "${platform}" -t "${image_name}" "${image_dir}"
+}
+
 start() {
     local image=$1
+    local platform=$2
     local image_name="${ROLE_NAME}-${image}"
     local container_name="${ROLE_NAME}-${image}-tests"
+    local start_opts=()
+    if [ -n "${platform}" ]; then
+        start_opts+=("--platform")
+        start_opts+=("${platform}")
+    fi
     echo "*** Start container with image ${image}"
     docker run --rm -d \
         "${docker_run_opts[@]}" \
+        "${start_opts[@]}" \
         -e "TEST_ENV=${image}" \
         -v "${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME}" \
         --name "${container_name}" \
@@ -104,16 +122,17 @@ start() {
 
 run_tests() {
     local image=$1
+    local platform=$2
     if [[ $image == *"homebrew"* ]]; then
         if [ "${test_with_homebrew}" == "true" ]; then
-            run_tests_with_homebrew "$image" || {
+            run_tests_with_homebrew "$image" "$platform" || {
                 error "failed Homebrew installation in ${image}"
                 return 1
             }
         fi
     else
         if [ "${test_with_git}" == "true" ]; then
-            run_tests_with_git "$image" || {
+            run_tests_with_git "$image" "$platform" || {
                 error "failed Git installation in ${image}"
                 return 1
             }
@@ -123,6 +142,7 @@ run_tests() {
 
 run_tests_with_git() {
     local image=$1
+    local platform=$2
     local test_scripts=(
         "test_syntax.sh"
         "test_install.sh"
@@ -130,7 +150,7 @@ run_tests_with_git() {
     local failed=0
     echo "*** Run tests installing with Git install"
     for test_script in "${test_scripts[@]}"; do
-        start "${image}"
+        start "${image}" "${platform}"
         run_test_script "${image}" "${test_script}" || failed=1
         stop "${image}"
         # Give Docker time to clean up
@@ -143,6 +163,7 @@ run_tests_with_git() {
 
 run_tests_with_homebrew() {
     local image=$1
+    local platform=$2
     local test_scripts=(
         "test_syntax.sh"
         "test_install_with_homebrew.sh"
@@ -150,7 +171,7 @@ run_tests_with_homebrew() {
     local failed=0
     echo "*** Run tests installing with Homebrew install"
     for test_script in "${test_scripts[@]}"; do
-        start "${image}"
+        start "${image}" "${platform}"
         run_test_script "${image}" "${test_script}" || failed=1
         stop "${image}"
         # Give Docker time to clean up
@@ -242,6 +263,10 @@ images=("${images[@]/tests\//}")
 images=("${images[@]/images\//}")
 images=("${images[@]/\/Dockerfile/}")
 
+platforms=(
+    "linux/amd64"
+)
+
 cd "${PROJECT_ROOT}"
 
 setup_mount_root
@@ -249,10 +274,19 @@ setup_mount_root
 set -e
 
 for i in "${images[@]}"; do
-    build "$i" || {
-        error "failed to build $i"
-        exit 1
-    }
+    if [ "${USE_BUILDKIT}" == "true" ]; then
+        for p in "${platforms[@]}"; do
+            build_using_buildkit "$i" "$p" || {
+                error "failed to build $i for platform $p"
+                exit 1
+            }
+        done
+    else
+        build "$i" || {
+            error "failed to build $i"
+            exit 1
+        }
+    fi
 done
 
 if [ "${debug}" == "true" ]; then
@@ -263,9 +297,18 @@ if [ "${debug}" == "true" ]; then
     debug_image "${images[0]}"
 else
     for i in "${images[@]}"; do
-        run_tests "$i" || {
-            error "failed tests in $i"
-            exit 1
-        }
+        if [ "${USE_BUILDKIT}" == "true" ]; then
+            for p in "${platforms[@]}"; do
+                run_tests "$i" "$p" || {
+                    error "failed tests $i on platform $p"
+                    exit 1
+                }
+            done
+        else
+            run_tests "$i" || {
+                error "failed tests in $i"
+                exit 1
+            }
+        fi
     done
 fi
