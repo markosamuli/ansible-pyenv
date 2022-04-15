@@ -5,19 +5,15 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/blob/master/LICENSE)
 
-| Branch  | Tests                                         | Code Quality                                                |
-| ------- | --------------------------------------------- | ----------------------------------------------------------- |
-| master  | [![Test][test-master]][test-actions-master]   | [![Code Quality][quality-master]][quality-actions-master]   |
-| develop | [![Test][test-develop]][test-actions-develop] | [![Code Quality][quality-develop]][quality-actions-develop] |
+| Branch  | Pipeline                                       |
+| ------- | ---------------------------------------------- |
+| master  | [![master][status-master]][pipeline-master]    |
+| develop | [![develop][status-develop]][pipeline-develop] |
 
-[test-actions-master]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/test.yml?query=branch%3Amaster
-[test-actions-develop]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/test.yml?query=branch%3Adevelop
-[test-master]: https://github.com/markosamuli/ansible-pyenv/workflows/Test/badge.svg?branch=master
-[test-develop]: https://github.com/markosamuli/ansible-pyenv/workflows/Test/badge.svg?branch=develop
-[quality-actions-master]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/code-quality.yml?query=branch%3Amaster
-[quality-actions-develop]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/code-quality.yml?query=branch%3Adevelop
-[quality-master]: https://github.com/markosamuli/ansible-pyenv/workflows/Code%20Quality/badge.svg?branch=master
-[quality-develop]: https://github.com/markosamuli/ansible-pyenv/workflows/Code%20Quality/badge.svg?branch=develop
+[pipeline-master]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/pipeline.yml?query=branch%3Amaster
+[pipeline-develop]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/pipeline.yml?query=branch%3Adevelop
+[status-master]: https://github.com/markosamuli/ansible-pyenv/workflows/pipeline/badge.svg?branch=master
+[status-develop]: https://github.com/markosamuli/ansible-pyenv/workflows/pipeline/badge.svg?branch=develop
 
 Ansible role to install [pyenv] and [pyenv-virtualenv] on Ubuntu or macOS
 development machines.
