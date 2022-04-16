@@ -5,15 +5,12 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-pyenv.svg)](https://github.com/markosamuli/ansible-pyenv/blob/master/LICENSE)
 
-| Branch  | Pipeline                                       |
-| ------- | ---------------------------------------------- |
-| master  | [![master][status-master]][pipeline-master]    |
-| develop | [![develop][status-develop]][pipeline-develop] |
+| Branch | Pipeline                                    |
+| ------ | ------------------------------------------- |
+| master | [![master][status-master]][pipeline-master] |
 
 [pipeline-master]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/pipeline.yml?query=branch%3Amaster
-[pipeline-develop]: https://github.com/markosamuli/ansible-pyenv/actions/workflows/pipeline.yml?query=branch%3Adevelop
 [status-master]: https://github.com/markosamuli/ansible-pyenv/workflows/Test%20and%20release/badge.svg?branch=master
-[status-develop]: https://github.com/markosamuli/ansible-pyenv/workflows/Test%20and%20release/badge.svg?branch=develop
 
 Ansible role to install [pyenv] and [pyenv-virtualenv] on Ubuntu or macOS
 development machines.
