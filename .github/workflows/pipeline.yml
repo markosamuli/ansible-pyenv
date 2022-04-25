@@ -68,8 +68,12 @@ jobs:
     strategy:
       matrix:
         distrib: [ubuntu]
-        release: [focal, jammy]
+        release: [focal]
         install_with: [git, homebrew]
+        include:
+          - distrib: ubuntu
+            release: jammy
+            install_with: git
     name: Test - ${{ matrix.distrib }} ${{ matrix.release }} - ${{ matrix.install_with }}
     env:
       DISTRIB: ${{ matrix.distrib }}

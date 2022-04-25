@@ -23,12 +23,19 @@ VENV := venv
 setup_deps = setup-dev-requirements
 test_deps = setup-dev-requirements
 
-archlinux_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=archlinux $(TEST_IMAGE_OPTS))
-ubuntu_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=ubuntu $(TEST_IMAGE_OPTS))
-debian_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --distrib=debian $(TEST_IMAGE_OPTS))
-focal_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=focal $(TEST_IMAGE_OPTS))
-bullseye_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --release=bullseye $(TEST_IMAGE_OPTS))
-homebrew_images = $(shell $(VENV)/bin/python ./tests/update_test_images.py --list-only --no-git)
+update_test_images := ./tests/update_test_images.py
+
+archlinux_template = tests/templates/Dockerfile.archlinux.jinja2
+archlinux_images := $(addsuffix /Dockerfile,$(addprefix tests/images/,archlinux archlinux-with-homebrew))
+
+debian_template = tests/templates/Dockerfile.debian.jinja2
+ubuntu_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --distrib=ubuntu $(TEST_IMAGE_OPTS))
+debian_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --distrib=debian $(TEST_IMAGE_OPTS))
+focal_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --release=focal $(TEST_IMAGE_OPTS))
+jammy_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --release=jammy --no-homebrew $(TEST_IMAGE_OPTS))
+bullseye_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --release=bullseye $(TEST_IMAGE_OPTS))
+
+homebrew_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --no-git)
 
 ###
 # This Makefile uses self-documenting help commands
@@ -67,8 +74,11 @@ $(VENV)/bin/pre-commit: setup-dev-requirements
 requirements.dev.txt: requirements.dev.in | $(VENV)/bin/pip-compile
 	$(VENV)/bin/pip-compile requirements.dev.in --output-file requirements.dev.txt
 
-tests/images/%/Dockerfile: | $(VENV)/bin/python
-	$(VENV)/bin/python ./tests/update_test_images.py --dockerfile=$@
+$(archlinux_images): $(archlinux_template) $(update_test_images) | $(VENV)/bin/python
+	$(VENV)/bin/python $(update_test_images) --dockerfile=$@
+
+tests/images/%/Dockerfile: $(debian_template) $(update_test_images) | $(VENV)/bin/python
+	$(VENV)/bin/python $(update_test_images) --dockerfile=$@
 
 .PHONY: test-ubuntu
 test-ubuntu: $(test_deps)
@@ -79,6 +89,11 @@ test-ubuntu: $(test_deps)
 test-focal: $(test_deps)
 	$(MAKE) $(focal_images)
 	./tests/run-tests.sh $(focal_images) $(TEST_RUN_OPTS)
+
+.PHONY: test-jammy
+test-jammy: $(test_deps)
+	$(MAKE) $(jammy_images)
+	./tests/run-tests.sh $(jammy_images) $(TEST_RUN_OPTS)
 
 .PHONY: test-debian
 test-debian: $(test_deps)
