@@ -26,7 +26,7 @@ test_deps = setup-dev-requirements
 update_test_images := ./tests/update_test_images.py
 
 archlinux_template = tests/templates/Dockerfile.archlinux.jinja2
-archlinux_images := $(addsuffix /Dockerfile,$(addprefix tests/images/,archlinux archlinux-with-homebrew))
+archlinux_images := tests/images/archlinux/Dockerfile
 
 debian_template = tests/templates/Dockerfile.debian.jinja2
 ubuntu_images = $(shell $(VENV)/bin/python $(update_test_images) --list-only --distrib=ubuntu $(TEST_IMAGE_OPTS))
