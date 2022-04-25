@@ -104,9 +104,12 @@ def create_dockerfile(
 
 
 images = {
-    "debian": {"bullseye": {"python": "python3", "os_family": "debian"}},
+    "debian": {
+        "bullseye": {"python": "python3", "os_family": "debian"},
+    },
     "ubuntu": {
         "focal": {"python": "python3", "os_family": "debian"},
+        "jammy": {"python": "python3", "os_family": "debian"},
     },
     "archlinux": {"archlinux": {"os_family": "archlinux"}},
 }

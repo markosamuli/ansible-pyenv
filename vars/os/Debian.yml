@@ -17,7 +17,7 @@ pyenv_build_requirements:
   - tk-dev
   - libffi-dev
   - liblzma-dev
-  - python-openssl
+  - python3-openssl
   - git
 
 pyenv_build_requirements_with_homebrew:
