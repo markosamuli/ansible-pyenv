@@ -68,7 +68,7 @@ jobs:
     strategy:
       matrix:
         distrib: [ubuntu]
-        release: [focal]
+        release: [focal, jammy]
         install_with: [git, homebrew]
     name: Test - ${{ matrix.distrib }} ${{ matrix.release }} - ${{ matrix.install_with }}
     env:
