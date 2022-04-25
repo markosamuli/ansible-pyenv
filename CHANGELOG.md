@@ -2,6 +2,48 @@
 
 Only the latest major version is maintained.
 
+## [6.2.0] - 2022-04-25
+
+Support for Ubuntu 22.04 LTS and Arch Linux. I don't have test environments for
+either of these so testing is limited to the Docker environments only.
+
+[6.2.0]: https://github.com/markosamuli/ansible-pyenv/releases/tag/v6.2.0
+
+### Fixed
+
+- Change how tasks are included to address issues with missing homebrew action
+  on Linux. ([#47][issue-47])
+
+[issue-47]: https://github.com/markosamuli/ansible-pyenv/issues/47
+
+### Changed
+
+- Added tests for Ubuntu 22.04 LTS.
+
+  Compiling Python 3.10 with Homebrew fails on Ubuntu 22.04 LTS so Homebrew
+  tests are not included.
+
+- Added configuration and tests for Arch Linux.
+
+  Do not test Homebrew on Arch Linux as Homebrew install itself fails due to
+  incorrect Ruby version.
+
+- Default to `python3-openssl` in Ubuntu and Debian. ([#54][issue-54])
+
+  This should work as the new default since Python 2 is EOL.
+
+[issue-54]: https://github.com/markosamuli/ansible-pyenv/issues/54
+
+### Development changes
+
+- Test macOS install on GitHub Actions.
+- Remove `develop` branch and pipelines.
+- Support for running cross platform test images on Apple M1 devices.
+- Use [`robertdebock/galaxy-action`][galaxy-action] GitHub Action to publish
+  tagged releases to Ansible Galaxy once tests have been completed.
+
+[galaxy-action]: https://github.com/robertdebock/galaxy-action
+
 ## [6.1.0] - 2022-04-15
 
 Fix breaking changes introduced in pyenv 2.0.0.
