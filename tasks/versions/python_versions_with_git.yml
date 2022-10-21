@@ -1,4 +1,12 @@
 ---
+- name: Check if interpreters installed
+  ansible.builtin.shell: >-
+    {{ pyenv_bin_path }} versions
+  args:
+    executable: "{{ pyenv_install_shell | default(omit) }}"
+  environment: "{{ pyenv_install_environment }}"
+  register: pyenv_installed_versions
+
 - name: Install Python interpreters # noqa 305
   ansible.builtin.shell: >-
     {{ pyenv_bin_path }} install {{ item }}
@@ -7,3 +15,4 @@
     creates: "{{ pyenv_root }}/versions/{{ item }}/bin/python"
   with_items: "{{ pyenv_python_versions }}"
   environment: "{{ pyenv_install_environment }}"
+  when: item not in pyenv_installed_versions.stdout
