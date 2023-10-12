@@ -1,6 +1,7 @@
 ---
 - name: Install pyenv build requirements
   become: true
+  become_user: root
   ansible.builtin.package:
     name: "{{ pyenv_build_requirements }}"
     state: present
