@@ -24,7 +24,7 @@ filelock==3.6.0
     # via virtualenv
 gitdb==4.0.9
     # via gitpython
-gitpython==3.1.27
+gitpython==3.1.41
     # via
     #   -r requirements.dev.in
     #   bandit
@@ -32,7 +32,7 @@ identify==2.4.12
     # via pre-commit
 isort==5.10.1
     # via pylint
-jinja2==3.1.1
+jinja2==3.1.3
     # via -r requirements.dev.in
 lazy-object-proxy==1.7.1
     # via astroid
