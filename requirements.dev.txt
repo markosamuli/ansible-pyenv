@@ -6,7 +6,7 @@
 #
 astroid==2.11.2
     # via pylint
-bandit==1.7.4
+bandit==1.7.7
     # via -r requirements.dev.in
 black==22.3.0
     # via -r requirements.dev.in
