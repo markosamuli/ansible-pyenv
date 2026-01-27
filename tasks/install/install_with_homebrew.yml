@@ -55,7 +55,7 @@
 - name: Check if pyenv needs to be upgraded
   ansible.builtin.set_fact:
     brew_pyenv_update: "{{ brew_pyenv_info.linked_keg is version(pyenv_required_version, '<') }}"
-  when: brew_pyenv_info.linked_keg
+  when_true: brew_pyenv_info.linked_keg is defined
 
 - name: Upgrade pyenv with Homebrew and update Homebrew itself
   homebrew:
